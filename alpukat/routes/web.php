@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DokumenController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -11,10 +12,14 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
+// Jalur untuk user
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/dokumen.pengajuan', [DokumenController::class, 'create'])->name('dokumen.create');
+    Route::post('/dokumen.pengajuan', [DokumenController::class, 'store'])->name('dokumen.store');
 });
 
 Route::middleware('auth', 'admin')->group(function () {
@@ -26,4 +31,4 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::post('/edit_syarat/{id}', [AdminController::class, 'postEditSyarat'])->name('admin.posteditsyarat');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

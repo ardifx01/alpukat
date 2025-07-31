@@ -1,4 +1,4 @@
-<!-- untuk user login -->
+<!-- untuk dashboard user -->
 
 <!DOCTYPE html>
 <html>
@@ -51,7 +51,7 @@
                             <a class="nav-link" href="{{ route('dashboard') }}">Beranda <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="shop.html">
+                            <a class="nav-link" href="{{ route('dokumen.store')}}">
                                 Pengajuan
                             </a>
                         </li>
