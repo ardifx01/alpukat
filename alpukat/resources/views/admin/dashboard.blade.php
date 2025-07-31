@@ -102,7 +102,14 @@
             <li><a href="{{ route('admin.lihatsyarat') }}">Lihat Syarat</a></li>
           </ul>
         </li>
-        <li><a href="login.html"> <i class="icon-logout"></i>Log out </a></li>
+        <li>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+          </form>
+          <a href="#" onclick="event.preventDefault(); if(confirm('Yakin ingin logout?')) document.getElementById('logout-form').submit();">
+            <i class="icon-logout"></i>Log out 
+          </a>
+        </li>
       </ul>
     </nav>
     <!-- Sidebar Navigation end-->
