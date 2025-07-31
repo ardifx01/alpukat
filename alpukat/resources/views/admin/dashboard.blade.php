@@ -98,8 +98,8 @@
         <!-- Kelola persyaratan -->
         <li><a href="#dropdownSyarat" data-toggle="collapse" data-parent="#accordionSidebar" aria-expanded="false"> <i class="icon-windows"></i>Kelola Persyaratan </a>
           <ul id="dropdownSyarat" class="collapse list-unstyled ">
-            <li><a href="#">Tambah Syarat</a></li>
-            <li><a href="#">Lihat Syarat</a></li>
+            <li><a href="{{ route('admin.tambahsyarat') }}">Tambah Syarat</a></li>
+            <li><a href="{{ route('admin.lihatsyarat') }}">Lihat Syarat</a></li>
           </ul>
         </li>
         <li><a href="login.html"> <i class="icon-logout"></i>Log out </a></li>
@@ -113,7 +113,7 @@
         </div>
       </div>
       <section class="no-padding-top no-padding-bottom">
-        <!-- @yield('dashboard')
+        @yield('dashboard')
 
         @yield('tambah_syarat')
 
@@ -121,7 +121,7 @@
 
         @yield('edit_syarat')
 
-        @yield('unggah_berkas') -->
+        @yield('unggah_berkas')
       </section>
 
       <!-- End of all sections -->
