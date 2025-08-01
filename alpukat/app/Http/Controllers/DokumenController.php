@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Syarat;
 use App\Models\Dokumen;
-use App\Models\User;
 
 class DokumenController extends Controller
 {
@@ -16,7 +14,7 @@ class DokumenController extends Controller
         $syaratKoperasi = Syarat::where('kategori_syarat', 'koperasi')->get();
         $syaratPengurus = Syarat::where('kategori_syarat', 'pengurus')->get();
 
-        return view('dokumen.pengajuan', compact('syaratKoperasi', 'syaratPengurus'));
+        return view('dokumen/pengajuan', compact('syaratKoperasi', 'syaratPengurus'));
     }
 
     public function store(Request $request)
