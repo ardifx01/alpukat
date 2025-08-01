@@ -56,6 +56,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('dokumen.user') }}">
+                                Lihat Dokumen Saya
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="why.html">
                                 Notifikasi
                             </a>

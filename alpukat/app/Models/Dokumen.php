@@ -13,13 +13,13 @@ class Dokumen extends Model
 
     protected $fillable = ['user_id', 'syarat_id', 'file_path'];
 
-    public function syarat()
-    {
-        return $this->belongsTo(Syarat::class);
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function syarat()
+    {
+        return $this->belongsTo(Syarat::class);
     }
 }

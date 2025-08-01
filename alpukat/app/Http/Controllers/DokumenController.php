@@ -54,4 +54,17 @@ class DokumenController extends Controller
 
         return redirect()->route('dokumen.store')->with('success', 'Dokumen berhasil diunggah!');
     }
+
+    public function indexUser()
+    {
+        $user = Auth::user();
+
+        // Ambil semua dokumen milik user yang sedang login
+        $dokumenUser = Dokumen::with('syarat') // pastikan ada relasi ke tabel syarat nanti
+            ->where('user_id', $user->id)
+            ->get();
+
+        // Kirim data ke view
+        return view('dokumen.user_index', compact('dokumenUser'));
+    }
 }
