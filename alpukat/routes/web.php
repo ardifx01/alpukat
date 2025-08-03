@@ -5,7 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DokumenController;
 use Illuminate\Support\Facades\Route;
-// arinda
+
 Route::get('/', function () {
     return view('dashboard');
 });
