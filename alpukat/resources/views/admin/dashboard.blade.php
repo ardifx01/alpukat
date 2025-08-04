@@ -88,7 +88,7 @@
           <a href="#dropdownVerif" data-toggle="collapse" data-parent="#accordionSidebar" aria-expanded="false"> <i class="icon-windows"></i>Verifikasi </a>
           <ul id="dropdownVerif" class="collapse list-unstyled ">
             <li><a href="{{ route('admin.daftar_pengajuan') }}">Daftar Pengajuan </a></li>
-            <li><a href="#">Lihat Hasil Verifikasi </a></li>
+            <li><a href="{{ route('admin.hasil_verifikasi') }}">Lihat Hasil Verifikasi </a></li>
           </ul>
         </li>
       
@@ -131,6 +131,8 @@
         @yield('daftar_pengajuan')
 
         @yield('verif_berkas')
+
+        @yield('hasil_verifikasi')
 
         @yield('tambah_syarat')
 

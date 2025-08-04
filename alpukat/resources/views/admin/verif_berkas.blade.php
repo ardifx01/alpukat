@@ -2,8 +2,14 @@
 
 @section('verif_berkas')
     @if(session('verif_pesan'))
-        <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+        <div class="alert alert-success">
             {{ session('verif_pesan') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
         </div>
     @endif
 

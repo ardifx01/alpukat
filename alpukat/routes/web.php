@@ -49,7 +49,7 @@ Route::middleware('auth', 'admin')->group(function () {
     // Simpan hasil verifikasi
     Route::post('/verifikasi-berkas/{id}', [VerifikasiController::class, 'postVerifBerkas'])->name('admin.verif_berkas');
     
-    // Route::get('/hasil-verifikasi', [VerifikasiController::class, 'hasilVerifikasi'])->name('admin.hasil_verifikasi');
+    Route::get('/hasil-verifikasi', [VerifikasiController::class, 'hasilVerifikasi'])->name('admin.hasil_verifikasi');
 
 });
 
