@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Syarat;
 use App\Models\Dokumen;
+use App\Models\Verifikasi;
 
+// Fokus ngatur upload atau tampilkan dokumen
 class DokumenController extends Controller
 {
     public function create()
@@ -14,7 +16,7 @@ class DokumenController extends Controller
         $syaratKoperasi = Syarat::where('kategori_syarat', 'koperasi')->get();
         $syaratPengurus = Syarat::where('kategori_syarat', 'pengurus')->get();
 
-        return view('dokumen/pengajuan', compact('syaratKoperasi', 'syaratPengurus'));
+        return view('dokumen.pengajuan', compact('syaratKoperasi', 'syaratPengurus'));
     }
 
     public function store(Request $request)
@@ -29,7 +31,7 @@ class DokumenController extends Controller
         // Validasi inputan: pastikan dokumen adalah array dan tiap itemnya valid
         $request->validate([
             'dokumen' => 'array',
-            'dokumen.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048'
+            'dokumen.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048' // PDF atau gambar, ga boleh > 2 MB
         ]);
 
         $files = $request->file('dokumen');
@@ -52,19 +54,31 @@ class DokumenController extends Controller
             }
         }
 
-        return redirect()->route('dokumen.store')->with('success', 'Dokumen berhasil diunggah!');
+        return redirect()->route('dokumen.create')->with('success', 'Dokumen berhasil diunggah!');
     }
 
-    public function indexUser()
+    public function lihatBerkas()
     {
         $user = Auth::user();
 
         // Ambil semua dokumen milik user yang sedang login
-        $dokumenUser = Dokumen::with('syarat') // pastikan ada relasi ke tabel syarat nanti
+        $berkasUser = Dokumen::with('syarat') // pastikan ada relasi ke tabel syarat nanti
             ->where('user_id', $user->id)
             ->get();
 
         // Kirim data ke view
-        return view('dokumen.user_index', compact('dokumenUser'));
+        return view('dokumen.lihat_berkas', compact('berkasUser'));
+    }
+
+    public function daftarPengajuan()
+    {
+        $semuaDokumen = Dokumen::with(['user', 'syarat'])->get();
+
+        $someUser = $semuaDokumen->first()?->user;
+
+        return view('admin.daftar_pengajuan', [
+            'dokumens' => $semuaDokumen,
+            'user' => $someUser, // dikirim ke blade
+        ]);
     }
 }

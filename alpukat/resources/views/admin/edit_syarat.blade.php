@@ -9,7 +9,7 @@
 </div>
 @endif
 <div class="container-fluid">
-    <form action="{{ route('admin.posteditsyarat', $syarat->id) }}" method="POST">
+    <form action="{{ route('admin.post_edit_syarat', $syarat->id) }}" method="POST">
         @csrf
 
         <div class="form-group">

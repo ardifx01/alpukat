@@ -1,10 +1,14 @@
-<x-app-layout>
+@extends('layouts.app')
+
+@section('header')
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             Upload Dokumen Permohonan SK UKK
         </h2>
     </x-slot>
+@endsection
 
+@section('content')
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @if (session('success'))
@@ -44,4 +48,4 @@
             </form>
         </div>
     </div>
-</x-app-layout>
+@endsection

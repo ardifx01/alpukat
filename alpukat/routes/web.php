@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\VerifikasiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -12,27 +13,44 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
-// Jalur untuk user
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    Route::get('/dokumen_user', [DokumenController::class, 'indexUser'])->name('dokumen.user');
 });
 
+// Supaya halaman hanya dapat diakses oleh user saja
 Route::middleware(['auth', 'role.user'])->group(function () {
-    Route::get('/dokumen/pengajuan', [DokumenController::class, 'create'])->name('dokumen.create');
-    Route::post('/dokumen/pengajuan', [DokumenController::class, 'store'])->name('dokumen.store');
+    Route::get('/pengajuan', [DokumenController::class, 'create'])->name('dokumen.create');
+    Route::post('/pengajuan', [DokumenController::class, 'store'])->name('dokumen.store');
+    Route::get('/lihat-berkas', [DokumenController::class, 'lihatBerkas'])->name('dokumen.lihat_berkas');
 });
 
 Route::middleware('auth', 'admin')->group(function () {
-    Route::get('/tambah_syarat', [AdminController::class, 'tambahSyarat'])->name('admin.tambahsyarat');
-    Route::post('/tambah_syarat', [AdminController::class, 'postTambahSyarat'])->name('admin.posttambahsyarat');
-    Route::get('/lihat_syarat', [AdminController::class, 'lihatSyarat'])->name('admin.lihatsyarat');
-    Route::get('/hapus_syarat/{id}', [AdminController::class, 'hapusSyarat'])->name('admin.hapussyarat');
-    Route::get('/edit_syarat/{id}', [AdminController::class, 'editSyarat'])->name('admin.editsyarat');
-    Route::post('/edit_syarat/{id}', [AdminController::class, 'postEditSyarat'])->name('admin.posteditsyarat');
+    // Tambah persyaratan
+    Route::get('/tambah-syarat', [AdminController::class, 'tambahSyarat'])->name('admin.tambah_syarat');
+    Route::post('/tambah-syarat', [AdminController::class, 'postTambahSyarat'])->name('admin.post_tambah_syarat');
+    // Lihat persyaratan
+    Route::get('/lihat-syarat', [AdminController::class, 'lihatSyarat'])->name('admin.lihat_syarat');
+    
+    // Hapus persyaratan
+    Route::get('/hapus-syarat/{id}', [AdminController::class, 'hapusSyarat'])->name('admin.hapus_syarat');
+
+    // Edit persyaratan
+    Route::get('/edit-syarat/{id}', [AdminController::class, 'editSyarat'])->name('admin.edit_syarat');
+    Route::post('/edit-syarat/{id}', [AdminController::class, 'postEditSyarat'])->name('admin.post_edit_syarat');
+
+    // Lihat berkas atau dokumen user
+    Route::get('/daftar-pengajuan', [DokumenController::class, 'daftarPengajuan'])->name('admin.daftar_pengajuan');
+
+    // Tampilkan halaman verifikasi
+    Route::get('/verifikasi-berkas/{id}', [VerifikasiController::class, 'verifBerkas'])->name('admin.verif_berkas');
+
+    // Simpan hasil verifikasi
+    Route::post('/verifikasi-berkas/{id}', [VerifikasiController::class, 'postVerifBerkas'])->name('admin.verif_berkas');
+    
+    // Route::get('/hasil-verifikasi', [VerifikasiController::class, 'hasilVerifikasi'])->name('admin.hasil_verifikasi');
+
 });
 
 require __DIR__ . '/auth.php';

@@ -56,7 +56,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('dokumen.user') }}">
+                            <a class="nav-link" href="{{ route('dokumen.lihat_berkas') }}">
                                 Lihat Dokumen Saya
                             </a>
                         </li>

@@ -4,7 +4,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <h1 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Daftar Dokumen</h1>
 
-        @if ($dokumenUser->isEmpty())
+        @if ($berkasUser->isEmpty())
             <div class="p-4 bg-yellow-100 text-yellow-800 rounded shadow">
                 Anda belum mengunggah dokumen apapun.
             </div>
@@ -20,7 +20,7 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                        @foreach ($dokumenUser as $index => $item)
+                        @foreach ($berkasUser as $index => $item)
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ $index + 1 }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">

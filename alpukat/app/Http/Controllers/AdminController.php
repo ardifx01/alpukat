@@ -9,7 +9,7 @@ class AdminController extends Controller
 {
     public function tambahSyarat()
     {
-        return view('admin.tambahsyarat');
+        return view('admin.tambah_syarat');
     }
 
     public function postTambahSyarat(Request $request)
@@ -34,7 +34,7 @@ class AdminController extends Controller
         $syarat_koperasi = Syarat::where('kategori_syarat', 'koperasi')->get();
         $syarat_pengurus = Syarat::where('kategori_syarat', 'pengurus')->get();
         
-        return view('admin.lihatsyarat', compact('syarat_koperasi', 'syarat_pengurus'));
+        return view('admin.lihat_syarat', compact('syarat_koperasi', 'syarat_pengurus'));
     }
 
     public function hapusSyarat($id)
@@ -49,7 +49,7 @@ class AdminController extends Controller
     public function editSyarat($id)
     {
         $syarat=Syarat::findOrFail($id);
-        return view('admin.editsyarat', compact('syarat'));
+        return view('admin.edit_syarat', compact('syarat'));
     }
 
     public function postEditsyarat(Request $request, $id){

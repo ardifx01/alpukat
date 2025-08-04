@@ -8,7 +8,7 @@
     </div>
     @endif
     <div class="container-fluid">
-        <form action="{{ route('admin.posttambahsyarat') }}" method="POST">
+        <form action="{{ route('admin.post_tambah_syarat') }}" method="POST">
             @csrf
 
             <div class="form-group">

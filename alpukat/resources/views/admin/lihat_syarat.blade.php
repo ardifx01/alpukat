@@ -54,8 +54,8 @@
                         <td>{{ $syarat->nama_syarat }}</td>
                         <td>{{ $syarat->created_at->format('d-m-Y H:i') }}</td>
                         <td>
-                            <a href="{{ route('admin.editsyarat', $syarat->id) }}" style="color: green;">Edit</a>
-                            <a href="{{ route('admin.hapussyarat', $syarat->id) }}" onclick="return confirm('Apakah Anda yakin?')">Hapus</a>
+                            <a href="{{ route('admin.edit_syarat', $syarat->id) }}" style="color: green;">Edit</a>
+                            <a href="{{ route('admin.hapus_syarat', $syarat->id) }}" onclick="return confirm('Apakah Anda yakin?')">Hapus</a>
                         </td>
                     </tr>
                     @endforeach
@@ -85,8 +85,8 @@
                         <td>{{ $syarat->nama_syarat }}</td>
                         <td>{{ $syarat->created_at->format('d-m-Y H:i') }}</td>
                         <td>
-                            <a href="{{ route('admin.editsyarat', $syarat->id) }}" style="color: green;">Edit</a>
-                            <a href="{{ route('admin.hapussyarat', $syarat->id) }}" onclick="return confirm('Apakah Anda yakin?')">Hapus</a>
+                            <a href="{{ route('admin.edit_syarat', $syarat->id) }}" style="color: green;">Edit</a>
+                            <a href="{{ route('admin.hapus_syarat', $syarat->id) }}" onclick="return confirm('Apakah Anda yakin?')">Hapus</a>
                         </td>
                     </tr>
                     @endforeach

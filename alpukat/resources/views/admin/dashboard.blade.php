@@ -9,17 +9,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="all,follow">
   <!-- Bootstrap CSS-->
-  <link rel="stylesheet" href="admin/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ asset('admin/vendor/bootstrap/css/bootstrap.min.css') }}">
   <!-- Font Awesome CSS-->
-  <link rel="stylesheet" href="admin/vendor/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{{ asset('admin/vendor/font-awesome/css/font-awesome.min.css') }}">
   <!-- Custom Font Icons CSS-->
-  <link rel="stylesheet" href="admin/css/font.css">
-  <!-- Google fonts - Muli-->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,700">
+  <link rel="stylesheet" href="{{ asset('admin/css/font.css') }}">
   <!-- theme stylesheet-->
-  <link rel="stylesheet" href="admin/css/style.default.css" id="theme-stylesheet">
+  <link rel="stylesheet" href="{{ asset('admin/css/style.default.css') }}" id="theme-stylesheet">
   <!-- Custom stylesheet - for your changes-->
-  <link rel="stylesheet" href="admin/css/custom.css">
+  <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}">
   <!-- Favicon-->
   <link rel="shortcut icon" href="front_end/images/logo_kepri.png">
   <!-- Tweaks for older IEs--><!--[if lt IE 9]>
@@ -85,7 +83,15 @@
       <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
       <ul id="accordionSidebar" class="list-unstyled">
         <li class="active"><a href="index.html"> <i class="icon-home"></i>Home </a></li>
-        <li><a href="tables.html"> <i class="icon-grid"></i>Daftar Pengajuan </a></li>
+        <!-- Verifikasi Berkas -->
+        <li>
+          <a href="#dropdownVerif" data-toggle="collapse" data-parent="#accordionSidebar" aria-expanded="false"> <i class="icon-windows"></i>Verifikasi </a>
+          <ul id="dropdownVerif" class="collapse list-unstyled ">
+            <li><a href="{{ route('admin.daftar_pengajuan') }}">Daftar Pengajuan </a></li>
+            <li><a href="#">Lihat Hasil Verifikasi </a></li>
+          </ul>
+        </li>
+      
         <!-- Unggah Berkas -->
         <li>
           <a href="#dropdownUnggah" data-toggle="collapse" data-parent="#accordionSidebar" aria-expanded="false"> <i class="icon-windows"></i>Berkas </a>
@@ -98,8 +104,8 @@
         <!-- Kelola persyaratan -->
         <li><a href="#dropdownSyarat" data-toggle="collapse" data-parent="#accordionSidebar" aria-expanded="false"> <i class="icon-windows"></i>Kelola Persyaratan </a>
           <ul id="dropdownSyarat" class="collapse list-unstyled ">
-            <li><a href="{{ route('admin.tambahsyarat') }}">Tambah Syarat</a></li>
-            <li><a href="{{ route('admin.lihatsyarat') }}">Lihat Syarat</a></li>
+            <li><a href="{{ route('admin.tambah_syarat') }}">Tambah Syarat</a></li>
+            <li><a href="{{ route('admin.lihat_syarat') }}">Lihat Syarat</a></li>
           </ul>
         </li>
         <li>
@@ -122,13 +128,15 @@
       <section class="no-padding-top no-padding-bottom">
         @yield('dashboard')
 
+        @yield('daftar_pengajuan')
+
+        @yield('verif_berkas')
+
         @yield('tambah_syarat')
 
         @yield('lihat_syarat')
 
         @yield('edit_syarat')
-
-        @yield('unggah_berkas')
       </section>
 
       <!-- End of all sections -->
@@ -143,14 +151,14 @@
     </div>
   </div>
   <!-- JavaScript files-->
-  <script src="admin/vendor/jquery/jquery.min.js"></script>
-  <script src="admin/vendor/popper.js/umd/popper.min.js"> </script>
-  <script src="admin/vendor/bootstrap/js/bootstrap.min.js"></script>
-  <script src="admin/vendor/jquery.cookie/jquery.cookie.js"> </script>
-  <script src="admin/vendor/chart.js/Chart.min.js"></script>
-  <script src="admin/vendor/jquery-validation/jquery.validate.min.js"></script>
-  <script src="admin/js/charts-home.js"></script>
-  <script src="admin/js/front.js"></script>
+  <script src="{{ asset('admin/vendor/jquery/jquery.min.js') }}"></script>
+  <script src="{{ asset('admin/vendor/popper.js/umd/popper.min.js') }}"></script>
+  <script src="{{ asset('admin/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+  <script src="{{ asset('admin/vendor/jquery.cookie/jquery.cookie.js') }}"></script>
+  <script src="{{ asset('admin/vendor/chart.js/Chart.min.js') }}"></script>
+  <script src="{{ asset('admin/vendor/jquery-validation/jquery.validate.min.js') }}"></script>
+  <script src="{{ asset('admin/js/charts-home.js') }}"></script>
+  <script src="{{ asset('admin/js/front.js') }}"></script>
 </body>
 
 </html>

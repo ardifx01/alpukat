@@ -11,7 +11,15 @@ class Dokumen extends Model
 
     protected $table = 'dokumen';
 
-    protected $fillable = ['user_id', 'syarat_id', 'file_path'];
+    protected $fillable = [
+        'user_id', 
+        'syarat_id', 
+        'file_path',
+        'status',
+        'feedback',
+        'tanggal_wawancara',
+        'lokasi_wawancara',
+    ];
 
     public function user()
     {
