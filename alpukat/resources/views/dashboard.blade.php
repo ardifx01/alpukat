@@ -61,8 +61,17 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="why.html">
+                            <a class="nav-link" href="{{ route('notifikasi') }}">
                                 Notifikasi
+                                @php
+                                    $jumlahNotifikasiBelumDibaca = \App\Models\Notifikasi::where('user_id', auth()->id())
+                                        ->where('dibaca', false)
+                                        ->count();
+                                @endphp
+
+                                @if($jumlahNotifikasiBelumDibaca > 0)
+                                    <span class="badge bg-danger">{{ $jumlahNotifikasiBelumDibaca }}</span>
+                                @endif
                             </a>
                         </li>
                     </ul>

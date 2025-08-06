@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Dokumen;
 use App\Models\Verifikasi;
+use App\Models\Notifikasi;
+use App\Models\User;
 
 class VerifikasiController extends Controller
 {
@@ -35,13 +37,34 @@ class VerifikasiController extends Controller
             return redirect()->back()->with('error', 'Verifikasi hanya bisa diberikan sekali.');
         }
 
-        Verifikasi::create([
+        // Simpan hasil verifikasi ke dalam variabel 
+        $verifikasi = Verifikasi::create([
             'user_id' => $id,
             'status' => $request->status,
             'feedback' => $request->feedback,
             'tanggal_wawancara' => $request->tanggal_wawancara,
             'lokasi_wawancara' => $request->lokasi_wawancara,
         ]);
+
+        // Ambil data user berdasarkan id
+        $user = User::find($id);
+
+        // Siapkan pesan notifikasi berdasarkan status
+        if ($request->status === 'diterima') {
+            $pesan = "Selamat! Berkas Anda sudah lengkap. Silakan ikut wawancara pada tanggal " . date('d M Y', strtotime($request->tanggal_wawancara)) . " di " . $request->lokasi_wawancara . ".";
+        } else {
+            $pesan = "Maaf, pengajuan Anda ditolak. " . $request->feedback;
+        }
+
+        // Simpan notifikasi
+        $notifikasi = Notifikasi::create([
+            'user_id' => $user->id, //id koperasi
+            'verifikasi_id' => $verifikasi->id,
+            'pesan' => $pesan,
+            'dibaca' => false, 
+        ]);
+
+        // dd($notifikasi);
 
         return redirect()->route('admin.verif_berkas', ['id' => $id])->with('verif_pesan', 'Verifikasi berhasil disimpan.');
     }

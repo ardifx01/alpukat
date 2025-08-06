@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Verifikasi;
+use App\Models\Notifikasi;
 
 class User extends Authenticatable
 {
@@ -51,9 +52,8 @@ class User extends Authenticatable
         return $this->hasOne(Verifikasi::class);
     }
 
-    public function pengajuan()
+    public function notifikasi()
     {
-        return $this->hasOne(Pengajuan::class);
+        return $this->hasMany(Notifikasi::class);
     }
-
 }

@@ -22,8 +22,12 @@ Route::middleware('auth')->group(function () {
 // Supaya halaman hanya dapat diakses oleh user saja
 Route::middleware(['auth', 'role.user'])->group(function () {
     Route::get('/pengajuan', [DokumenController::class, 'create'])->name('dokumen.create');
+
     Route::post('/pengajuan', [DokumenController::class, 'store'])->name('dokumen.store');
+
     Route::get('/lihat-berkas', [DokumenController::class, 'lihatBerkas'])->name('dokumen.lihat_berkas');
+
+    Route::get('/notifikasi', [UserController::class, 'notifikasi'])->middleware('auth')->name('notifikasi');
 });
 
 Route::middleware('auth', 'admin')->group(function () {
@@ -49,6 +53,7 @@ Route::middleware('auth', 'admin')->group(function () {
     // Simpan hasil verifikasi
     Route::post('/verifikasi-berkas/{id}', [VerifikasiController::class, 'postVerifBerkas'])->name('admin.verif_berkas');
     
+    // Tampilkan halaman hasil verifikasi
     Route::get('/hasil-verifikasi', [VerifikasiController::class, 'hasilVerifikasi'])->name('admin.hasil_verifikasi');
 
 });
