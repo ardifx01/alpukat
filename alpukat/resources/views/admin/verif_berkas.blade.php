@@ -27,10 +27,21 @@
                 </select>
             </div>
 
+            <!-- Info batas wawancara -->
+             @if ($verifikasi && $verifikasi->status === 'diterima' && $verifikasi->batas_wawancara)
+                <div class="alert alert-info">
+                    <strong>Batas maksimal wawancara:</strong>
+                    {{ \Carbon\Carbon::parse($verifikasi->batas_wawancara)->translatedFormat('d F Y') }}
+                </div>  
+            @endif
+
             <div id="wawancara-fields" style="display: none;">
                 <div class="mb-3">
                     <label for="tanggal_wawancara" class="form-label">Tanggal Wawancara:</label>
-                    <input type="date" name="tanggal_wawancara" class="form-control" value="{{ $verifikasi?->tanggal_wawancara }}">
+                    <input type="date" name="tanggal_wawancara" class="form-control" value="{{ old('tanggal_wawancara', $verifikasi?->tanggal_wawancara) }}" max="{{ $verifikasi?->batas_wawancara }}">
+                    <small class="text-muted">
+                        Batas maksimal wawancara: <strong>{{ $batasMax }}</strong>
+                    </small>
                 </div>
 
                 <div class="mb-3">

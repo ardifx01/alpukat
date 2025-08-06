@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Verifikasi;
 use App\Models\Notifikasi;
+use App\Models\Dokumen;
 
 class User extends Authenticatable
 {
@@ -45,6 +46,11 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function dokumen()
+    {
+        return $this->hasMany(Dokumen::class);
     }
 
     public function verifikasi()

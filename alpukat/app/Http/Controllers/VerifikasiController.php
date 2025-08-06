@@ -7,23 +7,44 @@ use App\Models\Dokumen;
 use App\Models\Verifikasi;
 use App\Models\Notifikasi;
 use App\Models\User;
+use Carbon\Carbon;
 
 class VerifikasiController extends Controller
 {
     // Tampilkan form verifikasi
     public function verifBerkas($id)
     {
-        $dokumen = Dokumen::where('user_id', $id)->get(); // ambil semua dokumen milik user
-        $verifikasi = Verifikasi::where('user_id', $id)->first();
         $users = \App\Models\User::findOrFail($id);
+        $dokumen = $users->dokumen;
+        $verifikasi = Verifikasi::where('user_id', $id)->first();
 
-        return view('admin.verif_berkas', compact('dokumen', 'users', 'verifikasi'));
+        // Hitung 30 hari kerja dari hari ini
+        $batasMax = $this->hitungBatasWawancara(30);
+
+        return view('admin.verif_berkas', compact('dokumen', 'users', 'verifikasi', 'batasMax'));
+    }
+
+    public function hitungBatasWawancara($jumlahHariKerja) 
+    {
+        $tanggal = Carbon::now();
+        $hariKerja = 0;
+
+        while ($hariKerja < $jumlahHariKerja) {
+            if (!$tanggal->isWeekend()) {
+                $hariKerja++;
+            }
+            if ($hariKerja < $jumlahHariKerja) {
+                $tanggal->addDay();
+            }
+        }
+
+        return $tanggal;
     }
 
     // Simpan hasil verifikasi
     public function postVerifBerkas(Request $request, $id)
     {
-        // Validasi input
+        // Validasi input atau data yang masuk
         $request->validate([
             'status' => 'required|in:diterima,ditolak',
             'feedback' => 'nullable|string|max:1000',
@@ -37,13 +58,39 @@ class VerifikasiController extends Controller
             return redirect()->back()->with('error', 'Verifikasi hanya bisa diberikan sekali.');
         }
 
-        // Simpan hasil verifikasi ke dalam variabel 
+        // Simpan hasil verifikasi ke dalam variabel
+        $batasWawancara = null;
+
+        if ($request->status === 'diterima') {
+            // Hitung 30 hari kerja dari sekarang
+            $startDate = Carbon::now();
+            $workDays = 0;
+            $date = $startDate->copy();
+
+            while ($workDays < 30) {
+                if (!$date->isWeekend()) {
+                    $workDays++;
+                }
+                if ($workDays < 30) {
+                    $date->addDay();
+                }
+            }
+
+            $batasWawancara = $date;
+
+            // Validasi agar tanggal_wawancara tidak melebihi batas
+            if ($request->tanggal_wawancara && Carbon::parse($request->tanggal_wawancara)->gt($batasWawancara)) {
+                return redirect()->back()->with('error', 'Tanggal wawancara tidak boleh melebihi batas maksimal (' . $batasWawancara->translatedFormat('d F Y') . ').');
+            }
+        }
+        
         $verifikasi = Verifikasi::create([
             'user_id' => $id,
             'status' => $request->status,
             'feedback' => $request->feedback,
             'tanggal_wawancara' => $request->tanggal_wawancara,
             'lokasi_wawancara' => $request->lokasi_wawancara,
+            'batas_wawancara' => $batasWawancara,
         ]);
 
         // Ambil data user berdasarkan id
