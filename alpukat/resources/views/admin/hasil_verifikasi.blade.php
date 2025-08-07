@@ -1,6 +1,6 @@
 @extends('admin.dashboard')
 
-@section('hasil_verifikasi')
+@section('content')
 
 <div class="container">
     <h2 class="mb-4">Hasil Verifikasi Pengajuan</h2>

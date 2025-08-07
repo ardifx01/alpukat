@@ -11,6 +11,8 @@ Route::get('/', function () {
     return view('dashboard');
 });
 
+Route::get('/admin', [AdminController::class, 'dashboard'])->name('dashboard');
+
 Route::get('/dashboard', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -31,6 +33,8 @@ Route::middleware(['auth', 'role.user'])->group(function () {
 });
 
 Route::middleware('auth', 'admin')->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
     // Tambah persyaratan
     Route::get('/tambah-syarat', [AdminController::class, 'tambahSyarat'])->name('admin.tambah_syarat');
     Route::post('/tambah-syarat', [AdminController::class, 'postTambahSyarat'])->name('admin.post_tambah_syarat');
@@ -55,7 +59,6 @@ Route::middleware('auth', 'admin')->group(function () {
     
     // Tampilkan halaman hasil verifikasi
     Route::get('/hasil-verifikasi', [VerifikasiController::class, 'hasilVerifikasi'])->name('admin.hasil_verifikasi');
-
 });
 
 require __DIR__ . '/auth.php';

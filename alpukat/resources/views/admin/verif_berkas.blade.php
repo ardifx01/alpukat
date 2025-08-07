@@ -1,6 +1,6 @@
 @extends('admin.dashboard')
 
-@section('verif_berkas')
+@section('content')
     @if(session('verif_pesan'))
         <div class="alert alert-success">
             {{ session('verif_pesan') }}

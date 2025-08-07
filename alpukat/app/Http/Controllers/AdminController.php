@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Syarat;
+use App\Models\Verifikasi;
 
 class AdminController extends Controller
 {
+    public function dashboard()
+    {
+        return view('admin.dashboard');
+    }
+
     public function tambahSyarat()
     {
         return view('admin.tambah_syarat');
@@ -67,5 +74,4 @@ class AdminController extends Controller
         
         return redirect()->back()->with('editsyarat_pesan', 'Persyaratan berhasil diedit!');
     }
-
 }

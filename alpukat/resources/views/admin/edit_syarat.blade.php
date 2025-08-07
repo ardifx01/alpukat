@@ -1,7 +1,7 @@
 @extends('admin.dashboard')
 
 <base href="/public">
-@section('edit_syarat')
+@section('content')
 
 @if(session('editsyarat_pesan'))
 <div style="border: 1px solid blue; color:white; border-radius: 4px rounded; padding: 10px; background-color:blue; margin-bottom: 10px;">

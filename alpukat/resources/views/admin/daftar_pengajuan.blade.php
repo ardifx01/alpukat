@@ -1,6 +1,6 @@
 @extends('admin.dashboard')
 
-@section('daftar_pengajuan')
+@section('content')
 <div class="container">
     <h2 class="mb-4">Daftar Pengajuan Koperasi</h2>
 

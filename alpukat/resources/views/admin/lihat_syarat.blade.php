@@ -1,6 +1,6 @@
 @extends('admin.dashboard')
 
-@section('lihat_syarat')
+@section('content')
 
 @if(session('hapussyarat_pesan'))
     <div style="margin-bottom: 10px; color: black; background-color:orangered;">
@@ -19,12 +19,12 @@
     {{-- TAB NAV --}}
     <ul class="nav nav-tabs" id="syaratTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="koperasi-tab" data-toggle="tab" href="#koperasi" role="tab" aria-controls="koperasi" aria-selected="true">
+            <a class="nav-link active" id="koperasi-tab" data-bs-toggle="tab" href="#koperasi" role="tab" aria-controls="koperasi" aria-selected="true">
                 📁 Koperasi
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="pengurus-tab" data-toggle="tab" href="#pengurus" role="tab" aria-controls="pengurus" aria-selected="false">
+            <a class="nav-link" id="pengurus-tab" data-bs-toggle="tab" href="#pengurus" role="tab" aria-controls="pengurus" aria-selected="false">
                 🗂️ Pengurus/Pengawas
             </a>
         </li>
