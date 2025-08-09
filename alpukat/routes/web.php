@@ -62,7 +62,8 @@ Route::middleware('auth', 'admin')->group(function () {
     // Tampilkan halaman hasil verifikasi
     Route::get('/hasil-verifikasi', [VerifikasiController::class, 'hasilVerifikasi'])->name('admin.hasil_verifikasi');
 
-    Route::resource('berkas-admin', BerkasAdminController::class);
+    Route::resource('berkas-admin', BerkasAdminController::class)->except(['edit', 'update', 'destroy']);
+
     Route::get('berkas-admin/{id}/download', [BerkasAdminController::class, 'download'])->name('berkas-admin.download');
 
 });

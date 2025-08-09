@@ -1,38 +1,54 @@
-<!-- List semua berkas -->
-
 @extends('admin.dashboard')
 
 @section('content')
-<h1>Daftar Berkas</h1>
+<div class="container mt-5">
+    <h1 class="mb-3">Daftar Berkas</h1>
+    <p>Berikut adalah daftar berkas yang telah Anda kirim</p>
 
-<a href="{{ route('berkas-admin.create') }}" class="btn btn-primary">Tambah Berkas</a>
+    <a href="{{ route('berkas-admin.create') }}" class="btn btn-primary mb-4">Tambah Berkas</a>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Nama Berkas</th>
-            <th>File</th>
-            <th>Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($data as $berkas)
-        <tr>
-            <td>{{ $berkas->nama_berkas }}</td>
-            <td>
-                <a href="{{ asset('storage/berkas_Admin/'.$berkas->file) }}" target="_blank">Lihat</a></td>
-            <td>
-                <a href="{{ route('berkas-admin.show', $berkas->id) }}" class="btn btn-info btn-sm">Detail</a>
-                <a href="{{ route('berkas-admin.edit', $berkas->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                <a href="{{ route('berkas-admin.download', $berkas->id) }}" class="btn btn-success btn-sm">Download</a>
-                <form action="{{ route('berkas-admin.destroy', $berkas->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('akin ingin menghapus berkas ini?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-dark text-center">
+            <tr>
+                <th>Nama Berkas</th>
+                <th>User</th>
+                <th>Tanggal Wawancara</th>
+                <th>File</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($data as $berkas)
+            <tr>
+                <td>
+                    {{ $berkas->nama_berkas ?? ucfirst(str_replace('_', ' ', $berkas->jenis_surat)) }}
+                </td>
+                <td>
+                    {{ $berkas->verifikasi->user->name ?? '-' }}
+                </td>
+                <td>
+                    {{ optional($berkas->verifikasi->tanggal_wawancara)->format('d-m-Y') ?? '-'}}
+                </td>
+                <td class="text-center">
+                    <a href="{{ asset('storage/berkas_admin/' . $berkas->file_path) }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                        Lihat
+                    </a>
+                </td>
+                <td class="text-center">
+                    <a href="{{ route('berkas-admin.download', $berkas->id) }}" class="btn btn-success btn-sm me-1">Download</a>
+                </td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="3" class="text-center text-muted">Belum ada berkas yang dikirim.</td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+
+    <!-- Pagination Links -->
+    <div class="mt-3">
+        {{ $data->links() }}
+    </div>
+</div>
 @endsection

@@ -4,6 +4,7 @@
 
 <div class="container mt-5">
     <h2 class="mb-4 fw-bold">Hasil Verifikasi Pengajuan</h2>
+    <p>Berikut adalah hasil verifikasi pengajuan surat</p>
 
     <table class="table table-bordered align-middle">
         <thead class="table-dark">

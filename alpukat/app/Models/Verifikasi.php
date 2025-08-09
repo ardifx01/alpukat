@@ -25,12 +25,6 @@ class Verifikasi extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Relasi ke admin yang memverifikasi
-    // public function admin()
-    // {
-    //     return $this->belongsTo(Admin::class);
-    // }
-
     public function berkasAdmin()
     {
         return $this->hasMany(BerkasAdmin::class);

@@ -3,6 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <h2 class="mb-4 fw-bold">Daftar Pengajuan Koperasi</h2>
+    <p>Berikut adalah daftar surat yang telah masuk</p>
 
     <table class="table table-bordered align-middle">
         <thead class="table-dark">
@@ -55,11 +56,11 @@
                 </tr>
             @endforelse
         </tbody>
-
-        {{-- Pagination --}}
+    </table>
+    
+    {{-- Pagination --}}
         <div class="mt-3">
             {{ $users->links() }}
         </div>
-    </table>
 </div>
 @endsection
