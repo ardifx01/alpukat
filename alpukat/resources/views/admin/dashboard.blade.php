@@ -4,8 +4,8 @@
 
 @section('content')
 
-<div class="container-fluid px-4">
-    <h1 class="mt-4">Halaman Admin</h1>
+<div class="container mt-5">
+    <h1 class="mb-4 fw-bold">Halaman Admin</h1>
     <p>Selamat datang di dashboard admin!</p>
 </div>
 @endsection

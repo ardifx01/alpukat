@@ -2,19 +2,8 @@
 
 @section('content')
 
-@if(session('hapussyarat_pesan'))
-    <div style="margin-bottom: 10px; color: black; background-color:orangered;">
-        {{session('hapussyarat_pesan')}}
-    </div>
-@endif
 <div class="container mt-5">
-    <h2 class="mb-4">Lihat Persyaratan Berkas</h2>
-
-    @if(session('syarat_pesan'))
-    <div class="alert alert-success">
-        {{ session('syarat_pesan') }}
-    </div>
-    @endif
+    <h2 class="mb-4 fw-bold">Lihat Persyaratan Berkas</h2>
 
     {{-- TAB NAV --}}
     <ul class="nav nav-tabs" id="syaratTab" role="tablist">

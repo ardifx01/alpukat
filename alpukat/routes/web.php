@@ -5,6 +5,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\VerifikasiController;
+use App\Http\Controllers\BerkasAdminController;
+use App\Models\BerkasAdmin;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -59,6 +61,10 @@ Route::middleware('auth', 'admin')->group(function () {
     
     // Tampilkan halaman hasil verifikasi
     Route::get('/hasil-verifikasi', [VerifikasiController::class, 'hasilVerifikasi'])->name('admin.hasil_verifikasi');
+
+    Route::resource('berkas-admin', BerkasAdminController::class);
+    Route::get('berkas-admin/{id}/download', [BerkasAdminController::class, 'download'])->name('berkas-admin.download');
+
 });
 
 require __DIR__ . '/auth.php';

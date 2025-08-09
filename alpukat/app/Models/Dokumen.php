@@ -23,11 +23,11 @@ class Dokumen extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function syarat()
     {
-        return $this->belongsTo(Syarat::class);
+        return $this->belongsTo(Syarat::class, 'syarat_id');
     }
 }

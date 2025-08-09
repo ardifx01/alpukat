@@ -1,71 +1,87 @@
 <!-- Sidebar -->
+@php
+$menus = [
+    [
+        'heading' => 'Core',
+        'items' => [
+            ['label' => 'Dashboard', 'icon' => 'fas fa-tachometer-alt', 'route' => 'admin.dashboard'],
+        ]
+    ],
+    [
+        'heading' => 'Peran Admin',
+        'items' => [
+            [
+                'label' => 'Verifikasi Berkas',
+                'icon' => 'fas fa-columns',
+                'children' => [
+                    ['label' => 'Daftar Pengajuan', 'route' => 'admin.daftar_pengajuan'],
+                    ['label' => 'Lihat Hasil Verifikasi', 'route' => 'admin.hasil_verifikasi'],
+                ]
+            ],
+            [
+                'label' => 'Kirim Berkas',
+                'icon' => 'fas fa-book-open',
+                'children' => [
+                    ['label' => 'Upload Berkas', 'route' => 'berkas-admin.create'],
+                    ['label' => 'Lihat Berkas', 'route' => 'berkas-admin.index'],
+                ]
+            ],
+            [
+                'label' => 'Kelola Persyaratan',
+                'icon' => 'fas fa-columns',
+                'children' => [
+                    ['label' => 'Tambah Persyaratan', 'route' => 'admin.tambah_syarat'],
+                    ['label' => 'Kelola Persyaratan', 'route' => 'admin.lihat_syarat'],
+                ]
+            ]
+        ]
+    ]
+];
+@endphp
+
 <div id="layoutSidenav_nav">
-    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+    <nav class="sb-sidenav accordion sidebar-gradient" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
             <div class="nav">
+                @foreach($menus as $menu)
+                    <div class="sb-sidenav-menu-heading">{{ $menu['heading'] }}</div>
 
-                <div class="sb-sidenav-menu-heading">Core</div>
-                <a class="nav-link" href="{{ route('admin.dashboard') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    Dashboard
-                </a>
-
-                <div class="sb-sidenav-menu-heading">Peran Admin</div>
-
-                <!-- Verifikasi Berkas -->
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseVerifikasi" aria-expanded="false" aria-controls="collapseVerifikasi">
-                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                    Verifikasi Berkas
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseVerifikasi" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="{{ route('admin.daftar_pengajuan') }}">Daftar Pengajuan</a>
-                        <a class="nav-link" href="{{ route('admin.hasil_verifikasi') }}">Lihat Hasil Verifikasi</a>
-                    </nav>
-                </div>
-
-                <!-- Kirim Berkas -->
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseKirim" aria-expanded="false" aria-controls="collapseKirim">
-                    <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                    Kirim Berkas
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseKirim" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="#">Upload Berkas</a>
-                        <a class="nav-link" href="#">Lihat Berkas</a>
-                    </nav>
-                </div>
-
-                <!-- Kelola Persyaratan -->
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSyarat" aria-expanded="false" aria-controls="collapseSyarat">
-                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                    Kelola Persyaratan
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseSyarat" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="{{ route('admin.tambah_syarat') }}">Tambah Persyaratan</a>
-                        <a class="nav-link" href="{{ route('admin.lihat_syarat') }}">Kelola Persyaratan</a>
-                    </nav>
-                </div>
-
-                <div class="sb-sidenav-menu-heading">Addons</div>
-                <a class="nav-link" href="charts.html">
-                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                    Charts
-                </a>
-                <a class="nav-link" href="tables.html">
-                    <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                    Tables
-                </a>
-
+                    @foreach($menu['items'] as $item)
+                        @if(isset($item['children']))
+                            @php
+                                $isActive = collect($item['children'])->contains(fn($child) => Request::routeIs($child['route']));
+                            @endphp
+                            <a class="nav-link {{ $isActive ? '' : 'collapsed' }}"
+                               href="#"
+                               data-bs-toggle="collapse"
+                               data-bs-target="#collapse{{ \Illuminate\Support\Str::slug($item['label']) }}"
+                               aria-expanded="{{ $isActive ? 'true' : 'false' }}">
+                                <div class="sb-nav-link-icon"><i class="{{ $item['icon'] }}"></i></div>
+                                {{ $item['label'] }}
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse {{ $isActive ? 'show' : '' }}"
+                                 id="collapse{{ \Illuminate\Support\Str::slug($item['label']) }}"
+                                 data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    @foreach($item['children'] as $child)
+                                        <a class="nav-link {{ Request::routeIs($child['route']) ? 'active' : '' }}"
+                                           href="{{ route($child['route']) }}">
+                                            {{ $child['label'] }}
+                                        </a>
+                                    @endforeach
+                                </nav>
+                            </div>
+                        @else
+                            <a class="nav-link {{ Request::routeIs($item['route']) ? 'active' : '' }}"
+                               href="{{ route($item['route']) }}">
+                                <div class="sb-nav-link-icon"><i class="{{ $item['icon'] }}"></i></div>
+                                {{ $item['label'] }}
+                            </a>
+                        @endif
+                    @endforeach
+                @endforeach
             </div>
-        </div>
-        <div class="sb-sidenav-footer">
-            <div class="small">Logged in as:</div>
-            Dinas Koperasi (Admin)
         </div>
     </nav>
 </div>

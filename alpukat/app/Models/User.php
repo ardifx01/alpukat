@@ -48,9 +48,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function dokumen()
+    public function dokumens()
     {
-        return $this->hasMany(Dokumen::class);
+        return $this->hasMany(Dokumen::class, 'user_id');
     }
 
     public function verifikasi()
@@ -61,5 +61,10 @@ class User extends Authenticatable
     public function notifikasi()
     {
         return $this->hasMany(Notifikasi::class);
+    }
+
+    public function berkasAdmin()
+    {
+        return $this->hasMany(BerkasAdmin::class);
     }
 }

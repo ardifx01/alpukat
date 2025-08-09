@@ -1,18 +1,6 @@
 @extends('admin.dashboard')
 
 @section('content')
-    @if(session('verif_pesan'))
-        <div class="alert alert-success">
-            {{ session('verif_pesan') }}
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-
     <div class="container-fluid">
         <h2 class="mb-4">Verifikasi Pengajuan: {{ $users->name }}</h2>
         <form method="POST" action="{{ route('admin.verif_berkas', ['id' => $users->id]) }}">

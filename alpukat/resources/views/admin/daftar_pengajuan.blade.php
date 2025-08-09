@@ -1,11 +1,11 @@
 @extends('admin.dashboard')
 
 @section('content')
-<div class="container">
-    <h2 class="mb-4">Daftar Pengajuan Koperasi</h2>
+<div class="container mt-5">
+    <h2 class="mb-4 fw-bold">Daftar Pengajuan Koperasi</h2>
 
-    <table class="table table-bordered">
-        <thead>
+    <table class="table table-bordered align-middle">
+        <thead class="table-dark">
             <tr>
                 <th>Nama Koperasi</th>
                 <th>Email</th>
@@ -16,34 +16,50 @@
             </tr>
         </thead>
         <tbody>
-            @php
-                $grouped = $dokumens->groupBy('user_id');
-            @endphp
-
-            @forelse ($grouped as $userId => $dokumens)
-                @foreach ($dokumens as $index => $dokumen)
+            @forelse ($users as $user)
+                @foreach ($user->dokumens as $index => $dokumen)
                     <tr>
-                        <td>{{ $dokumen->user->name ?? '-' }}</td>
-                        <td>{{ $dokumen->user->email ?? '-' }}</td>
-                        <td>{{ $dokumen->syarat->nama_syarat ?? '-' }}</td>
-                        <td>{{ $dokumen->syarat->kategori_syarat ?? '-' }}</td>
+                        @if ($loop->first)
+                            {{-- Nama dan email hanya di baris pertama untuk user ini --}}
+                            <td rowspan="{{ $user->dokumens->count() }}">
+                                {{ $user->name ?? '-'}}
+                            </td>
+                            <td rowspan="{{ $user->dokumens->count() }}">
+                                {{ $user->email ?? '-'}}
+                            </td>
+                        @endif
                         <td>
-                            <a href="{{ asset('storage/' . $dokumen->file_path) }}" target="_blank">Lihat File</a>
+                            {{ $dokumen->syarat->nama_syarat ?? '-'}}
+                        </td>
+                        <td>
+                            {{ $dokumen->syarat->kategori_syarat ?? '-'}}
+                        </td>
+                        <td>
+                            <a href="{{ asset('storage/' . $dokumen->file_path) }}" target="_blank">
+                                Lihat File
+                            </a>
                         </td>
 
                         @if ($loop->first)
-                            <td rowspan="{{ $dokumens->count() }}">
-                                <a href="{{ route('admin.verif_berkas', $userId) }}" class="btn btn-sm btn-primary">Verifikasi</a>
+                            <td rowspan="{{ $user->dokumens->count() }}">
+                                <a href="{{ route('admin.verif_berkas', $user->id) }}" class="btn btn-sm btn-primary">Verifikasi</a>
                             </td>
                         @endif
                     </tr>
                 @endforeach
             @empty
                 <tr>
-                    <td colspan="7">Belum ada dokumen yang diunggah.</td>
+                    <td colspan="6">
+                        Belum ada dokumen yang diunggah.
+                    </td>
                 </tr>
             @endforelse
         </tbody>
+
+        {{-- Pagination --}}
+        <div class="mt-3">
+            {{ $users->links() }}
+        </div>
     </table>
 </div>
 @endsection

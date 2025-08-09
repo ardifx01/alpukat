@@ -1,0 +1,53 @@
+table thead th {
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+/* === Tema Admin: Biru Senada === */
+
+/* Gradient umum untuk header dan footer */
+.app-gradient {
+    background: linear-gradient(90deg, #222F8D, #3449D0) !important;
+    color: white !important;
+}
+
+/* Sidebar gradient */
+.sidebar-gradient {
+    background: linear-gradient(180deg, #222F8D, #3449D0) !important;
+    color: white !important;
+}
+
+/* Heading sidebar */
+.sidebar-gradient .sb-sidenav-menu-heading {
+    color: rgba(255, 255, 255, 0.7) !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+/* Link sidebar */
+.sidebar-gradient .nav-link {
+    color: white !important;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hover sidebar */
+.sidebar-gradient .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #FFD700 !important; /* emas pas hover */
+}
+
+/* Link aktif sidebar */
+.sidebar-gradient .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    font-weight: bold;
+}
+
+/* Footer teks */
+.footer-text {
+    color: white !important;
+}
+
+/* Footer background */
+.footer-gradient {
+    background: linear-gradient(90deg, #222F8D, #3449D0) !important;
+}

@@ -11,6 +11,7 @@
     <link href="{{ asset('theme/css/styles.css') }}" rel="stylesheet" />
     <link rel="shortcut icon" href="{{ asset('theme/assets/img/logo_kepri.png') }}">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
 <body class="sb-nav-fixed">
     @include('theme.header')
@@ -20,6 +21,18 @@
 
         <div id="layoutSidenav_content">
             <main>
+                {{-- Flash message global --}}
+                @foreach (['success', 'error', 'warning', 'info'] as $msg)
+                    @if(session($msg))
+                        <div class="alert alert-{{ $msg === 'error' ? 'danger' : $msg }} 
+                                    alert-dismissible fade show mt-3 mx-3" role="alert">
+                            {{ session($msg) }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                @endforeach
+                {{-- Akhir flash message global --}}
+
                 @yield('content')
             </main>
 
@@ -28,6 +41,39 @@
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-...hash..." crossorigin="anonymous"></script>
 
             <script src="{{ asset('theme/js/scripts.js') }}"></script>
+
+            {{-- Script animasi flash message --}}
+            <style>
+                /* Efek muncul slide dari atas */
+                .alert {
+                    transform: translateY(-20px);
+                    opacity: 0;
+                    transition: all 0.5s ease;
+                }
+                .alert.showing {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            </style>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const alerts = document.querySelectorAll('.alert');
+
+                    alerts.forEach(function (alert) {
+                        // Tambah kelas untuk animasi muncul
+                        setTimeout(() => alert.classList.add('showing'), 50);
+
+                        // Setelah 3 detik, fade out
+                        setTimeout(function () {
+                            // Tambahkan efek fade out
+                            alert.style.opacity = '0';
+                            alert.style.transform = 'translateY(-20px)';
+                            setTimeout(() => alert.remove(), 500); // hapus setelah animasi selesai
+                        }, 3000);
+                    });
+                });
+            </script>
         </div>
     </div>
 </body>

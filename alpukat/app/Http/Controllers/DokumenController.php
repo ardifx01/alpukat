@@ -72,13 +72,11 @@ class DokumenController extends Controller
 
     public function daftarPengajuan()
     {
-        $semuaDokumen = Dokumen::with(['user', 'syarat'])->get();
+        // Ambil user yang punya dokumen, dan relasi dokumennya
+        $users = \App\Models\User::whereHas('dokumens')
+            ->with(['dokumens.syarat']) // relasi dokumen + syarat
+            ->paginate(1); // 1 user per halaman
 
-        $someUser = $semuaDokumen->first()?->user;
-
-        return view('admin.daftar_pengajuan', [
-            'dokumens' => $semuaDokumen,
-            'user' => $someUser, // dikirim ke blade
-        ]);
+        return view('admin.daftar_pengajuan', compact('users'));
     }
 }

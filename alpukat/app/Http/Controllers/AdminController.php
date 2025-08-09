@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Syarat;
-use App\Models\Verifikasi;
 
 class AdminController extends Controller
 {
@@ -33,7 +31,7 @@ class AdminController extends Controller
         $syarat->kategori_syarat = $request->kategori_syarat;
         $syarat->save();
 
-        return redirect()->back()->with('syarat_pesan', 'Persyaratan berhasil ditambahkan!');
+        return redirect()->route('admin.lihat_syarat')->with('success', 'Persyaratan berhasil ditambahkan!');
     }
 
     public function lihatSyarat()
@@ -50,7 +48,7 @@ class AdminController extends Controller
 
         $syarat->delete();
 
-        return redirect()->back()->with('hapussyaratsyarat_pesan', 'Persyaratan berhasil dihapus!');
+        return redirect()->route('admin.lihat_syarat')->with('success', 'Persyaratan berhasil dihapus!');
     }
 
     public function editSyarat($id)
@@ -72,6 +70,6 @@ class AdminController extends Controller
         $syarat->kategori_syarat=$request->kategori_syarat;
         $syarat->save();
         
-        return redirect()->back()->with('editsyarat_pesan', 'Persyaratan berhasil diedit!');
+        return redirect()->route('admin.lihat_syarat')->with('success', 'Persyaratan berhasil diedit!');
     }
 }

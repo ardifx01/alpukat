@@ -113,12 +113,12 @@ class VerifikasiController extends Controller
 
         // dd($notifikasi);
 
-        return redirect()->route('admin.verif_berkas', ['id' => $id])->with('verif_pesan', 'Verifikasi berhasil disimpan.');
+        return redirect()->route('admin.verif_berkas', ['id' => $id])->with('success', 'Verifikasi berhasil disimpan.');
     }
 
     public function hasilVerifikasi()
     {
-        $verifikasi = Verifikasi::with('user')->orderBy('updated_at', 'desc')->paginate(10);
+        $verifikasi = Verifikasi::with('user')->orderBy('updated_at', 'desc')->paginate(3);
 
         // dd($verifikasi);
         return view('admin.hasil_verifikasi', compact('verifikasi'));

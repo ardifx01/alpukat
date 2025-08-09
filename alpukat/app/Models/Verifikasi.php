@@ -31,8 +31,8 @@ class Verifikasi extends Model
     //     return $this->belongsTo(Admin::class);
     // }
 
-    public function pengajuan()
+    public function berkasAdmin()
     {
-        return $this->belongsTo(Pengajuan::class);
+        return $this->hasMany(BerkasAdmin::class);
     }
 }

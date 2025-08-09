@@ -1,32 +1,47 @@
 @extends('admin.dashboard')
 
-<base href="/public">
 @section('content')
+<div class="container mt-5">
+    <h2 class="mb-4 fw-bold">Edit Syarat Dokumen</h2>
 
-@if(session('editsyarat_pesan'))
-<div style="border: 1px solid blue; color:white; border-radius: 4px rounded; padding: 10px; background-color:blue; margin-bottom: 10px;">
-    {{ session('editsyarat_pesan') }}
-</div>
-@endif
-<div class="container-fluid">
     <form action="{{ route('admin.post_edit_syarat', $syarat->id) }}" method="POST">
         @csrf
 
-        <div class="form-group">
-            <label for="nama_syarat">Nama Persyaratan</label>
-            <input type="text" name="nama_syarat" value="{{ $syarat->nama_syarat }}" placeholder="Tuliskan nama persyaratan">
+        {{-- Nama Persyaratan --}}
+        <div class="mb-3">
+            <label for="nama_syarat" class="form-label">Nama Persyaratan</label>
+            <input 
+                type="text" 
+                name="nama_syarat" 
+                id="nama_syarat"
+                value="{{ $syarat->nama_syarat }}" 
+                placeholder="Tuliskan nama persyaratan"
+                class="form-control"
+                required
+            >
         </div>
 
-        <div class="form-group">
-            <label for="kategori_syarat">Kategori Persyaratan</label>
-            <select name="kategori_syarat" required>
+        {{-- Kategori Persyaratan --}}
+        <div class="mb-3">
+            <label for="kategori_syarat" class="form-label">Kategori Persyaratan</label>
+            <select 
+                name="kategori_syarat" 
+                id="kategori_syarat"
+                class="form-select"
+                required
+            >
                 <option value="">-- Pilih Kategori --</option>
                 <option value="koperasi" {{ $syarat->kategori_syarat == 'koperasi' ? 'selected' : '' }}>Koperasi</option>
                 <option value="pengurus" {{ $syarat->kategori_syarat == 'pengurus' ? 'selected' : '' }}>Pengurus/Pengawas Koperasi</option>
             </select>
         </div>
 
-        <input type="submit" name="submit" value="Edit Syarat">
+        {{-- Tombol Submit --}}
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">
+                Edit Syarat
+            </button>
+        </div>
     </form>
 </div>
 @endsection
