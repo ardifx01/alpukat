@@ -5,7 +5,6 @@
     <h1 class="mb-4 fw-bold">Tambah Berkas</h1>
     <p>Masukkan berita acara dan SK UKK di sini</p>
 
-    <!-- Tampilkan pesan error validasi -->
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul class="mb-0">
@@ -19,21 +18,29 @@
     <form id="formTambahBerkas" action="{{ route('berkas-admin.store') }}" method="POST" enctype="multipart/form-data" novalidate>
         @csrf
 
-        <!-- Pilih Koperasi yang telah diwawancarai -->
+        {{-- Pilih Koperasi --}}
         <div class="mb-3">
             <label for="verifikasi_id" class="form-label">Pilih Koperasi yang Telah Diwawancarai</label>
             <select name="verifikasi_id" id="verifikasi_id" class="form-select" required>
-                <option value="" disabled selected>-- Pilih Koperasi yang Telah Diwawancarai --</option>
+                <option value="" disabled selected>-- Pilih Koperasi --</option>
                 @foreach($verifikasis as $verifikasi)
-                    <option value="{{ $verifikasi->id }}" {{ old('verifikasi_id') == $verifikasi->id ? 'selected' : '' }}>
-                        {{ optional($verifikasi->tanggal_wawancara)->format('d-m-Y') ?? '-' }} - {{ $verifikasi->user->name ?? 'User' }}
+                    <option 
+                        value="{{ $verifikasi->id }}" 
+                        data-tanggal="{{ $verifikasi->tanggal_wawancara ? \Carbon\Carbon::parse($verifikasi->tanggal_wawancara)->format('d-m-Y') : '' }}">
+                        {{ $verifikasi->user->name ?? 'User' }}
                     </option>  
                 @endforeach 
             </select>
             <div class="invalid-feedback">Harap pilih koperasi yang sudah diwawancara.</div>
         </div>
 
-        <!-- Jenis Surat -->
+        {{-- Tanggal Wawancara --}}
+        <div class="mb-3">
+            <label for="tanggal_wawancara" class="form-label">Tanggal Wawancara</label>
+            <input type="text" id="tanggal_wawancara" class="form-control" readonly>
+        </div>
+
+        {{-- Jenis Surat --}}
         <div class="mb-3">
             <label for="jenis_surat" class="form-label">Jenis Surat</label>
             <select name="jenis_surat" id="jenis_surat" class="form-select" required>
@@ -44,7 +51,7 @@
             <div class="invalid-feedback">Jenis surat wajib dipilih.</div>
         </div>
 
-        <!-- Upload File -->
+        {{-- Upload File --}}
         <div class="mb-3">
             <label for="file" class="form-label">File PDF</label>
             <input type="file" name="file" id="file" class="form-control" accept="application/pdf" required>
@@ -58,7 +65,16 @@
         </div>
     </form>
 
+    {{-- Script --}}
     <script>
+        // Auto-set tanggal wawancara
+        document.getElementById('verifikasi_id').addEventListener('change', function() {
+            let selectedOption = this.options[this.selectedIndex];
+            let tanggal = selectedOption.getAttribute('data-tanggal') || '';
+            document.getElementById('tanggal_wawancara').value = tanggal;
+        });
+
+        // Validasi file & form
         (function () {
             'use strict';
 
@@ -67,24 +83,11 @@
             const maxSize = 5 * 1024 * 1024; // 5 MB
 
             form.addEventListener('submit', function (event) {
-                // Reset custom validation
                 fileInput.classList.remove('is-invalid');
 
-                // Cek file dulu
-                if (fileInput.files.length === 0) {
-                    // Jika tidak ada file, biarkan validasi HTML berjalan (required)
-                } else {
-                    // Cek ekstensi (hanya pdf)
+                if (fileInput.files.length > 0) {
                     const file = fileInput.files[0];
-                    const validTypes = ['application/pdf'];
-                    if (!validTypes.includes(file.type)) {
-                        fileInput.classList.add('is-invalid');
-                        event.preventDefault();
-                        event.stopPropagation();
-                        return;
-                    }
-                    // Cek ukuran
-                    if (file.size > maxSize) {
+                    if (file.type !== 'application/pdf' || file.size > maxSize) {
                         fileInput.classList.add('is-invalid');
                         event.preventDefault();
                         event.stopPropagation();

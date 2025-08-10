@@ -12,7 +12,7 @@
             <tr>
                 <th>Nama Berkas</th>
                 <th>User</th>
-                <th>Tanggal Wawancara</th>
+                <th>Tanggal Ditambahkan</th>
                 <th>File</th>
                 <th>Aksi</th>
             </tr>
@@ -27,7 +27,7 @@
                     {{ $berkas->verifikasi->user->name ?? '-' }}
                 </td>
                 <td>
-                    {{ optional($berkas->verifikasi->tanggal_wawancara)->format('d-m-Y') ?? '-'}}
+                    {{ $berkas->created_at->format('d-m-Y H:i') }}
                 </td>
                 <td class="text-center">
                     <a href="{{ asset('storage/berkas_admin/' . $berkas->file_path) }}" target="_blank" class="btn btn-outline-primary btn-sm">

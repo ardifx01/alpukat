@@ -18,7 +18,7 @@ class BerkasAdmin extends Model
 
     public function verifikasi()
     {
-        return $this->belongsTo(Verifikasi::class);
+        return $this->belongsTo(Verifikasi::class, 'verifikasi_id');
     }
 
     public function user()
