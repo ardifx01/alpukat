@@ -1,383 +1,247 @@
-<!-- untuk dashboard user -->
-
 <!DOCTYPE html>
-<html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>ALPUKAT - Aplikasi Uji Kelayakan dan Kepatutan</title>
+    <link rel="shortcut icon" href="{{ asset('front_end/images/logo_kepri.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ asset('front_end/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('front_end/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('front_end/css/responsive.css') }}">
 
 <head>
-    <!-- Basic -->
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <!-- Site Metas -->
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <link rel="shortcut icon" href="front_end/images/logo_kepri.png" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Header ALPUKAT</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
 
-    <title>
-        Alpukat
-    </title>
+    /* Header Container */
+    header {
+        background-color: #E6F4FB; /* Warna biru muda */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 40px;
+    }
 
-    <!-- slider stylesheet -->
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    /* Logo dan Nama */
+    .logo-container {
+        display: flex;
+        align-items: center;
+    }
 
-    <!-- bootstrap core css -->
-    <link rel="stylesheet" type="text/css" href="front_end/css/bootstrap.css" />
+    .logo-container img {
+        height: 50px;
+        margin-right: 10px;
+    }
 
-    <!-- Custom styles for this template -->
-    <link href="front_end/css/style.css" rel="stylesheet" />
-    <!-- responsive style -->
-    <link href="front_end/css/responsive.css" rel="stylesheet" />
+    .logo-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .logo-text h1 {
+        font-size: 14px;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .logo-text p {
+        font-size: 12px;
+        margin: 0;
+    }
+
+    /* Menu Navigation */
+    nav {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    }
+
+    nav a {
+        text-decoration: none;
+        color: black;
+        font-size: 14px;
+    }
+
+    nav a.active {
+        font-weight: bold;
+    }
+
+    /* Tombol Login */
+    .login-btn {
+        background-color: #23349E;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    /* Responsif */
+    @media (max-width: 768px) {
+        header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        nav {
+            margin-top: 10px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+    }
+</style>
 </head>
-
 <body>
-    <div class="hero_area">
-        <!-- header section strats -->
-        <header class="header_section">
-            <nav class="navbar navbar-expand-lg custom_nav-container ">
-                <a class="navbar-brand" href="index.html">
-                    <span>
-                        Alpukat
-                    </span>
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class=""></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav  ">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{{ route('dashboard') }}">Beranda <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('dokumen.store')}}">
-                                Pengajuan
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('dokumen.lihat_berkas') }}">
-                                Lihat Dokumen Saya
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('notifikasi') }}">
-                                Notifikasi
-                                @php
-                                    $jumlahNotifikasiBelumDibaca = \App\Models\Notifikasi::where('user_id', auth()->id())
-                                        ->where('dibaca', false)
-                                        ->count();
-                                @endphp
-
-                                @if($jumlahNotifikasiBelumDibaca > 0)
-                                    <span class="badge bg-danger">{{ $jumlahNotifikasiBelumDibaca }}</span>
-                                @endif
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="user_option">
-                        @if(Auth::check())
-                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button type="submit" style="background: none; border: none; color: inherit; cursor: pointer;">
-                                <i class="icon-logout"></i>
-                                <span>Logout</span>
-                            </button>
-                        </form>
-                        @else
-                        <a href="{{route('login')}}">
-                            <i class="fa fa-user" aria-hidden="true"></i>
-                            <span>
-                                Login
-                            </span>
-                        </a>
-                        <a href="{{route('register')}}">
-                            <i class="fa fa-user" aria-hidden="true"></i>
-                            <span>
-                                Sign Up
-                            </span>
-                        </a>
-                        @endif
-                        <!-- <form class="form-inline ">
-                            <button class="btn nav_search-btn" type="submit">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </button>
-                        </form> -->
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <!-- end header section -->
-        <!-- slider section -->
-
-        <section class="slider_section">
-            <div class="slider_container">
-                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <div class="col-md-7">
-                                        <div class="detail-box">
-                                            <h1>
-                                                Selamat Datang di<br>
-                                                Alpukat
-                                            </h1>
-                                            <p>
-                                                Aplikasi Uji Kelayakan dan Kepatutan
-                                            </p>
-                                            <a href="{{ asset('files/juklak_ukk.pdf') }}" download>
-                                                Download Juklak UKK
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-5 ">
-                                        <div class="img-box">
-                                            <img style="width:600px" src="front_end/images/gambar_login.png" alt="Kompleks gedung gubernur" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- end slider section -->
+<header>
+    <div class="logo-container">
+        <img src="logo.png" alt="Logo Dinas"> <!-- Ganti dengan path logo -->
+        <div class="logo-text">
+            <h1>Dinas Koperasi, Usaha Kecil dan Menengah</h1>
+            <p>Dompak, Kec. Bukit Bestari, Kota Tanjungpinang, Kepulauan Riau</p>
+        </div>
     </div>
-    <!-- end hero area -->
 
-    <!-- shop section -->
+    <nav>
+        <a href="#" class="active">Beranda</a>
+        <a href="#">Pengajuan</a>
+        <a href="#">Notifikasi</a>
+        <a href="#" class="login-btn">Login</a>
+    </nav>
+</header>
 
-    <section class="shop_section layout_padding">
-        <div class="container">
-            <div class="heading_container heading_center">
-                <h2>
-                    Latest Products
-                </h2>
+    <!-- Animations -->
+    <style>
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeLeft {
+            0% { opacity: 0; transform: translateX(-30px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeRight {
+            0% { opacity: 0; transform: translateX(30px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        .animate-up { animation: fadeUp 0.8s ease forwards; }
+        .animate-left { animation: fadeLeft 0.8s ease forwards; }
+        .animate-right { animation: fadeRight 0.8s ease forwards; }
+
+        .hero-section {
+            background: #1f2b7b;
+            padding: 80px 0;
+            color: white;
+        }
+        .hero-section h1 {
+            font-size: 48px;
+            font-weight: bold;
+        }
+        .hero-section p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .hero-section .btn-primary {
+            background-color: #0071e3;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+        }
+        .steps-section {
+            padding: 60px 0;
+            background: #f8f9fa;
+            text-align: center;
+        }
+        .steps-section h2 {
+            font-weight: bold;
+            margin-bottom: 40px;
+        }
+        .step-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            opacity: 0; /* Hidden before animation */
+        }
+        .step-number {
+            font-size: 22px;
+            font-weight: bold;
+            background: #000;
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+        }
+        .about-section {
+            padding: 60px 0;
+        }
+        .about-section img {
+            width: 100%;
+            border-radius: 8px;
+        }
+        footer {
+            background: #1f2b7b;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+        }
+    </style>
+</head>
+<body>
+
+{{-- @include('partials.navbar') Navbar tetap sama seperti versi sebelumnya --}}
+
+<!-- Hero -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-7 animate-up">
+                <h1>Selamat Datang di <br>ALPUKAT</h1>
+                <p>Aplikasi Uji Kelayakan dan Kepatutan</p>
+                <a href="{{ asset('files/juklak_ukk.pdf') }}" class="btn btn-primary mb-2" download>Download Juklak UKK</a>
+                @guest
+                    <br>
+                    <a href="{{ route('login') }}" class="btn btn-light">Login untuk Pengajuan</a>
+                @endguest
             </div>
-            <div class="row">
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="box">
-                        <a href="">
-                            <div class="img-box">
-                                <img src="front_end/images/p1.png" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h6>
-                                    Ring
-                                </h6>
-                                <h6>
-                                    Price
-                                    <span>
-                                        $200
-                                    </span>
-                                </h6>
-                            </div>
-                            <div class="new">
-                                <span>
-                                    New
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="box">
-                        <a href="">
-                            <div class="img-box">
-                                <img src="front_end/images/p2.png" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h6>
-                                    Watch
-                                </h6>
-                                <h6>
-                                    Price
-                                    <span>
-                                        $300
-                                    </span>
-                                </h6>
-                            </div>
-                            <div class="new">
-                                <span>
-                                    New
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="box">
-                        <a href="">
-                            <div class="img-box">
-                                <img src="front_end/images/p3.png" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h6>
-                                    Teddy Bear
-                                </h6>
-                                <h6>
-                                    Price
-                                    <span>
-                                        $110
-                                    </span>
-                                </h6>
-                            </div>
-                            <div class="new">
-                                <span>
-                                    New
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="box">
-                        <a href="">
-                            <div class="img-box">
-                                <img src="front_end/images/p4.png" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h6>
-                                    Flower Bouquet
-                                </h6>
-                                <h6>
-                                    Price
-                                    <span>
-                                        $45
-                                    </span>
-                                </h6>
-                            </div>
-                            <div class="new">
-                                <span>
-                                    New
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="box">
-                        <a href="">
-                            <div class="img-box">
-                                <img src="front_end/images/p5.png" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h6>
-                                    Teddy Bear
-                                </h6>
-                                <h6>
-                                    Price
-                                    <span>
-                                        $95
-                                    </span>
-                                </h6>
-                            </div>
-                            <div class="new">
-                                <span>
-                                    New
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="box">
-                        <a href="">
-                            <div class="img-box">
-                                <img src="front_end/images/p6.png" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h6>
-                                    Flower Bouquet
-                                </h6>
-                                <h6>
-                                    Price
-                                    <span>
-                                        $70
-                                    </span>
-                                </h6>
-                            </div>
-                            <div class="new">
-                                <span>
-                                    New
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="box">
-                        <a href="">
-                            <div class="img-box">
-                                <img src="front_end/images/p7.png" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h6>
-                                    Watch
-                                </h6>
-                                <h6>
-                                    Price
-                                    <span>
-                                        $400
-                                    </span>
-                                </h6>
-                            </div>
-                            <div class="new">
-                                <span>
-                                    New
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="box">
-                        <a href="">
-                            <div class="img-box">
-                                <img src="front_end/images/p8.png" alt="">
-                            </div>
-                            <div class="detail-box">
-                                <h6>
-                                    Ring
-                                </h6>
-                                <h6>
-                                    Price
-                                    <span>
-                                        $450
-                                    </span>
-                                </h6>
-                            </div>
-                            <div class="new">
-                                <span>
-                                    New
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="btn-box">
-                <a href="">
-                    View All Products
-                </a>
+            <div class="col-md-5 animate-right">
+                <img src="{{ asset('front_end/images/gambar_login.png') }}" alt="Gedung" class="img-fluid rounded">
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- end shop section -->
+<!-- Steps -->
+<section class="steps-section">
+    <div class="container">
+        <h2 class="animate-up">Tata Cara Pengajuan</h2>
+        <div class="row">
+            @foreach (['Pendaftaran','Unggah','Verifikasi','Wawancara','Hasil'] as $i => $step)
+                <div class="col-md-2 {{ $i == 0 ? 'offset-md-1' : '' }}">
+                    <div class="step-box" style="animation: fadeUp 0.6s ease {{ $i * 0.2 }}s forwards;">
+                        <div class="step-number">{{ $i+1 }}</div>
+                        <p>{{ $step }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
 
-
-
-
-
-
-
-    <!-- contact section -->
+<!-- contact section -->
 
     <section class="contact_section ">
         <div class="container px-0">
