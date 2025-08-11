@@ -115,8 +115,9 @@
 
         <nav>
             <a href="#" class="active">Beranda</a>
-            <a href="#">Pengajuan</a>
-            <a href="#">Notifikasi</a>
+            <a href="{{ route('dokumen.create') }}">Pengajuan</a>
+            <a href="{{ route('dokumen.lihat_berkas') }}">Lihat Berkas</a>
+            <a href="{{ route('notifikasi') }}">Notifikasi</a>
             <a href="#" class="login-btn">Login</a>
         </nav>
     </header>

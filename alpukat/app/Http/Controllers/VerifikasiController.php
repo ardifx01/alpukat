@@ -13,39 +13,34 @@ class VerifikasiController extends Controller
     // Tampilkan form verifikasi
     public function verifBerkas($id)
     {
-        $users = \App\Models\User::findOrFail($id);
+        $users = User::findOrFail($id);
         $dokumen = $users->dokumens ?? collect();
+
+        // Ambil verifikasi (bisa null)
         $verifikasi = Verifikasi::where('user_id', $id)->first();
 
-        if ($dokumen instanceof \Illuminate\Database\Eloquent\Collection) {
-            if ($dokumen->isEmpty()) {
-                return redirect()->back()->with('error', 'Dokumen belum diunggah.');
-            }
-            $tanggalUpload = $dokumen->first()->created_at;
-        } else {
-            // kalau relasi hasOne / single model
-            if (empty($dokumen)) {
-                return redirect()->back()->with('error', 'Dokumen belum diunggah.');
-            }
-            $tanggalUpload = $dokumen->created_at;
+        // Pastikan user punya dokumen
+        if ($dokumen->isEmpty()) {
+            return redirect()->back()->with('error', 'Dokumen belum diunggah.');
         }
 
+        // Ambil tanggal upload pertama
+        $tanggalUpload = $dokumen->first()->created_at;
         if (!$tanggalUpload) {
-            return redirect()->back()->with('error', 'Tanggal upload dokumen tidak ditemukan.');
+            return back()->with('error', 'Tanggal upload dokumen tidak ditemukan.');
         }
 
         // Ambil config (dari config/app.php)
         $batasSeconds = config('app.batas_verifikasi_seconds');
         $batasDays = config('app.batas_verifikasi_days', 14);
 
-        $batasVerifikasi = $tanggalUpload->copy();
-
+        // Hitung batas verifikasi
+        $batasVerifikasi = $tanggalUpload->copy()->addDays((int) $batasDays);
         if (!empty($batasSeconds) && is_numeric($batasSeconds)) {
-            $batasVerifikasi->addSeconds((int) $batasSeconds);
-        } else {
-            $batasVerifikasi->addDays((int) $batasDays);
+            $batasVerifikasi = $tanggalUpload->copy()->addSeconds((int) $batasSeconds);
         }
 
+        // Cek apakah batas waktu sudah lewat
         if (now()->gt($batasVerifikasi)) {
             return redirect()->route('admin.hasil_verifikasi')
                 ->with('error', 'Batas waktu verifikasi telah habis.');
@@ -86,34 +81,19 @@ class VerifikasiController extends Controller
         ]);
 
         // Cek apakah verifikasi sudah ada
-        $sudahAda = Verifikasi::where('user_id', $id)->exists();
-        if ($sudahAda) {
-            return redirect()->back()->with('error', 'Verifikasi hanya bisa diberikan sekali.');
+        if (Verifikasi::where('user_id', $id)->exists()) {
+            return back()->with('error', 'Verifikasi hanya bisa diberikan sekali.');
         }
 
         // Simpan hasil verifikasi ke dalam variabel
         $batasWawancara = null;
 
+        // Validasi agar tanggal_wawancara tidak melebihi batas
         if ($request->status === 'diterima') {
-            // Hitung 30 hari kerja dari sekarang
-            $startDate = Carbon::now();
-            $workDays = 0;
-            $date = $startDate->copy();
+            $batasWawancara = $this->hitungBatasWawancara(30);
 
-            while ($workDays < 30) {
-                if (!$date->isWeekend()) {
-                    $workDays++;
-                }
-                if ($workDays < 30) {
-                    $date->addDay();
-                }
-            }
-
-            $batasWawancara = $date;
-
-            // Validasi agar tanggal_wawancara tidak melebihi batas
             if ($request->tanggal_wawancara && Carbon::parse($request->tanggal_wawancara)->gt($batasWawancara)) {
-                return redirect()->back()->with('error', 'Tanggal wawancara tidak boleh melebihi batas maksimal (' . $batasWawancara->translatedFormat('d F Y') . ').');
+                return back()->with('error', 'Tanggal wawancara tidak boleh melebihi batas maksimal (' . $batasWawancara->translatedFormat('d F Y') . ')');
             }
         }
 
@@ -130,11 +110,9 @@ class VerifikasiController extends Controller
         $user = User::find($id);
 
         // Siapkan pesan notifikasi berdasarkan status
-        if ($request->status === 'diterima') {
-            $pesan = "Selamat! Berkas Anda sudah lengkap. Silakan ikut wawancara pada tanggal " . date('d M Y', strtotime($request->tanggal_wawancara)) . " di " . $request->lokasi_wawancara . ".";
-        } else {
-            $pesan = "Maaf, pengajuan Anda ditolak. " . $request->feedback;
-        }
+        $pesan = $request->status === 'diterima' 
+        ? "Selamat! Berkas Anda sudah lengkap. Silahkan ikut wawancara pada tanggal " . date('d M Y', strtotime($request->tanggal_wawancara)) . " di " . $request->lokasi_wawancara . "." 
+        : "Maaf, pengajuan Anda ditolak. " . $request->feedback;
 
         // Simpan notifikasi
         Notifikasi::create([
@@ -143,8 +121,6 @@ class VerifikasiController extends Controller
             'pesan' => $pesan,
             'dibaca' => false,
         ]);
-
-        // dd($notifikasi);
 
         return redirect()->route('admin.hasil_verifikasi', ['id' => $id])->with('success', 'Verifikasi berhasil disimpan.');
     }
