@@ -1,4 +1,4 @@
-<!-- untuk dashboard user -->
+<!-- untuk beranda user -->
 
 <!DOCTYPE html>
 <html>

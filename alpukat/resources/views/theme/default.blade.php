@@ -70,7 +70,7 @@
                             alert.style.opacity = '0';
                             alert.style.transform = 'translateY(-20px)';
                             setTimeout(() => alert.remove(), 500); // hapus setelah animasi selesai
-                        }, 3000);
+                        }, 5000);
                     });
                 });
             </script>

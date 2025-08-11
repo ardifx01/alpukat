@@ -14,13 +14,47 @@ class VerifikasiController extends Controller
     public function verifBerkas($id)
     {
         $users = \App\Models\User::findOrFail($id);
-        $dokumen = $users->dokumen;
+        $dokumen = $users->dokumens ?? collect();
         $verifikasi = Verifikasi::where('user_id', $id)->first();
+
+        if ($dokumen instanceof \Illuminate\Database\Eloquent\Collection) {
+            if ($dokumen->isEmpty()) {
+                return redirect()->back()->with('error', 'Dokumen belum diunggah.');
+            }
+            $tanggalUpload = $dokumen->first()->created_at;
+        } else {
+            // kalau relasi hasOne / single model
+            if (empty($dokumen)) {
+                return redirect()->back()->with('error', 'Dokumen belum diunggah.');
+            }
+            $tanggalUpload = $dokumen->created_at;
+        }
+
+        if (!$tanggalUpload) {
+            return redirect()->back()->with('error', 'Tanggal upload dokumen tidak ditemukan.');
+        }
+
+        // Ambil config (dari config/app.php)
+        $batasSeconds = config('app.batas_verifikasi_seconds');
+        $batasDays = config('app.batas_verifikasi_days', 14);
+
+        $batasVerifikasi = $tanggalUpload->copy();
+
+        if (!empty($batasSeconds) && is_numeric($batasSeconds)) {
+            $batasVerifikasi->addSeconds((int) $batasSeconds);
+        } else {
+            $batasVerifikasi->addDays((int) $batasDays);
+        }
+
+        if (now()->gt($batasVerifikasi)) {
+            return redirect()->route('admin.hasil_verifikasi')
+                ->with('error', 'Batas waktu verifikasi telah habis.');
+        }
 
         // Hitung 30 hari kerja dari hari ini
         $batasMax = $this->hitungBatasWawancara(30);
 
-        return view('admin.verif_berkas', compact('dokumen', 'users', 'verifikasi', 'batasMax'));
+        return view('admin.verif_berkas', compact('dokumen', 'users', 'verifikasi', 'batasMax', 'batasVerifikasi'));
     }
 
     public function hitungBatasWawancara($jumlahHariKerja)

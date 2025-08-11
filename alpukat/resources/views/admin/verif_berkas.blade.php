@@ -4,6 +4,18 @@
 <div class="container mt-5 mb-5">
     <h2 class="mb-4 fw-bold">Verifikasi Pengajuan: {{ $users->name }}</h2>
     <p>Periksa dokumen yang telah diunggah oleh {{ $users->name }}</p>
+
+    @if(isset($batasVerifikasi))
+        @if(now()->gt($batasVerifikasi))
+            <div class="alert alert-danger">
+                ⚠️ Batas verifikasi sudah lewat sejak {{ $batasVerifikasi->translatedFormat('d F Y H:i') }}
+            </div>
+        @else
+            <div class="alert alert-warning">
+                ⏳ Batas verifikasi sampai {{ $batasVerifikasi->translatedFormat('d F Y H:i') }}
+            </div>
+        @endif
+    @endif
     
     <form method="POST" action="{{ route('admin.verif_berkas', ['id' => $users->id]) }}">
         @csrf
@@ -61,6 +73,7 @@
     </form>
 </div>
 
+<div class="countdown"></div>
 <script>
     function toggleWawancara(status) {
         const wawancaraFields = document.getElementById('wawancara-fields');
@@ -70,5 +83,24 @@
     window.addEventListener('DOMContentLoaded', () => {
         toggleWawancara(document.getElementById('status').value);
     });
+
+    const endTime = new Date("{{ $batasVerifikasi->format('Y-m-d H:i:s') }}").getTime();
+    const timer = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = endTime - now;
+
+        if (distance < 0) {
+            clearInterval(timer);
+            document.getElementById("countdown").innerHTML = "⛔ Waktu habis";
+            return;
+        }
+
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown").innerHTML = 
+            `⏳ ${hours}j ${minutes}m ${seconds}d tersisa`;
+    }, 1000);
 </script>
 @endsection

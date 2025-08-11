@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Jakarta',
 
     /*
     |--------------------------------------------------------------------------
@@ -122,5 +122,8 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+
+    'batas_verifikasi_days' => env('BATAS_VERIFIKASI_DAYS', 14),
+    'batas_verifikasi_seconds' => env('BATAS_VERIFIKASI_SECONDS', null), // ditulis null karena cuma dipakai pas mau demo
 
 ];
