@@ -9,12 +9,24 @@
     @else
         <ul class="list-group">
             @foreach ($notifikasi as $item)
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    {{ $item->pesan }}
-                    <small class="text-muted">{{ $item->created_at->diffForHumans() }}</small>
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <span>
+                            {{ $item->pesan }}
+                        </span>
+                        <small class="text-muted">
+                            {{ $item->created_at->diffForHumans() }}
+                        </small>
+                    </div>
+                    @if(!empty($item->file_path))
+                        <a href="{{ asset('storage/' . $item->file_path) }}" target="_blank" class="btn btn-sm btn-primary mt-2">
+                            Lihat File
+                        </a>
+                    @endif
                 </li>
             @endforeach
         </ul>
+
     @endif
 </div>
 @endsection

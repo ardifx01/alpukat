@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BerkasAdmin;
 use App\Models\User;
 use App\Models\Verifikasi;
+use App\Models\Notifikasi;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class BerkasAdminController extends Controller
     // Menampilkan semua data berkas admin
     public function index()
     {
-        $data = BerkasAdmin::with(['verifikasi.user'])->paginate(3);
+        $data = BerkasAdmin::with(['verifikasi.user'])->latest()->paginate(3);
 
         return view('admin.berkas.index', compact('data'));
     }
@@ -69,6 +70,18 @@ class BerkasAdminController extends Controller
             'user_id' => $verifikasi->user_id,
             'jenis_surat' => $request->jenis_surat,
             'file_path' => $namaFileFinal,
+        ]);
+
+        // Tentukan pesan notifikasi berdasarkan jenis surat
+        $pesanNotif = $request->jenis_surat === 'sk_ukk' ? "Admin telah mengunggah SK UKK Anda." : "Admin telah mengunggah Berita Acara Anda.";
+
+        // Simpan notifikasi untuk user 
+        Notifikasi::create([
+            'user_id' => $verifikasi->user_id,
+            'verifikasi_id' => $request->verifikasi_id,
+            'pesan' => $pesanNotif,
+            'file_path' => 'berkas_admin/' . $namaFileFinal,
+            'dibaca' => 0,
         ]);
 
         return redirect()->route('berkas-admin.index')->with('success', 'Berkas berhasil ditambahkan');

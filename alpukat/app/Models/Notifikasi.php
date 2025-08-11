@@ -10,12 +10,13 @@ class Notifikasi extends Model
         'user_id',
         'verifikasi_id',
         'pesan',
+        'file_path',
         'dibaca',
     ];
 
     public function user()
     {
-        return $this->beongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function verifikasi() 

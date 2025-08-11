@@ -103,7 +103,7 @@ class VerifikasiController extends Controller
         }
 
         // Simpan notifikasi
-        $notifikasi = Notifikasi::create([
+        Notifikasi::create([
             'user_id' => $user->id, //id koperasi
             'verifikasi_id' => $verifikasi->id,
             'pesan' => $pesan,
