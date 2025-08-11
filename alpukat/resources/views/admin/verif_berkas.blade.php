@@ -51,11 +51,13 @@
         </div>
 
         <div class="mb-3">
-            <label for="feedback" class="form-label">Feedback:</label>
+            <label for="feedback" class="form-label">Feedback (Opsional):</label>
             <textarea name="feedback" class="form-control" rows="3">{{ old('feedback', $verifikasi?->feedback) }}</textarea>
         </div>
 
-        <button type="submit" class="btn btn-success">Simpan Verifikasi</button>
+        <button type="submit" class="btn btn-success">
+            Simpan Verifikasi
+        </button>
     </form>
 </div>
 

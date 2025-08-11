@@ -40,34 +40,35 @@ class BerkasAdminController extends Controller
             'verifikasi_id' => 'required|exists:verifikasis,id',
             'jenis_surat' => 'required|in:berita_acara,sk_ukk',
             'file' => 'required|mimes:pdf|max:5120', 
-            // Ukuran file nya maksimal 5 MB dulu supaya uploadnya cepat dan servernya tidak cepat penuh
         ]);
 
         $verifikasi = Verifikasi::findOrFail($request->verifikasi_id);
 
         if (!$verifikasi->tanggal_wawancara) {
-            return back()->withErrors(['file' => 'Tanggal wawancara tidak ditemukan.']);
+            return back()->withErrors(['file_path' => 'Tanggal wawancara tidak ditemukan.']);
         }
 
-        // Cek batas waktu 30 hari kerja (kecuali Sabtu dan Minggu)
+        // Hitung batas waktu
         $tanggalWawancara = Carbon::parse($verifikasi->tanggal_wawancara);
-
-        // Fungsi hitung 30 hari kerja setelah tanggal wawancara
         $batasWawancara = $this->addBusinessDays($tanggalWawancara, 30);
 
         if (Carbon::now()->greaterThan($batasWawancara)) {
             return back()->withErrors(['file' => 'Batas waktu upload sudah lewat 30 hari kerja setelah wawancara']);
         }
 
-        // Kalau lolos validasi, simpan berkas
-        $fileName = time() . '.' . $request->file->extension();
-        $request->file->storeAs('berkas_admin', $fileName, 'public');
+        // Simpan file dengan nama rapi
+        $file = $request->file('file');
+        $namaBersih = preg_replace('/\s+/', '_', strtolower($file->getClientOriginalName()));
+        $namaFileFinal = time() . '_' . $namaBersih;
 
+        $file->storeAs('berkas_admin', $namaFileFinal, 'public');
+
+        // Simpan ke database (pakai nama yang sama seperti di storage)
         BerkasAdmin::create([
             'verifikasi_id' => $request->verifikasi_id,
-            'user_id' => $verifikasi->user_id, // ambil dari verifikasi
+            'user_id' => $verifikasi->user_id,
             'jenis_surat' => $request->jenis_surat,
-            'file_path' => $fileName,
+            'file_path' => $namaFileFinal,
         ]);
 
         return redirect()->route('berkas-admin.index')->with('success', 'Berkas berhasil ditambahkan');

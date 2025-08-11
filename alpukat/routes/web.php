@@ -6,7 +6,6 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\VerifikasiController;
 use App\Http\Controllers\BerkasAdminController;
-use App\Models\BerkasAdmin;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {

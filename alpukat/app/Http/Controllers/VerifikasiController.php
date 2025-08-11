@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Dokumen;
 use App\Models\Verifikasi;
 use App\Models\Notifikasi;
 use App\Models\User;
@@ -24,7 +23,7 @@ class VerifikasiController extends Controller
         return view('admin.verif_berkas', compact('dokumen', 'users', 'verifikasi', 'batasMax'));
     }
 
-    public function hitungBatasWawancara($jumlahHariKerja) 
+    public function hitungBatasWawancara($jumlahHariKerja)
     {
         $tanggal = Carbon::now();
         $hariKerja = 0;
@@ -83,7 +82,7 @@ class VerifikasiController extends Controller
                 return redirect()->back()->with('error', 'Tanggal wawancara tidak boleh melebihi batas maksimal (' . $batasWawancara->translatedFormat('d F Y') . ').');
             }
         }
-        
+
         $verifikasi = Verifikasi::create([
             'user_id' => $id,
             'status' => $request->status,
@@ -108,12 +107,12 @@ class VerifikasiController extends Controller
             'user_id' => $user->id, //id koperasi
             'verifikasi_id' => $verifikasi->id,
             'pesan' => $pesan,
-            'dibaca' => false, 
+            'dibaca' => false,
         ]);
 
         // dd($notifikasi);
 
-        return redirect()->route('admin.verif_berkas', ['id' => $id])->with('success', 'Verifikasi berhasil disimpan.');
+        return redirect()->route('admin.hasil_verifikasi', ['id' => $id])->with('success', 'Verifikasi berhasil disimpan.');
     }
 
     public function hasilVerifikasi()

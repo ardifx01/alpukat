@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Syarat;
 use App\Models\Dokumen;
-use App\Models\Verifikasi;
 
 // Fokus ngatur upload atau tampilkan dokumen
 class DokumenController extends Controller
@@ -31,7 +30,7 @@ class DokumenController extends Controller
         // Validasi inputan: pastikan dokumen adalah array dan tiap itemnya valid
         $request->validate([
             'dokumen' => 'array',
-            'dokumen.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048' // PDF atau gambar, ga boleh > 2 MB
+            'dokumen.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120' // PDF atau gambar, ga boleh > 5 MB
         ]);
 
         $files = $request->file('dokumen');
@@ -44,7 +43,9 @@ class DokumenController extends Controller
         // Loop dan simpan file yang benar-benar diunggah
         foreach ($request->file('dokumen') as $syaratId => $file) {
             if ($file) {
-                $path = $file->store('dokumen', 'public');
+                $namaBersih = preg_replace('/\s+/', '_', strtolower($file->getClientOriginalName()));
+                $namaFileFinal = time() . '_' . $namaBersih;
+                $path = $file->storeAs('dokumen', $namaFileFinal, 'public');
 
                 Dokumen::create([
                     'user_id' => $user->id,

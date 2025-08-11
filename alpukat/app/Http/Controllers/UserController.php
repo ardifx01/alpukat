@@ -8,11 +8,11 @@ use App\Models\Notifikasi;
 
 class UserController extends Controller
 {
-    public function index(){
-        if(Auth::check() && Auth::user()->user_type=="user"){
+    public function index()
+    {
+        if (Auth::check() && Auth::user()->user_type == "user") {
             return view('dashboard');
-        }
-        else if(Auth::check() && Auth::user()->user_type=="admin"){
+        } else if (Auth::check() && Auth::user()->user_type == "admin") {
             return view('admin.dashboard');
         }
     }
