@@ -24,8 +24,6 @@ class UserController extends Controller
         // Ambil semua notifikasi user
         $notifikasi = Notifikasi::where('user_id', $userId)->latest()->get();
 
-        // dd($notifikasi->first()->file_path);  // <-- Pasang di sini untuk cek data pertama
-
         // Tandai semua notifikasi yang belum dibaca sebagai dibaca
         Notifikasi::where('user_id', $userId)->where('dibaca', false)->update(['dibaca' => true]);
 

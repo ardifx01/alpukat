@@ -17,7 +17,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('dokumen.store') }}" enctype="multipart/form-data" class="space-y-6 bg-white p-6 rounded shadow">
+            <form method="POST" action="{{ route('user.store') }}" enctype="multipart/form-data" class="space-y-6 bg-white p-6 rounded shadow">
                 @csrf
 
                 <h3 class="text-lg font-semibold">Dokumen Koperasi</h3>

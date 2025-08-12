@@ -139,9 +139,24 @@ body {
 
         <nav>
             <a href="#" class="active">Beranda</a>
-            <a href="{{ route('dokumen.create') }}">Pengajuan</a>
-            <a href="{{ route('dokumen.lihat_berkas') }}">Lihat Berkas</a>
-            <a href="{{ route('notifikasi') }}">Notifikasi</a>
+            <a href="{{ route('user.create') }}">Pengajuan</a>
+            <a href="{{ route('user.lihat_berkas') }}">Lihat Berkas</a>
+            <!-- Bagian yang menampilkan jumlah notifikasi -->
+            @php
+                $jumlahNotif = 0;
+                if(auth()->check()) {
+                    $jumlahNotif = auth()->user()->notifikasi()->where('dibaca', false)->count();
+                } 
+            @endphp
+
+            <a href="{{ route('user.notifikasi') }}">
+                Notifikasi
+                @if($jumlahNotif > 0)
+                    <span class="badge bg-danger">
+                        {{ $jumlahNotif }}
+                    </span>
+                @endif
+            </a>
             <a href="#" class="login-btn">Login</a>
             <a href="#" class="sign-up">Register</a>        
         </nav>
@@ -245,8 +260,8 @@ body {
 }
 
 /* .hero-section img:hover {
-    transform: scale(1.25); /* Efek zoom saat hover */
-} */
+    transform: scale(1.25);} /* Efek zoom saat hover */
+*/
 
         /* .hero-section {
             background: #1f2b7b;

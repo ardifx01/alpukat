@@ -15,7 +15,7 @@ class DokumenController extends Controller
         $syaratKoperasi = Syarat::where('kategori_syarat', 'koperasi')->get();
         $syaratPengurus = Syarat::where('kategori_syarat', 'pengurus')->get();
 
-        return view('dokumen.pengajuan', compact('syaratKoperasi', 'syaratPengurus'));
+        return view('user.pengajuan', compact('syaratKoperasi', 'syaratPengurus'));
     }
 
     public function store(Request $request)
@@ -55,7 +55,7 @@ class DokumenController extends Controller
             }
         }
 
-        return redirect()->route('dokumen.create')->with('success', 'Dokumen berhasil diunggah!');
+        return redirect()->route('user.create')->with('success', 'Dokumen berhasil diunggah!');
     }
 
     public function lihatBerkas()
@@ -68,7 +68,7 @@ class DokumenController extends Controller
             ->get();
 
         // Kirim data ke view
-        return view('dokumen.lihat_berkas', compact('berkasUser'));
+        return view('user.lihat_berkas', compact('berkasUser'));
     }
 
     public function daftarPengajuan()

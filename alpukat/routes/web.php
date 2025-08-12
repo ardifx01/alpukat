@@ -24,13 +24,13 @@ Route::middleware('auth')->group(function () {
 
 // Supaya halaman hanya dapat diakses oleh user saja
 Route::middleware(['auth', 'role.user'])->group(function () {
-    Route::get('/pengajuan', [DokumenController::class, 'create'])->name('dokumen.create');
+    Route::get('/pengajuan', [DokumenController::class, 'create'])->name('user.create');
 
-    Route::post('/pengajuan', [DokumenController::class, 'store'])->name('dokumen.store');
+    Route::post('/pengajuan', [DokumenController::class, 'store'])->name('user.store');
 
-    Route::get('/lihat-berkas', [DokumenController::class, 'lihatBerkas'])->name('dokumen.lihat_berkas');
+    Route::get('/lihat-berkas', [DokumenController::class, 'lihatBerkas'])->name('user.lihat_berkas');
 
-    Route::get('/notifikasi', [UserController::class, 'notifikasi'])->middleware('auth')->name('notifikasi');
+    Route::get('/notifikasi', [UserController::class, 'notifikasi'])->middleware('auth')->name('user.notifikasi');
 });
 
 Route::middleware('auth', 'admin')->group(function () {
