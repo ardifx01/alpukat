@@ -43,7 +43,7 @@
 
                         @if ($loop->first)
                             <td rowspan="{{ $user->dokumens->count() }}">
-                                <a href="{{ route('admin.verif_berkas', $user->id) }}" class="btn btn-sm btn-primary">Verifikasi</a>
+                                <a href="{{ route('admin.verif.verif_berkas', $user->id) }}" class="btn btn-sm btn-primary">Verifikasi</a>
                             </td>
                         @endif
                     </tr>

@@ -14,8 +14,8 @@ $menus = [
                 'label' => 'Verifikasi Berkas',
                 'icon' => 'fas fa-columns',
                 'children' => [
-                    ['label' => 'Daftar Pengajuan', 'route' => 'admin.daftar_pengajuan'],
-                    ['label' => 'Lihat Hasil Verifikasi', 'route' => 'admin.hasil_verifikasi'],
+                    ['label' => 'Daftar Pengajuan', 'route' => 'admin.verif.daftar_pengajuan'],
+                    ['label' => 'Lihat Hasil Verifikasi', 'route' => 'admin.verif.hasil_verifikasi'],
                 ]
             ],
             [
@@ -30,8 +30,8 @@ $menus = [
                 'label' => 'Kelola Persyaratan',
                 'icon' => 'fas fa-columns',
                 'children' => [
-                    ['label' => 'Tambah Persyaratan', 'route' => 'admin.tambah_syarat'],
-                    ['label' => 'Kelola Persyaratan', 'route' => 'admin.lihat_syarat'],
+                    ['label' => 'Tambah Persyaratan', 'route' => 'admin.syarat.tambah_syarat'],
+                    ['label' => 'Kelola Persyaratan', 'route' => 'admin.syarat.lihat_syarat'],
                 ]
             ]
         ]

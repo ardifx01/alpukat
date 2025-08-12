@@ -78,6 +78,6 @@ class DokumenController extends Controller
             ->with(['dokumens.syarat']) // relasi dokumen + syarat
             ->paginate(1); // 1 user per halaman
 
-        return view('admin.daftar_pengajuan', compact('users'));
+        return view('admin.verif.daftar_pengajuan', compact('users'));
     }
 }

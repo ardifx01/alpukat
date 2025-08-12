@@ -14,10 +14,10 @@
     <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
 </head>
 <body class="sb-nav-fixed">
-    @include('theme.header')
+    @include('admin.theme.header')
 
     <div id="layoutSidenav">
-        @include('theme.sidebar')
+        @include('admin.theme.sidebar')
 
         <div id="layoutSidenav_content">
             <main>
@@ -36,7 +36,7 @@
                 @yield('content')
             </main>
 
-            @include('theme.footer')
+            @include('admin.theme.footer')
 
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-...hash..." crossorigin="anonymous"></script>
 

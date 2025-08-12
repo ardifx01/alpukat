@@ -17,7 +17,7 @@
         @endif
     @endif
     
-    <form method="POST" action="{{ route('admin.verif_berkas', ['id' => $users->id]) }}">
+    <form method="POST" action="{{ route('admin.verif.verif_berkas', ['id' => $users->id]) }}">
         @csrf
 
         <div class="mb-3">

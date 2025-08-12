@@ -1,4 +1,4 @@
-@extends('theme.default')
+@extends('admin.theme.default')
 
 @section('title', 'Dashboard')
 

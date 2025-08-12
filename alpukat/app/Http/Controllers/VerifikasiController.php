@@ -42,14 +42,14 @@ class VerifikasiController extends Controller
 
         // Cek apakah batas waktu sudah lewat
         if (now()->gt($batasVerifikasi)) {
-            return redirect()->route('admin.hasil_verifikasi')
+            return redirect()->route('admin.verif.hasil_verifikasi')
                 ->with('error', 'Batas waktu verifikasi telah habis.');
         }
 
         // Hitung 30 hari kerja dari hari ini
         $batasMax = $this->hitungBatasWawancara(30);
 
-        return view('admin.verif_berkas', compact('dokumen', 'users', 'verifikasi', 'batasMax', 'batasVerifikasi'));
+        return view('admin.verif.verif_berkas', compact('dokumen', 'users', 'verifikasi', 'batasMax', 'batasVerifikasi'));
     }
 
     public function hitungBatasWawancara($jumlahHariKerja)
@@ -122,7 +122,7 @@ class VerifikasiController extends Controller
             'dibaca' => false,
         ]);
 
-        return redirect()->route('admin.hasil_verifikasi', ['id' => $id])->with('success', 'Verifikasi berhasil disimpan.');
+        return redirect()->route('admin.verif.hasil_verifikasi', ['id' => $id])->with('success', 'Verifikasi berhasil disimpan.');
     }
 
     public function hasilVerifikasi()
@@ -130,6 +130,6 @@ class VerifikasiController extends Controller
         $verifikasi = Verifikasi::with('user')->orderBy('updated_at', 'desc')->paginate(3);
 
         // dd($verifikasi);
-        return view('admin.hasil_verifikasi', compact('verifikasi'));
+        return view('admin.verif.hasil_verifikasi', compact('verifikasi'));
     }
 }

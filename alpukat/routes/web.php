@@ -37,29 +37,29 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
     // Tambah persyaratan
-    Route::get('/tambah-syarat', [AdminController::class, 'tambahSyarat'])->name('admin.tambah_syarat');
-    Route::post('/tambah-syarat', [AdminController::class, 'postTambahSyarat'])->name('admin.post_tambah_syarat');
+    Route::get('/tambah-syarat', [AdminController::class, 'tambahSyarat'])->name('admin.syarat.tambah_syarat');
+    Route::post('/tambah-syarat', [AdminController::class, 'postTambahSyarat'])->name('admin.syarat.post_tambah_syarat');
     // Lihat persyaratan
-    Route::get('/lihat-syarat', [AdminController::class, 'lihatSyarat'])->name('admin.lihat_syarat');
+    Route::get('/lihat-syarat', [AdminController::class, 'lihatSyarat'])->name('admin.syarat.lihat_syarat');
     
     // Hapus persyaratan
-    Route::get('/hapus-syarat/{id}', [AdminController::class, 'hapusSyarat'])->name('admin.hapus_syarat');
+    Route::get('/hapus-syarat/{id}', [AdminController::class, 'hapusSyarat'])->name('admin.syarat.hapus_syarat');
 
     // Edit persyaratan
-    Route::get('/edit-syarat/{id}', [AdminController::class, 'editSyarat'])->name('admin.edit_syarat');
-    Route::post('/edit-syarat/{id}', [AdminController::class, 'postEditSyarat'])->name('admin.post_edit_syarat');
+    Route::get('/edit-syarat/{id}', [AdminController::class, 'editSyarat'])->name('admin.syarat.edit_syarat');
+    Route::post('/edit-syarat/{id}', [AdminController::class, 'postEditSyarat'])->name('admin.syarat.post_edit_syarat');
 
     // Lihat berkas atau dokumen user
-    Route::get('/daftar-pengajuan', [DokumenController::class, 'daftarPengajuan'])->name('admin.daftar_pengajuan');
+    Route::get('/daftar-pengajuan', [DokumenController::class, 'daftarPengajuan'])->name('admin.verif.daftar_pengajuan');
 
     // Tampilkan halaman verifikasi
-    Route::get('/verifikasi-berkas/{id}', [VerifikasiController::class, 'verifBerkas'])->name('admin.verif_berkas');
+    Route::get('/verifikasi-berkas/{id}', [VerifikasiController::class, 'verifBerkas'])->name('admin.verif.verif_berkas');
 
     // Simpan hasil verifikasi
-    Route::post('/verifikasi-berkas/{id}', [VerifikasiController::class, 'postVerifBerkas'])->name('admin.verif_berkas');
+    Route::post('/verifikasi-berkas/{id}', [VerifikasiController::class, 'postVerifBerkas'])->name('admin.verif.verif_berkas');
     
     // Tampilkan halaman hasil verifikasi
-    Route::get('/hasil-verifikasi', [VerifikasiController::class, 'hasilVerifikasi'])->name('admin.hasil_verifikasi');
+    Route::get('/hasil-verifikasi', [VerifikasiController::class, 'hasilVerifikasi'])->name('admin.verif.hasil_verifikasi');
 
     Route::resource('berkas-admin', BerkasAdminController::class)->except(['edit', 'update', 'destroy']);
 

@@ -5,7 +5,7 @@
     <h2 class="mb-4 fw-bold">Tambah Syarat Dokumen</h2>
     <p>Masukkan persyaratan berkas yang perlu pihak koperasi masukkan</p>
 
-    <form action="{{ route('admin.post_tambah_syarat') }}" method="POST">
+    <form action="{{ route('admin.syarat.post_tambah_syarat') }}" method="POST">
         @csrf
 
         <div class="row mb-4">

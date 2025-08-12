@@ -14,7 +14,7 @@ class AdminController extends Controller
 
     public function tambahSyarat()
     {
-        return view('admin.tambah_syarat');
+        return view('admin.syarat.tambah_syarat');
     }
 
     public function postTambahSyarat(Request $request)
@@ -31,7 +31,7 @@ class AdminController extends Controller
         $syarat->kategori_syarat = $request->kategori_syarat;
         $syarat->save();
 
-        return redirect()->route('admin.lihat_syarat')->with('success', 'Persyaratan berhasil ditambahkan!');
+        return redirect()->route('admin.syarat.lihat_syarat')->with('success', 'Persyaratan berhasil ditambahkan!');
     }
 
     public function lihatSyarat()
@@ -39,7 +39,7 @@ class AdminController extends Controller
         $syarat_koperasi = Syarat::where('kategori_syarat', 'koperasi')->get();
         $syarat_pengurus = Syarat::where('kategori_syarat', 'pengurus')->get();
         
-        return view('admin.lihat_syarat', compact('syarat_koperasi', 'syarat_pengurus'));
+        return view('admin.syarat.lihat_syarat', compact('syarat_koperasi', 'syarat_pengurus'));
     }
 
     public function hapusSyarat($id)
@@ -70,6 +70,6 @@ class AdminController extends Controller
         $syarat->kategori_syarat=$request->kategori_syarat;
         $syarat->save();
         
-        return redirect()->route('admin.lihat_syarat')->with('success', 'Persyaratan berhasil diedit!');
+        return redirect()->route('admin.syarat.lihat_syarat')->with('success', 'Persyaratan berhasil diedit!');
     }
 }
