@@ -5,7 +5,7 @@
     <h2 class="mb-4 fw-bold">Edit Syarat Dokumen</h2>
     <p>Edit Persyaratan Dokumen yang Harus Dimasukkan oleh Koperasi</p>
 
-    <form action="{{ route('admin.post_edit_syarat', $syarat->id) }}" method="POST">
+    <form action="{{ route('admin.syarat.post_edit_syarat', $syarat->id) }}" method="POST">
         @csrf
 
         {{-- Nama Persyaratan --}}
