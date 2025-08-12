@@ -22,13 +22,25 @@
 
             /* Header Container */
             header {
-                background-color: #E6F4FB;
-                /* Warna biru muda */
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 10px 40px;
-            }
+    background-color: #E6F4FB; /* Warna biru muda */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+
+    position: fixed; /* Bikin header menempel di atas */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Pastikan di atas elemen lain */
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    padding-top: 65px; /* Sesuaikan dengan tinggi header */
+}
+
 
             /* Logo dan Nama */
             .logo-container {
@@ -66,7 +78,7 @@
 
             nav a {
                 text-decoration: none;
-                color: black;
+                color: rgb(0, 0, 0);
                 font-size: 14px;
             }
 
@@ -76,6 +88,18 @@
 
             /* Tombol Login */
             .login-btn {
+                background-color: #23349E;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 12px;
+                cursor: pointer;
+                font-weight: bold;
+                text-decoration: none;
+            }
+
+            /* Tombol Register */
+            .sign-up {
                 background-color: #23349E;
                 color: white;
                 border: none;
@@ -119,6 +143,7 @@
             <a href="{{ route('dokumen.lihat_berkas') }}">Lihat Berkas</a>
             <a href="{{ route('notifikasi') }}">Notifikasi</a>
             <a href="#" class="login-btn">Login</a>
+            <a href="#" class="sign-up">Register</a>        
         </nav>
     </header>
 
@@ -172,7 +197,58 @@
             animation: fadeRight 0.8s ease forwards;
         }
 
-        .hero-section {
+/* HERO */
+.hero-section {
+  background: url('../front_end/images/gambar_login.png') no-repeat center center / cover;
+  padding: 100px 0;
+  color: #fff;
+  position: relative;
+  overflow: hidden;            /* cegah anak elemen melewati section */
+}
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(31, 43, 123, 0.55); /* #1f2b7b + transparansi */
+  z-index: 1;
+}
+
+
+.hero-section .container {
+  position: relative;
+  z-index: 2;
+}
+
+/* Gambar di kolom kanan — tidak boleh kebesaran */
+.hero-img {
+  display: block;
+  width: 100%;        /* ikuti lebar kolomnya */
+  max-width: 460px;   /* batas aman di layar lebar */
+  height: auto;
+  margin-left: auto;  /* tetap rata kanan di kolom */
+  border-radius: 12px;
+  transform: none;    /* override styling lama yang membesar */
+}
+
+/* Responsive tweak */
+@media (max-width: 991.98px) {
+  .hero-section { padding: 70px 0; }
+  .hero-img {
+    max-width: 360px;
+    margin: 24px auto 0; /* center di tablet/HP */
+  }
+}
+@media (max-width: 575.98px) {
+  .hero-section { padding: 56px 0; }
+  .hero-img { max-width: 300px; }
+}
+
+/* .hero-section img:hover {
+    transform: scale(1.25); /* Efek zoom saat hover */
+} */
+
+        /* .hero-section {
             background: #1f2b7b;
             padding: 80px 0;
             color: white;
@@ -186,7 +262,7 @@
         .hero-section p {
             font-size: 18px;
             margin-bottom: 20px;
-        }
+        } */
 
         .hero-section .btn-primary {
             background-color: #0071e3;
@@ -256,7 +332,7 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-7 animate-up">
-                        <h1>Selamat Datang di <br>ALPUKAT</h1>
+                        <h3>Selamat Datang di </h3><h1>ALPUKAT</h1>
                         <p>Aplikasi Uji Kelayakan dan Kepatutan</p>
                         <a href="{{ asset('files/juklak_ukk.pdf') }}" class="btn btn-primary mb-2" download>Download Juklak UKK</a>
                         @guest
@@ -265,8 +341,10 @@
                         @endguest
                     </div>
                     <div class="col-md-5 animate-right">
-                        <img src="{{ asset('front_end/images/gambar_login.png') }}" alt="Gedung" class="img-fluid rounded">
-                    </div>
+  <img src="{{ asset('front_end/images/gambar_login2.png') }}"
+       alt="Dinas Koperasi Usaha Kecil & Menengah Kepulauan Riau"
+       class="img-fluid rounded hero-img">
+</div>
                 </div>
             </div>
         </section>
