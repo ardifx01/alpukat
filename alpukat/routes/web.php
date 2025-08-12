@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\VerifikasiController;
 use App\Http\Controllers\BerkasAdminController;
+use App\Http\Controllers\NotifikasiController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -30,7 +31,7 @@ Route::middleware(['auth', 'role.user'])->group(function () {
 
     Route::get('/lihat-berkas', [DokumenController::class, 'lihatBerkas'])->name('user.lihat_berkas');
 
-    Route::get('/notifikasi', [UserController::class, 'notifikasi'])->middleware('auth')->name('user.notifikasi');
+    Route::get('/notifikasi', [NotifikasiController::class, 'notifikasi'])->middleware('auth')->name('user.notifikasi');
 });
 
 Route::middleware('auth', 'admin')->group(function () {
