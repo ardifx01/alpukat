@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\BerkasAdmin;
 use App\Models\User;
 use App\Models\Verifikasi;
 use App\Models\Notifikasi;
 use Carbon\Carbon;
-
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class BerkasAdminController extends Controller

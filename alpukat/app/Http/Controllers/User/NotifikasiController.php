@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Notifikasi;
+use App\Http\Controllers\Controller;
 
 class NotifikasiController extends Controller
 {
@@ -24,7 +25,6 @@ class NotifikasiController extends Controller
     public function notifikasiAdmin()
     {
         $adminId = Auth::id();
-        // Nanti kalau admin pakai guard khusus, ganti jadi Auth::guard('admin')->id()
 
         // Ambil semua notifikasi untuk admin
         $notifikasi = Notifikasi::where('target_role', 'admin')->orderBy('created_at', 'desc')->paginate(10);

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Syarat;
 use App\Models\Dokumen;
+use App\Http\Controllers\Controller;
 
 // Fokus ngatur upload atau tampilkan dokumen
 class DokumenController extends Controller

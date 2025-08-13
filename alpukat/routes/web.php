@@ -1,13 +1,13 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\DokumenController;
-use App\Http\Controllers\VerifikasiController;
-use App\Http\Controllers\BerkasAdminController;
-use App\Http\Controllers\NotifikasiController;
-use App\Http\Controllers\SyaratController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\User\DokumenController;
+use App\Http\Controllers\Admin\VerifikasiController;
+use App\Http\Controllers\Admin\BerkasAdminController;
+use App\Http\Controllers\User\NotifikasiController;
+use App\Http\Controllers\Admin\SyaratController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {

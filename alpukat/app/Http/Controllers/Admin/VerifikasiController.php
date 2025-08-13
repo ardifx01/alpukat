@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Models\Verifikasi;
 use App\Models\Notifikasi;
 use App\Models\User;
 use Carbon\Carbon;
+use App\Http\Controllers\Controller;
 
 class VerifikasiController extends Controller
 {
