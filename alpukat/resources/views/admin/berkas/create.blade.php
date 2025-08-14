@@ -15,7 +15,7 @@
         </div>
     @endif
 
-    <form id="formTambahBerkas" action="{{ route('berkas-admin.store') }}" method="POST" enctype="multipart/form-data" novalidate>
+    <form id="formTambahBerkas" action="{{ route('admin.berkas-admin.store') }}" method="POST" enctype="multipart/form-data" novalidate>
         @csrf
 
         {{-- Pilih Koperasi --}}
@@ -61,7 +61,7 @@
 
         <div class="d-flex gap-2">
             <button type="submit" class="btn btn-primary">Simpan</button>
-            <a href="{{ route('berkas-admin.index') }}" class="btn btn-secondary">Batal</a>
+            <a href="{{ route('admin.berkas-admin.index') }}" class="btn btn-secondary">Batal</a>
         </div>
     </form>
 

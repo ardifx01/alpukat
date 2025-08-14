@@ -6,29 +6,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Verifikasi;
 use App\Models\Notifikasi;
 use App\Models\Dokumen;
+use App\Models\BerkasAdmin;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'user_type',
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
+     * Kolom yang disembunyikan
      */
     protected $hidden = [
         'password',
@@ -48,6 +44,7 @@ class User extends Authenticatable
         ];
     }
 
+    // Relasi
     public function dokumens()
     {
         return $this->hasMany(Dokumen::class, 'user_id');

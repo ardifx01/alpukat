@@ -5,7 +5,7 @@
     <h1 class="mb-3">Daftar Berkas</h1>
     <p>Berikut adalah daftar berkas yang telah Anda kirim</p>
 
-    <a href="{{ route('berkas-admin.create') }}" class="btn btn-primary mb-4">Tambah Berkas</a>
+    <a href="{{ route('admin.berkas-admin.create') }}" class="btn btn-primary mb-4">Tambah Berkas</a>
 
     <table class="table table-bordered table-hover align-middle">
         <thead class="table-dark text-center">
@@ -35,7 +35,7 @@
                     </a>
                 </td>
                 <td class="text-center">
-                    <a href="{{ route('berkas-admin.download', $berkas->id) }}" class="btn btn-success btn-sm me-1">Download</a>
+                    <a href="{{ route('admin.berkas-admin.download', $berkas->id) }}" class="btn btn-success btn-sm me-1">Download</a>
                 </td>
             </tr>
             @empty

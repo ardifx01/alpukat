@@ -84,7 +84,7 @@ class BerkasAdminController extends Controller
             'dibaca' => 0,
         ]);
 
-        return redirect()->route('berkas-admin.index')->with('success', 'Berkas berhasil ditambahkan');
+        return redirect()->route('admin.berkas-admin.index')->with('success', 'Berkas berhasil ditambahkan');
     }
 
     // Fungsi untuk menambahkan hari kerja 

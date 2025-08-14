@@ -1,72 +1,67 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\User\UserController;
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\User\DokumenController;
-use App\Http\Controllers\Admin\VerifikasiController;
-use App\Http\Controllers\Admin\BerkasAdminController;
-use App\Http\Controllers\User\NotifikasiController;
-use App\Http\Controllers\Admin\SyaratController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('dashboard');
-});
+use App\Http\Controllers\ProfileController;
 
-Route::get('/admin', [AdminController::class, 'dashboard'])->name('dashboard');
+// Admin
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\VerifikasiController;
+use App\Http\Controllers\Admin\BerkasAdminController;
+use App\Http\Controllers\Admin\SyaratController;
 
-Route::get('/dashboard', [UserController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+// User
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\DokumenController;
+use App\Http\Controllers\User\NotifikasiController;
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+// Public
+Route::view('/', 'user.dashboard')->name('home');
+
+// User atau koperasi
+Route::middleware(['auth','verified'])->group(function () {
+    Route::get('/dashboard', [UserController::class, 'index'])->name('user.dashboard');
+
+    // Profil
+    Route::get('/profile',  [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
-// Supaya halaman hanya dapat diakses oleh user saja
-Route::middleware(['auth', 'role.user'])->group(function () {
+    // Pengajuan / Dokumen
     Route::get('/pengajuan', [DokumenController::class, 'create'])->name('user.create');
-
     Route::post('/pengajuan', [DokumenController::class, 'store'])->name('user.store');
-
     Route::get('/lihat-berkas', [DokumenController::class, 'lihatBerkas'])->name('user.lihat_berkas');
 
-    Route::get('/notifikasi', [NotifikasiController::class, 'notifikasiUser'])->middleware('auth')->name('user.notifikasi');
+    // Notifikasi
+    Route::get('/notifikasi', [NotifikasiController::class, 'notifikasiUser'])->name('user.notifikasi');
 });
 
-Route::middleware('auth', 'admin')->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+// Admin atau dinas koperasi
+Route::prefix('admin')->name('admin.')->middleware(['auth','can:admin'])->group(function () {
+    // Dashboard admin
+    Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    // Tambah persyaratan
-    Route::get('/tambah-syarat', [SyaratController::class, 'tambahSyarat'])->name('admin.syarat.tambah_syarat');
-    Route::post('/tambah-syarat', [SyaratController::class, 'postTambahSyarat'])->name('admin.syarat.post_tambah_syarat');
-    // Lihat persyaratan
-    Route::get('/lihat-syarat', [SyaratController::class, 'lihatSyarat'])->name('admin.syarat.lihat_syarat');
-    
-    // Hapus persyaratan
-    Route::get('/hapus-syarat/{id}', [SyaratController::class, 'hapusSyarat'])->name('admin.syarat.hapus_syarat');
+    // ---- Syarat (admin.syarat.*)
+    Route::prefix('syarat')->name('syarat.')->group(function () {
+        Route::get('/', [SyaratController::class, 'lihatSyarat'])->name('lihat_syarat');
+        Route::get('/tambah', [SyaratController::class, 'tambahSyarat'])->name('tambah_syarat');
+        Route::post('/tambah', [SyaratController::class, 'postTambahSyarat'])->name('post_tambah_syarat');
+        Route::get('/{id}/edit', [SyaratController::class, 'editSyarat'])->name('edit_syarat');
+        Route::post('/{id}/edit', [SyaratController::class, 'postEditSyarat'])->name('post_edit_syarat');
+        Route::get('/{id}/hapus', [SyaratController::class, 'hapusSyarat'])->name('hapus_syarat'); // idealnya DELETE
+    });
 
-    // Edit persyaratan
-    Route::get('/edit-syarat/{id}', [SyaratController::class, 'editSyarat'])->name('admin.syarat.edit_syarat');
-    Route::post('/edit-syarat/{id}', [SyaratController::class, 'postEditSyarat'])->name('admin.syarat.post_edit_syarat');
+    // ---- Verifikasi (admin.verif.*)
+    Route::prefix('verifikasi')->name('verif.')->group(function () {
+        Route::get('/daftar-pengajuan', [DokumenController::class, 'daftarPengajuan'])->name('daftar_pengajuan');
+        Route::get('/berkas/{id}', [VerifikasiController::class, 'verifBerkas'])->name('verif_berkas');
+        Route::post('/berkas/{id}', [VerifikasiController::class, 'postVerifBerkas'])->name('post_verif_berkas');
+        Route::get('/hasil', [VerifikasiController::class, 'hasilVerifikasi'])->name('hasil_verifikasi');
+    });
 
-    // Lihat berkas atau dokumen user
-    Route::get('/daftar-pengajuan', [DokumenController::class, 'daftarPengajuan'])->name('admin.verif.daftar_pengajuan');
-
-    // Tampilkan halaman verifikasi
-    Route::get('/verifikasi-berkas/{id}', [VerifikasiController::class, 'verifBerkas'])->name('admin.verif.verif_berkas');
-
-    // Simpan hasil verifikasi
-    Route::post('/verifikasi-berkas/{id}', [VerifikasiController::class, 'postVerifBerkas'])->name('admin.verif.verif_berkas');
-    
-    // Tampilkan halaman hasil verifikasi
-    Route::get('/hasil-verifikasi', [VerifikasiController::class, 'hasilVerifikasi'])->name('admin.verif.hasil_verifikasi');
-
-    Route::resource('berkas-admin', BerkasAdminController::class)->except(['edit', 'update', 'destroy']);
-
+    // ---- Berkas Admin
+    Route::resource('berkas-admin', BerkasAdminController::class)->only(['index','create','store','show']);
     Route::get('berkas-admin/{id}/download', [BerkasAdminController::class, 'download'])->name('berkas-admin.download');
-
 });
 
 require __DIR__ . '/auth.php';

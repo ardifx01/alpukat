@@ -22,8 +22,8 @@ $menus = [
                 'label' => 'Kirim Berkas',
                 'icon' => 'fas fa-book-open',
                 'children' => [
-                    ['label' => 'Upload Berkas', 'route' => 'berkas-admin.create'],
-                    ['label' => 'Lihat Berkas', 'route' => 'berkas-admin.index'],
+                    ['label' => 'Upload Berkas', 'route' => 'admin.berkas-admin.create'],
+                    ['label' => 'Lihat Berkas', 'route' => 'admin.berkas-admin.index'],
                 ]
             ],
             [
