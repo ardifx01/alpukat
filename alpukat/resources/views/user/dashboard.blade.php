@@ -13,7 +13,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <style>
-    body{margin:0;font-family:Arial,Helvetica,sans-serif}
+    html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fff}
+
     /* Header */
     header{
       background:#E6F4FB;display:flex;justify-content:space-between;align-items:center;
@@ -64,12 +66,9 @@
       text-align:center;
       color:#000;
     }
-    /* persempit area konten steps */
     .steps-section .container{max-width:1100px}
     @media (max-width:576px){.steps-section{background-size:cover,280px}}
-
     .steps-section h2{font-weight:bold;margin-bottom:34px}
-
     .steps-grid{display:grid;grid-template-columns:repeat(5,minmax(180px,1fr));gap:24px}
     @media (max-width:992px){.steps-grid{grid-template-columns:repeat(3,minmax(180px,1fr))}}
     @media (max-width:576px){.steps-grid{grid-template-columns:repeat(2,minmax(150px,1fr))}}
@@ -80,12 +79,7 @@
       min-height:250px;display:flex;align-items:center;justify-content:center
     }
     .step-box:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.12)}
-
-    .step-panel{
-      position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
-      border-left:6px solid #23349E;padding-left:12px;opacity:0;transform:translateY(10px);
-      transition:opacity .25s ease, transform .35s ease;pointer-events:none;background:rgba(255,255,255,.97);text-align:center
-    }
+    .step-panel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-left:6px solid #23349E;padding-left:12px;opacity:0;transform:translateY(10px);transition:opacity .25s ease, transform .35s ease;pointer-events:none;background:rgba(255,255,255,.97);text-align:center}
     .step-icon{width:38px;height:38px;border-radius:8px;background:#23349E;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:18px;opacity:0;transform:translateX(-6px);transition:opacity .25s ease, transform .35s ease}
     .step-title{margin:0 0 6px 0;font-weight:700;font-size:1.05rem}
     .step-desc{margin:0;color:#333;font-size:.98rem;line-height:1.5}
@@ -96,75 +90,80 @@
     .step-box:hover .step-icon{opacity:1;transform:none}
     .step-box:hover .step-main{opacity:0;visibility:hidden}
 
-    /* ===== Tentang Kami (sesuai gambar) ===== */
+    /* ===== Tentang Kami ===== */
     .about-section{padding:52px 0}
-    .about-card{
-      background:#fff;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.08);
-      padding:26px
-    }
-    .about-map{
-      width:100%;height:340px;border:0;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,.08)
-    }
+    .about-card{background:#fff;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.08);padding:26px}
+    .about-map{width:100%;height:340px;border:0;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,.08)}
     .about-text h3{font-weight:800;margin-bottom:16px}
     .about-text p{font-size:1.05rem;line-height:1.7;color:#333}
     .about-list{margin-top:16px}
     .about-item{display:flex;align-items:center;gap:12px;margin:10px 0;font-size:1rem;color:#222}
-    .about-icon{
-      width:38px;height:38px;border-radius:10px;background:#23349E;color:#fff;display:inline-flex;align-items:center;justify-content:center
-    }
+    .about-icon{width:38px;height:38px;border-radius:10px;background:#23349E;color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:0 0 38px}
 
-    /* ===== Contact – kartu elegan di tengah ===== */
-    .contact_section{
-      padding:72px 0;
-      background:
-        radial-gradient(24px 24px at 20% 15%, rgba(35,52,158,.05) 0 40%, rgba(0,0,0,0) 41%),
-        radial-gradient(24px 24px at 80% 85%, rgba(35,52,158,.05) 0 40%, rgba(0,0,0,0) 41%),
-        linear-gradient(180deg, #f7f9ff 0%, #f1f3ff 100%);
+    /* ===== Footer – samakan ukuran dengan header, hilangkan garis putih ===== */
+    footer.footer_section{
+      background:#1f2b7b;
+      color:#fff;
+      width:100%;
+      padding:10px 40px;        /* sama dengan header */
+      min-height:65px;          /* setara header */
+      display:flex;
+      align-items:center;
+      justify-content:center;   /* pusatkan teks */
+      border-top:none;          /* hilangkan garis */
+      margin:0;                 /* cegah gap putih */
     }
-    .contact-card{
-      max-width: 860px;
-      margin: 0 auto;
-      background:#fff;
-      border-radius: 18px;
-      box-shadow: 0 18px 40px rgba(35,52,158,.12);
-      padding: 28px 26px;
-    }
-    @media (min-width:768px){
-      .contact-card{ padding: 36px 40px; }
-    }
-    .contact-heading{ text-align:center; margin-bottom: 22px; }
-    .contact-heading h2{ font-weight: 800; margin: 0 0 6px; }
-    .contact-heading p{ margin: 0; color:#5b6475; font-size: .98rem; }
+    footer.footer_section p{margin:0;line-height:1.4}
 
-    .input-grid{ display:grid; grid-template-columns:1fr; gap:16px; }
-    @media (min-width:768px){ .input-grid{ grid-template-columns:1fr 1fr; } }
-    .input-wrap{ position:relative; }
-    .input-wrap i{
-      position:absolute; left:12px; top:50%; transform:translateY(-50%);
-      font-size:16px; color:#9aa3b2; pointer-events:none;
+    /* Dropdown profil */
+    .profile-dropdown {
+      position: relative;
+      display: inline-block;
     }
-    .input-wrap input, .input-wrap textarea{
-      width:100%; border:1px solid #e3e7ef; border-radius:12px;
-      padding:12px 14px 12px 38px; font-size:15px; outline:none;
-      transition:border-color .2s, box-shadow .2s, transform .08s; background:#fbfcff;
+    .profile-btn {
+      background: none;
+      border: none;
+      color: #23349E;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 12px;
+      transition: background .15s;
     }
-    .input-wrap textarea{ min-height:120px; resize:vertical; padding-left:38px; }
-    .input-wrap input:focus, .input-wrap textarea:focus{
-      border-color:#23349E; box-shadow:0 0 0 4px rgba(35,52,158,.10); background:#fff;
+    .profile-btn:hover, .profile-btn:focus {
+      background: #e6f4fb;
     }
-    .send-row{ margin-top: 8px; }
-    .contact-btn{
-      width:100%; background:#23349E; color:#fff; border:none; border-radius:12px;
-      padding:12px 18px; font-weight:700; letter-spacing:.3px;
-      transition: transform .08s ease, box-shadow .2s ease, background .2s ease;
+    .profile-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 110%;
+      min-width: 160px;
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(0,0,0,.12);
+      border-radius: 10px;
+      z-index: 1001;
+      padding: 8px 0;
     }
-    .contact-btn:hover{ box-shadow:0 12px 24px rgba(35,52,158,.20); background:#1f2b7b; }
-    .contact-btn:active{ transform: translateY(1px); }
-    .small-note{ text-align:center; margin-top:10px; color:#7a8496; font-size:.9rem; }
-
-    /* Footer simple */
-    footer.footer_section{background:#1f2b7b;color:#fff;text-align:center;padding:20px 0}
-    footer .social_box a {color:#fff;margin:0 12px;font-size:22px;}
+    .profile-menu a, .profile-menu button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #23349E;
+      text-decoration: none;
+      padding: 8px 16px;
+      background: none;
+      border: none;
+      width: 100%;
+      font-size: 15px;
+      transition: background .15s;
+    }
+    .profile-menu a:hover, .profile-menu button:hover {
+      background: #f0f4ff;
+    }
   </style>
 </head>
 <body>
@@ -194,8 +193,30 @@
           <span class="badge bg-danger">{{ $jumlahNotif }}</span>
         @endif
       </a>
-      <a href="#" class="login-btn">Login</a>
-      <a href="#" class="sign-up">Register</a>
+
+      @guest
+        <a href="{{ route('login') }}" class="login-btn">Login</a>
+        <a href="#" class="sign-up">Register</a>
+      @endguest
+
+      @auth
+        <div class="profile-dropdown">
+          <button class="profile-btn" id="profileDropdownBtn" type="button">
+            <i class="fa fa-user-circle" style="font-size:22px;"></i>
+            {{ Auth::user()->name ?? 'Profil' }}
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="profile-menu" id="profileDropdownMenu">
+            <a href="{{ route('profile.edit') }}"><i class="fa fa-user"></i> Edit Profil</a>
+            <form action="{{ route('logout') }}" method="POST" style="margin:0;">
+              @csrf
+              <button type="submit" style="background:none;border:none;color:#e74c3c;width:100%;text-align:left;padding:8px 16px;cursor:pointer;">
+                <i class="fa fa-sign-out"></i> Logout
+              </button>
+            </form>
+          </div>
+        </div>
+      @endauth
     </nav>
   </header>
 
@@ -225,7 +246,7 @@
   {{-- Steps --}}
   <section class="steps-section">
     <div class="container">
-      <h2 class="animate-up">Tata Cara Pengajuan</h2>
+      <h2 class="mb-4" style="font-weight:800">Tata Cara Pengajuan</h2>
 
       @php
         $steps = [
@@ -279,17 +300,18 @@
             </p>
 
             <div class="about-list">
+              <!-- Perbaiki tag <a> agar tidak meluber sampai footer -->
               <div class="about-item">
                 <span class="about-icon"><i class="fa fa-envelope"></i></span>
-                dkukmprovkepri@gmail.com
+                <a href="mailto:dkukmprovkepri@gmail.com" style="color:#222;text-decoration:none;">dkukmprovkepri@gmail.com</a>
               </div>
               <div class="about-item">
                 <span class="about-icon"><i class="fa fa-phone"></i></span>
-                0812-3456-7890
+                <a href="tel:081234567890" style="color:#222;text-decoration:none;">0812-3456-7890</a>
               </div>
               <div class="about-item">
                 <span class="about-icon"><i class="fa fa-instagram"></i></span>
-                @dkukmkepri
+                <a href="https://instagram.com/dkukmkepri" target="_blank" rel="noopener" style="color:#222;text-decoration:none;">@dkukmkepri</a>
               </div>
             </div>
           </div>
@@ -298,22 +320,10 @@
     </div>
   </section>
 
-   {{-- Footer simple --}}
+  {{-- Footer (tinggi setara header, tanpa garis putih) --}}
   <footer class="footer_section">
-    <div class="social_box">
-      <a href="mailto:dkukmprovkepri@gmail.com">
-        <i class="fa fa-envelope" aria-hidden="true"></i>
-      </a>
-      <a href="tel:081234567890">
-        <i class="fa fa-phone" aria-hidden="true"></i>
-      </a>
-      <a href="https://instagram.com/dkukmkepri" target="_blank">
-        <i class="fa fa-instagram" aria-hidden="true"></i>
-      </a>
-    </div>
     <p>&copy; <span id="displayYear"></span> Dinas Koperasi Usaha Kecil dan Menengah. All Rights Reserved</p>
   </footer>
-
 
   <script>
     // tahun otomatis
@@ -324,5 +334,21 @@
   <script src="front_end/js/bootstrap.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
   <script src="front_end/js/custom.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const btn = document.getElementById('profileDropdownBtn');
+      const menu = document.getElementById('profileDropdownMenu');
+      if(btn && menu) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+        document.addEventListener('click', function() {
+          menu.style.display = 'none';
+        });
+      }
+    });
+  </script>
 </body>
 </html>
