@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <h2 class="mb-4 fw-bold">Edit Syarat Dokumen</h2>
-    <p>Edit Persyaratan Dokumen yang Harus Dimasukkan oleh Koperasi</p>
+    <p class="text-muted">Edit Persyaratan Dokumen yang Harus Dimasukkan oleh Koperasi</p>
 
     <form action="{{ route('admin.syarat.post_edit_syarat', $syarat->id) }}" method="POST">
         @csrf
@@ -35,6 +35,19 @@
                 <option value="koperasi" {{ $syarat->kategori_syarat == 'koperasi' ? 'selected' : '' }}>Koperasi</option>
                 <option value="pengurus" {{ $syarat->kategori_syarat == 'pengurus' ? 'selected' : '' }}>Pengurus/Pengawas Koperasi</option>
             </select>
+        </div>
+
+        {{-- Wajib diisi atau tidak --}}
+        <div class="form-check mb-4">
+            <input 
+                type="checkbox"
+                name="is_required"
+                id="is_required"
+                class="form-check-input"
+                value="1"
+                @checked(old('is_required', (bool) $syarat->is_required))
+            >
+            <label class="form-check-label" for="is_required">Wajib diisi</label>
         </div>
 
         {{-- Tombol Submit --}}

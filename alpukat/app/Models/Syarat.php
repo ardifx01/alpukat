@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Syarat extends Model
 {
-    use HasFactory;
 
     protected $table = 'syarat';
 
@@ -15,5 +14,10 @@ class Syarat extends Model
     protected $fillable = [
         'nama_syarat',
         'kategori_syarat',
+        'is_required',
+    ];
+
+    protected $casts = [
+        'is_required' => 'boolean',
     ];
 }

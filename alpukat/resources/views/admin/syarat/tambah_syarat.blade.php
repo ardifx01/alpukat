@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <h2 class="mb-4 fw-bold">Tambah Syarat Dokumen</h2>
-    <p>Masukkan persyaratan berkas yang perlu pihak koperasi masukkan</p>
+    <p class="text-muted">Masukkan persyaratan berkas yang perlu pihak koperasi masukkan</p>
 
     <form action="{{ route('admin.syarat.post_tambah_syarat') }}" method="POST">
         @csrf
@@ -35,6 +35,21 @@
                     <option value="koperasi">Koperasi</option>
                     <option value="pengurus">Pengurus/Pengawas Koperasi</option>
                 </select>
+            </div>
+
+            <!-- Checkbox wajib diisi atau tidak -->
+            <div class="col-12">
+                <div class="form-check">
+                    <input 
+                        type="checkbox"
+                        name="is_required"
+                        id="is_required"
+                        class="form-check-input"
+                        value="1"
+                        @checked(old('is_required', true))
+                    >
+                    <label class="form-check-label" for="is_required">Wajib diisi</label>
+                </div>
             </div>
         </div>
 

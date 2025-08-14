@@ -19,7 +19,8 @@ use App\Http\Controllers\User\NotifikasiController;
 Route::view('/', 'user.dashboard')->name('home');
 
 // User atau koperasi
-Route::middleware(['auth','verified'])->group(function () {
+// Kalau mau pakai verifikasi, bisa pakai ini -> Route::middleware(['auth','verified'])->group(function ()
+Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [UserController::class, 'index'])->name('user.dashboard');
 
     // Profil

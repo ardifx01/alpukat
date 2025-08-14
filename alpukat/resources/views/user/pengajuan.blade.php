@@ -23,28 +23,71 @@
                 <h3 class="text-lg font-semibold">Dokumen Koperasi</h3>
                 @foreach ($syaratKoperasi as $syarat)
                     <div>
-                        <label class="block text-gray-700">{{ $syarat->nama_syarat }}</label>
-                        <input type="file" name="dokumen[{{ $syarat->id }}]" class="mt-1 block w-full">
+                        <label class="block text-gray-700 dark:text-gray-300">
+                            {{ $syarat->nama_syarat }}
+                            @if($syarat->is_required)
+                                <span class="ml-2 inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800">
+                                    Wajib
+                                </span>
+                            @else
+                                <span class="ml-2 inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700">
+                                    Opsional
+                                </span>
+                            @endif
+                        </label>
+                        <input 
+                            type="file" 
+                            name="dokumen[{{ $syarat->id }}]" 
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            @if($syarat->is_required) required @endif
+                            class="mt-1 block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4
+                                    file:rounded file:border-0 file:text-sm file:font-semibold
+                                    file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100
+                                    dark:text-gray-100 dark:file:bg-gray-700 dark:file:text-gray-200"
+                        >
                         @error("dokumen.{$syarat->id}")
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
                 @endforeach
 
-                <h3 class="text-lg font-semibold mt-6">Dokumen Pengurus</h3>
-                @foreach ($syaratPengurus as $syarat)
-                    <div>
-                        <label class="block text-gray-700">{{ $syarat->nama_syarat }}</label>
-                        <input type="file" name="dokumen[{{ $syarat->id }}]" class="mt-1 block w-full">
-                        @error("dokumen.{$syarat->id}")
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
+                <h3 class="text-lg font-semibold">Dokumen Pengurus</h3>
+                    @foreach ($syaratPengurus as $syarat)
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300">
+                                {{ $syarat->nama_syarat }}
+                                @if($syarat->is_required)
+                                    <span class="ml-2 inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800">
+                                        Wajib
+                                    </span>
+                                @else
+                                    <span class="ml-2 inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700">
+                                        Opsional
+                                    </span>
+                                @endif
+                            </label>
+                            <input 
+                                type="file" 
+                                name="dokumen[{{ $syarat->id }}]" 
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                    @if($syarat->is_required) required @endif
+                                    class="mt-1 block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4
+                                        file:rounded file:border-0 file:text-sm file:font-semibold
+                                        file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100
+                                        dark:text-gray-100 dark:file:bg-gray-700 dark:file:text-gray-200"
+                            >
+                            @error("dokumen.{$syarat->id}")
+                                <p class="mt-1 text-red-500 text-sm">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    @endforeach
+                    <div class="flex gap-2">
+                        <button type="submit" name="action" value="submit"
+                                class="bg-blue-600 text-black px-4 py-2 rounded hover:bg-blue-700">
+                            Kirim Pengajuan
+                        </button>
                     </div>
-                @endforeach
-
-                <button type="submit" class="bg-blue-600 text-black px-4 py-2 rounded hover:bg-blue-700">
-                    Upload Semua
-                </button>
+                </div>
             </form>
         </div>
     </div>
