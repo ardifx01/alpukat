@@ -37,7 +37,7 @@
         </button>
         <div class="profile-menu" id="profileDropdownMenu" role="menu" aria-labelledby="profileDropdownBtn">
           <a href="{{ route('profile.edit') }}"><i class="fa fa-user"></i> Edit Profil </a>
-          <form action="{{ route('logout') }}" method="POST" style="margin:0;">
+          <form action="{{ route('logout') }}" method="POST" class="m-0" onsubmit="return confirm('Yakin ingin logout?')">
             @csrf
             <button type="submit" style="color:#e74c3c;width:100%;text-align:left;padding:8px 16px;cursor:pointer;">
               <i class="fa fa-sign-out" aria-hidden="true"></i> Logout
