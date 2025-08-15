@@ -1,76 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <title>ALPUKAT - Aplikasi Uji Kelayakan dan Kepatutan</title>
+@extends('user.theme.default')
 
-  <link rel="shortcut icon" href="{{ asset('front_end/images/logo_kepri.png') }}" type="image/x-icon">
+@section('title', 'Dashboard | ALPUKAT')
 
-  {{-- CSS vendor --}}
-  <link rel="stylesheet" href="{{ asset('front_end/css/bootstrap.css') }}">
-  <link rel="stylesheet" href="{{ asset('front_end/css/style.css') }}">
-  <link rel="stylesheet" href="{{ asset('front_end/css/responsive.css') }}">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-  {{-- CSS kustom halaman ini --}}
-  <link rel="stylesheet" href="{{ asset('front_end/css/alpukat.css') }}">
-</head>
-<body>
-
-  <header>
-    <div class="logo-container">
-      <img src="{{ asset('front_end/images/logo_kepri.png') }}" alt="Logo Dinas">
-      <div class="logo-text">
-        <h1>Dinas Koperasi, Usaha Kecil dan Menengah</h1>
-        <p>Dompak, Kec. Bukit Bestari, Kota Tanjungpinang, Kepulauan Riau</p>
-      </div>
-    </div>
-
-    <nav>
-      <a href="#" class="active">Beranda</a>
-      <a href="{{ route('user.create') }}">Pengajuan</a>
-      <a href="{{ route('user.lihat_berkas') }}">Lihat Berkas</a>
-
-      @php
-          $jumlahNotif = 0;
-          if(auth()->check()) {
-              $jumlahNotif = auth()->user()->notifikasi()->where('dibaca', false)->count();
-          }
-      @endphp
-      <a href="{{ route('user.notifikasi') }}">
-        Notifikasi
-        @if($jumlahNotif > 0)
-          <span class="badge bg-danger">{{ $jumlahNotif }}</span>
-        @endif
-      </a>
-
-      @guest
-        <a href="{{ route('login') }}" class="login-btn">Login</a>
-        <a href="{{ route('register') }}" class="sign-up">Register</a>
-      @endguest
-
-      @auth
-        <div class="profile-dropdown">
-          <button class="profile-btn" id="profileDropdownBtn" type="button">
-            <i class="fa fa-user-circle" style="font-size:22px;"></i>
-            {{ Auth::user()->name ?? 'Profil' }}
-            <i class="fa fa-caret-down"></i>
-          </button>
-          <div class="profile-menu" id="profileDropdownMenu">
-            <a href="{{ route('profile.edit') }}"><i class="fa fa-user"></i> Edit Profil</a>
-            <form action="{{ route('logout') }}" method="POST" style="margin:0;">
-              @csrf
-              <button type="submit" style="background:none;border:none;color:#e74c3c;width:100%;text-align:left;padding:8px 16px;cursor:pointer;">
-                <i class="fa fa-sign-out"></i> Logout
-              </button>
-            </form>
-          </div>
-        </div>
-      @endauth
-    </nav>
-  </header>
-
+@section('content')
   {{-- Hero --}}
   <section class="hero-section">
     <div class="container">
@@ -86,9 +18,7 @@
           @endguest
         </div>
         <div class="col-md-5 animate-right">
-          <img src="{{ asset('front_end/images/profile DKUKM.jpeg') }}"
-               alt="Dinas Koperasi Usaha Kecil & Menengah Kepulauan Riau"
-               class="img-fluid rounded hero-img">
+          <img src="{{ asset('front_end/images/profile DKUKM.jpeg') }}" alt="Dinas Koperasi Usaha Kecil & Menengah Kepulauan Riau" class="img-fluid rounded hero-img" loading="lazy">
         </div>
       </div>
     </div>
@@ -139,6 +69,8 @@
           <div class="col-lg-7">
             <iframe
               class="about-map"
+              title="Lokasi Dinas Koperasi, Usaha Kecil dan Menengah Kepulauan Riau"
+              loading="lazy"
               src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Dinas+Koperasi+Usaha+Kecil+dan+Menengah+Kepulauan+Riau"
               allowfullscreen>
             </iframe>
@@ -169,19 +101,4 @@
       </div>  
     </div>
   </section>
-
-  {{-- Footer --}}
-  <footer class="footer_section">
-    <p>&copy; <span id="displayYear"></span> Dinas Koperasi Usaha Kecil dan Menengah. All Rights Reserved</p>
-  </footer>
-
-  {{-- JS vendor --}}
-  <script src="{{ asset('front_end/js/jquery-3.4.1.min.js') }}"></script>
-  <script src="{{ asset('front_end/js/bootstrap.js') }}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-  <script src="{{ asset('front_end/js/custom.js') }}"></script>
-
-  {{-- JS kustom halaman ini --}}
-  <script src="{{ asset('front_end/js/alpukat.js') }}"></script>
-</body>
-</html>
+@endsection
