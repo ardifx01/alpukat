@@ -24,7 +24,7 @@ class BerkasAdminController extends Controller
     public function create()
     {
         // Ambil user yang telah diverifikasi
-        $users = User::whereHas('verifikasi', function($query) {
+        $users = User::whereHas('verifikasi', function ($query) {
             $query->whereNotNull('tanggal_wawancara');
         })->get();
 
@@ -40,7 +40,7 @@ class BerkasAdminController extends Controller
         $request->validate([
             'verifikasi_id' => 'required|exists:verifikasis,id',
             'jenis_surat' => 'required|in:berita_acara,sk_ukk',
-            'file' => 'required|mimes:pdf|max:5120', 
+            'file' => 'required|mimes:pdf|max:5120',
         ]);
 
         $verifikasi = Verifikasi::findOrFail($request->verifikasi_id);
@@ -97,7 +97,7 @@ class BerkasAdminController extends Controller
             $resultDate->addDay();
 
             // Cek kalau bukan Sabtu atau Minggu
-            if(!in_array($resultDate->dayOfWeek, [Carbon::SATURDAY, Carbon::SUNDAY])) {
+            if (!in_array($resultDate->dayOfWeek, [Carbon::SATURDAY, Carbon::SUNDAY])) {
                 $addedDays++;
             }
         }
@@ -117,5 +117,4 @@ class BerkasAdminController extends Controller
 
         return response()->download($path, basename($berkas->file_path));
     }
-
 }

@@ -16,11 +16,22 @@
   {{-- CSS kustom halaman ini --}}
   <link rel="stylesheet" href="{{ asset('front_end/css/alpukat.css') }}">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     @include('user.theme.header')
 
-    <main class="main-content">
+    <main id="main-content" class="flex-grow-1">
       @yield('content')
+      {{-- Flash message global --}}
+      @foreach (['success', 'error', 'warning', 'info'] as $msg)
+      @if(session($msg))
+      <div class="alert alert-{{ $msg === 'error' ? 'danger' : $msg }} 
+                          alert-dismissible fade show mt-3 mx-3" role="alert">
+          {{ session($msg) }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      @endif
+      @endforeach
+      {{-- Akhir flash message global --}}
     </main>
     
     @include('user.theme.footer')
@@ -30,4 +41,6 @@
 
     {{-- JS kustom halaman ini --}}
     <script src="{{ asset('front_end/js/alpukat.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('theme/js/scripts.js') }}"></script>
 </body>

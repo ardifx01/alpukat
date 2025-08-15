@@ -1,94 +1,139 @@
-@extends('layouts.app')
+@extends('user.dashboard')
 
-@section('header')
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Upload Dokumen Permohonan SK UKK
-        </h2>
-    </x-slot>
-@endsection
+@section('title', 'Pengajuan | ALPUKAT')
 
 @section('content')
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if (session('success'))
-                <div class="mb-4 font-medium text-sm text-green-600">
-                    {{ session('success') }}
-                </div>
+<div class="container py-4">
+    <h2 class="mb-2 fw-bold">Upload Dokumen Permohonan SK UKK</h2>
+    <p class="text-muted mb-4">Unggah Dokumen Permohonan Surat Keputusan Uji Kelayakan dan Kepatutan (SK UKK) Anda di sini</p>
+
+    @if (session('success'))
+        <div class="alert alert-success mb-4">{{ session('success') }}</div>
+    @endif
+
+    @if (session('missing_required') || $errors->has('dokumen'))
+        <div class="alert alert-danger mb-3">
+            <strong>Form belum lengkap.</strong>
+            @php $missing = (array) session('missing_required', []); @endphp
+            @if (!empty($missing))
+            <div class="mt-1 small">Masih ada berkas wajib yang kosong:
+                <em>{{ implode(', ', $missing) }}</em>.
+            </div>
+            @else
+            <div class="mt-1 small">{{ $errors->first('dokumen') }}</div>
             @endif
-
-            <form method="POST" action="{{ route('user.store') }}" enctype="multipart/form-data" class="space-y-6 bg-white p-6 rounded shadow">
-                @csrf
-
-                <h3 class="text-lg font-semibold">Dokumen Koperasi</h3>
-                @foreach ($syaratKoperasi as $syarat)
-                    <div>
-                        <label class="block text-gray-700 dark:text-gray-300">
-                            {{ $syarat->nama_syarat }}
-                            @if($syarat->is_required)
-                                <span class="ml-2 inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800">
-                                    Wajib
-                                </span>
-                            @else
-                                <span class="ml-2 inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700">
-                                    Opsional
-                                </span>
-                            @endif
-                        </label>
-                        <input 
-                            type="file" 
-                            name="dokumen[{{ $syarat->id }}]" 
-                            accept=".pdf,.jpg,.jpeg,.png"
-                            @if($syarat->is_required) required @endif
-                            class="mt-1 block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4
-                                    file:rounded file:border-0 file:text-sm file:font-semibold
-                                    file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100
-                                    dark:text-gray-100 dark:file:bg-gray-700 dark:file:text-gray-200"
-                        >
-                        @error("dokumen.{$syarat->id}")
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
-                    </div>
-                @endforeach
-
-                <h3 class="text-lg font-semibold">Dokumen Pengurus</h3>
-                    @foreach ($syaratPengurus as $syarat)
-                        <div>
-                            <label class="block text-gray-700 dark:text-gray-300">
-                                {{ $syarat->nama_syarat }}
-                                @if($syarat->is_required)
-                                    <span class="ml-2 inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800">
-                                        Wajib
-                                    </span>
-                                @else
-                                    <span class="ml-2 inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700">
-                                        Opsional
-                                    </span>
-                                @endif
-                            </label>
-                            <input 
-                                type="file" 
-                                name="dokumen[{{ $syarat->id }}]" 
-                                accept=".pdf,.jpg,.jpeg,.png"
-                                    @if($syarat->is_required) required @endif
-                                    class="mt-1 block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4
-                                        file:rounded file:border-0 file:text-sm file:font-semibold
-                                        file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100
-                                        dark:text-gray-100 dark:file:bg-gray-700 dark:file:text-gray-200"
-                            >
-                            @error("dokumen.{$syarat->id}")
-                                <p class="mt-1 text-red-500 text-sm">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    @endforeach
-                    <div class="flex gap-2">
-                        <button type="submit" name="action" value="submit"
-                                class="bg-blue-600 text-black px-4 py-2 rounded hover:bg-blue-700">
-                            Kirim Pengajuan
-                        </button>
-                    </div>
-                </div>
-            </form>
         </div>
-    </div>
+    @endif
+
+
+    @php
+        // Tentukan tab aktif: default "koperasi". Jika ada error di tab pengurus, aktifkan pengurus.
+        $activeTab = 'koperasi';
+        foreach (($syaratPengurus ?? []) as $s) {
+        if ($errors->has("dokumen.$s->id")) { $activeTab = 'pengurus'; break; }
+        }
+        // Opsional: izinkan query ?tab=pengurus untuk memaksa tab
+        if (request('tab') === 'pengurus') { $activeTab = 'pengurus'; }
+    @endphp
+
+    {{-- NAV TABS --}}
+    <ul class="nav nav-tabs" id="uploadTab" role="tablist">
+        <li class="nav-item" role="presentation">
+        <button class="nav-link {{ $activeTab==='koperasi' ? 'active' : '' }}" id="koperasi-tab"
+                data-bs-toggle="tab" data-bs-target="#koperasi" type="button" role="tab"
+                aria-controls="koperasi" aria-selected="{{ $activeTab==='koperasi' ? 'true' : 'false' }}">
+            📁 Koperasi
+        </button>
+        </li>
+        <li class="nav-item" role="presentation">
+        <button class="nav-link {{ $activeTab==='pengurus' ? 'active' : '' }}" id="pengurus-tab"
+                data-bs-toggle="tab" data-bs-target="#pengurus" type="button" role="tab"
+                aria-controls="pengurus" aria-selected="{{ $activeTab==='pengurus' ? 'true' : 'false' }}">
+            🗂️ Pengurus/Pengawas
+        </button>
+        </li>
+    </ul>
+
+    <form method="POST" action="{{ route('user.store') }}" enctype="multipart/form-data"
+            class="tab-content border-start border-end border-bottom p-3 rounded-bottom" id="uploadTabContent">
+        @csrf
+
+        {{-- TAB: KOPERASI --}}
+        <div class="tab-pane fade {{ $activeTab==='koperasi' ? 'show active' : '' }}" id="koperasi" role="tabpanel" aria-labelledby="koperasi-tab" tabindex="0">
+        @if(collect($syaratKoperasi ?? [])->isEmpty())
+            <div class="alert alert-info mt-3">Belum ada persyaratan untuk kategori koperasi.</div>
+        @else
+            @foreach ($syaratKoperasi as $syarat)
+            <div class="mb-3">
+                <label for="dokumen_{{ $syarat->id }}" class="form-label">
+                {{ $syarat->nama_syarat }}
+                @if($syarat->is_required)
+                    <span class="badge text-bg-danger ms-2">Wajib</span>
+                @else
+                    <span class="badge text-bg-secondary ms-2">Opsional</span>
+                @endif
+                </label>
+                <input type="file" id="dokumen_{{ $syarat->id }}" name="dokumen[{{ $syarat->id }}]"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    class="form-control @error('dokumen.'.$syarat->id) is-invalid @enderror"
+                    @if($syarat->is_required) required @endif>
+                @error('dokumen.'.$syarat->id)
+                <div class="invalid-feedback">{{ $message }}</div>
+                @else
+                <div class="form-text">Format: PDF/JPG/PNG.</div>
+                @enderror
+            </div>
+            @endforeach
+        @endif
+        </div>
+
+        {{-- TAB: PENGURUS/PENGAWAS --}}
+        <div class="tab-pane fade {{ $activeTab==='pengurus' ? 'show active' : '' }}" id="pengurus" role="tabpanel" aria-labelledby="pengurus-tab" tabindex="0">
+        @if(collect($syaratPengurus ?? [])->isEmpty())
+            <div class="alert alert-info mt-3">Belum ada persyaratan untuk kategori pengurus/pengawas.</div>
+        @else
+            @foreach ($syaratPengurus as $syarat)
+            <div class="mb-3">
+                <label for="dokumen_{{ $syarat->id }}" class="form-label">
+                {{ $syarat->nama_syarat }}
+                @if($syarat->is_required)
+                    <span class="badge text-bg-danger ms-2">Wajib</span>
+                @else
+                    <span class="badge text-bg-secondary ms-2">Opsional</span>
+                @endif
+                </label>
+                <input type="file" id="dokumen_{{ $syarat->id }}" name="dokumen[{{ $syarat->id }}]"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    class="form-control @error('dokumen.'.$syarat->id) is-invalid @enderror"
+                    @if($syarat->is_required) required @endif>
+                @error('dokumen.'.$syarat->id)
+                <div class="invalid-feedback">{{ $message }}</div>
+                @else
+                <div class="form-text">Format: PDF/JPG/PNG.</div>
+                @enderror
+            </div>
+            @endforeach
+        @endif
+        </div>
+
+        <div class="d-flex gap-2 mt-3">
+        <button type="submit" name="action" value="submit" class="btn btn-primary">
+            Kirim Pengajuan
+        </button>
+        </div>
+    </form>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+// Jika URL punya hash #pengurus, buka tab Pengurus saat load
+(function(){
+    const hash = window.location.hash;
+    if (hash === '#pengurus') {
+    const trigger = document.querySelector('[data-bs-target="#pengurus"]');
+    if (trigger) new bootstrap.Tab(trigger).show();
+    }
+})();
+</script>
+@endpush

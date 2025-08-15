@@ -5,7 +5,9 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Syarat;
 use App\Models\Dokumen;
 
@@ -29,14 +31,12 @@ class DokumenController extends Controller
             return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu.');
         }
 
-        // 1) Ambil daftar syarat (wajib & opsional)
+        // 1) Ambil daftar syarat
         $syaratWajib    = Syarat::where('is_required', true)->get(['id','nama_syarat']);
         $syaratOpsional = Syarat::where('is_required', false)->get(['id','nama_syarat']);
 
-        // 2) Susun rule dinamis per syarat
-        $rules = [
-            'dokumen' => ['required','array'],
-        ];
+        // 2) Rule dinamis
+        $rules = ['dokumen' => ['required','array']];
         $messages = [];
 
         foreach ($syaratWajib as $s) {
@@ -52,17 +52,45 @@ class DokumenController extends Controller
         }
 
         // 3) Validasi
-        $validated = $request->validate($rules, $messages);
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            // Kumpulkan nama berkas wajib yang kosong (biar ada ringkasan singkat di atas)
+            $submitted = collect($request->file('dokumen', []))
+                ->filter(fn($f) => !is_null($f))     // hanya yang ada filenya
+                ->keys()->map(fn($k) => (int) $k);   // daftar id syarat yang terisi
+
+            $missingNames = $syaratWajib
+                ->whereNotIn('id', $submitted)
+                ->pluck('nama_syarat')
+                ->values()
+                ->all();
+
+            return back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('missing_required', $missingNames);   // <— dipakai di Blade
+        }
 
         // 4) Simpan file + upsert Dokumen
-        $files = $request->file('dokumen', []);
+        $files = $request->file('dokumen', []);           // <- array [syarat_id => UploadedFile|null]
         foreach ($files as $syaratId => $file) {
-            if (!$file) continue; // opsional yang kosong
+            if (!$file) continue; // lewati opsional yang kosong
 
-            // simpan file ke storage/app/public/dokumen/...
-            $path = $file->store('dokumen', 'public');
+            // Susun nama file yang rapi (slug + timestamp + random)
+            $origName = $file->getClientOriginalName();
+            $ext      = $file->getClientOriginalExtension();
+            $base     = pathinfo($origName, PATHINFO_FILENAME);
+            $safeBase = Str::slug($base);
+            $filename = $safeBase . '-' . now()->format('YmdHis') . '-' . Str::random(5) . '.' . $ext;
 
-            // kalau sudah ada dokumen untuk syarat ini, hapus file lama & update path
+            // Folder per user (lebih rapih)
+            $folder = 'dokumen/' . $user->id;
+
+            // SIMPAN di disk 'public', dapatkan path string
+            $storedPath = $file->storeAs($folder, $filename, 'public');
+
+            // Upsert record + hapus file lama bila ada
             $existing = Dokumen::where('user_id', $user->id)
                 ->where('syarat_id', (int) $syaratId)
                 ->first();
@@ -71,18 +99,26 @@ class DokumenController extends Controller
                 if ($existing->file_path && Storage::disk('public')->exists($existing->file_path)) {
                     Storage::disk('public')->delete($existing->file_path);
                 }
-                $existing->update(['file_path' => $path]);
+                $existing->update([
+                    'file_path'      => $storedPath,            // <- simpan path STRING hasil storeAs
+                    'original_name'  => $origName,              // (opsional tapi disarankan)
+                    'mime'           => $file->getClientMimeType(),
+                    'size'           => $file->getSize(),
+                ]);
             } else {
                 Dokumen::create([
-                    'user_id'   => $user->id,
-                    'syarat_id' => (int) $syaratId,
-                    'file_path' => $path,
+                    'user_id'        => $user->id,
+                    'syarat_id'      => (int) $syaratId,
+                    'file_path'      => $storedPath,            // <- path STRING
+                    'original_name'  => $origName,              // simpan nama asli untuk ditampilkan
+                    'mime'           => $file->getClientMimeType(),
+                    'size'           => $file->getSize(),
                 ]);
             }
         }
 
         return redirect()
-            ->route('user.lihat_berkas')
+            ->route('user.store')
             ->with('success', 'Dokumen berhasil diunggah!');
     }
 

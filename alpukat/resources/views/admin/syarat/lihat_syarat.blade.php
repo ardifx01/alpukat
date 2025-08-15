@@ -4,7 +4,7 @@
 
 <div class="container mt-5">
     <h2 class="mb-4 fw-bold">Lihat Persyaratan Berkas</h2>
-    <p>Lihat Persyaratan Berkas yang Telah Anda Masukkan</p>
+    <p class="text-muted">Lihat Persyaratan Berkas yang Telah Anda Masukkan</p>
 
     {{-- TAB NAV --}}
     <ul class="nav nav-tabs" id="syaratTab" role="tablist">

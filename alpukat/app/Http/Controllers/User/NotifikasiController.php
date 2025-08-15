@@ -21,17 +21,4 @@ class NotifikasiController extends Controller
 
         return view('user.notifikasi', compact('notifikasi'));
     }
-
-    public function notifikasiAdmin()
-    {
-        $adminId = Auth::id();
-
-        // Ambil semua notifikasi untuk admin
-        $notifikasi = Notifikasi::where('target_role', 'admin')->orderBy('created_at', 'desc')->paginate(10);
-
-        // Tandai semua notifikasi yang belum dibaca sebagai dibaca
-        Notifikasi::where('target_role', 'admin')->where('dibaca', false)->update(['dibaca' => true]);
-
-        return view('admin.notifikasi.index', compact('notifikasi'));
-    }
 }
