@@ -7,25 +7,6 @@
     <h2 class="mb-2 fw-bold">Upload Dokumen Permohonan SK UKK</h2>
     <p class="text-muted mb-4">Unggah Dokumen Permohonan Surat Keputusan Uji Kelayakan dan Kepatutan (SK UKK) Anda di sini</p>
 
-    @if (session('success'))
-        <div class="alert alert-success mb-4">{{ session('success') }}</div>
-    @endif
-
-    @if (session('missing_required') || $errors->has('dokumen'))
-        <div class="alert alert-danger mb-3">
-            <strong>Form belum lengkap.</strong>
-            @php $missing = (array) session('missing_required', []); @endphp
-            @if (!empty($missing))
-            <div class="mt-1 small">Masih ada berkas wajib yang kosong:
-                <em>{{ implode(', ', $missing) }}</em>.
-            </div>
-            @else
-            <div class="mt-1 small">{{ $errors->first('dokumen') }}</div>
-            @endif
-        </div>
-    @endif
-
-
     @php
         // Tentukan tab aktif: default "koperasi". Jika ada error di tab pengurus, aktifkan pengurus.
         $activeTab = 'koperasi';

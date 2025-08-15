@@ -21,17 +21,6 @@
 
     <main id="main-content" class="flex-grow-1">
       @yield('content')
-      {{-- Flash message global --}}
-      @foreach (['success', 'error', 'warning', 'info'] as $msg)
-      @if(session($msg))
-      <div class="alert alert-{{ $msg === 'error' ? 'danger' : $msg }} 
-                          alert-dismissible fade show mt-3 mx-3" role="alert">
-          {{ session($msg) }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      @endif
-      @endforeach
-      {{-- Akhir flash message global --}}
     </main>
     
     @include('user.theme.footer')

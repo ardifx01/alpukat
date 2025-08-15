@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use App\Models\Syarat;
 use App\Models\Dokumen;
 
@@ -52,25 +51,7 @@ class DokumenController extends Controller
         }
 
         // 3) Validasi
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            // Kumpulkan nama berkas wajib yang kosong (biar ada ringkasan singkat di atas)
-            $submitted = collect($request->file('dokumen', []))
-                ->filter(fn($f) => !is_null($f))     // hanya yang ada filenya
-                ->keys()->map(fn($k) => (int) $k);   // daftar id syarat yang terisi
-
-            $missingNames = $syaratWajib
-                ->whereNotIn('id', $submitted)
-                ->pluck('nama_syarat')
-                ->values()
-                ->all();
-
-            return back()
-                ->withErrors($validator)
-                ->withInput()
-                ->with('missing_required', $missingNames);   // <— dipakai di Blade
-        }
+        $validated = $request->validate($rules, $messages);
 
         // 4) Simpan file + upsert Dokumen
         $files = $request->file('dokumen', []);           // <- array [syarat_id => UploadedFile|null]
@@ -118,7 +99,7 @@ class DokumenController extends Controller
         }
 
         return redirect()
-            ->route('user.store')
+            ->route('user.lihat_berkas')
             ->with('success', 'Dokumen berhasil diunggah!');
     }
 
