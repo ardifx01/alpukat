@@ -7,6 +7,12 @@
     <h2 class="mb-2 fw-bold">Upload Dokumen Permohonan SK UKK</h2>
     <p class="text-muted mb-4">Unggah Dokumen Permohonan Surat Keputusan Uji Kelayakan dan Kepatutan (SK UKK) Anda di sini</p>
 
+    @if(isset($cooldownUntil) && now()->lt($cooldownUntil))
+    <div class="alert alert-warning">
+        Anda bisa mengunggah lagi tunggu {{ $cooldownUntil->diffForHumans(['parts' => 2]) }}
+    </div>
+    @endif
+
     @php
         // Tentukan tab aktif: default "koperasi". Jika ada error di tab pengurus, aktifkan pengurus.
         $activeTab = 'koperasi';
@@ -98,7 +104,8 @@
         </div>
 
         <div class="d-flex gap-2 mt-3">
-        <button type="submit" name="action" value="submit" class="btn btn-primary">
+        @php $onCooldown = $cooldownUntil && now()->lt($cooldownUntil); @endphp
+        <button type="submit" name="action" value="submit" class="btn btn-primary" {{ $onCooldown ? 'disabled' : '' }}>
             Kirim Pengajuan
         </button>
         </div>

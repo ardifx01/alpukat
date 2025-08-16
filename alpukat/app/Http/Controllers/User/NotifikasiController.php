@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\User;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Notifikasi;
 use App\Http\Controllers\Controller;

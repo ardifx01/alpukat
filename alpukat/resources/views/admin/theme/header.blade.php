@@ -11,12 +11,24 @@
     <!-- Tombol Lonceng Notifikasi -->
     <ul class="navbar-nav ms-auto me-3 me-lg-4">
         <li class="nav-item">
-            <a class="nav-link position-relative" href="#">
+            @php
+            $unreadCount = auth()->check()
+            ? cache()->remember('notif-unread-'.auth()->id(), 15, fn () =>
+            \App\Models\Notifikasi::where('user_id', auth()->id())
+            ->where('dibaca', false)
+            ->count()
+            )
+            : 0;
+            @endphp
+
+            <a class="nav-link position-relative" href="{{ route('admin.notifications.index') }}" class="relative">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Badge jumlah notifikasi -->
-                <span class="position-absolute badge rounded-pill bg-danger" style="top: 5px; right: 5px; transform: translate(0, 0); font-size: 0.5rem;">
-                    3
+                @if($unreadCount > 0)
+                <span class="badge text-bg-danger">
+                    {{ $unreadCount }}
                 </span>
+                @endif
             </a>
         </li>
 
@@ -27,7 +39,9 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="#!">Profil</a></li>
-                <li><hr class="dropdown-divider" /></li>
+                <li>
+                    <hr class="dropdown-divider" />
+                </li>
                 <li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
