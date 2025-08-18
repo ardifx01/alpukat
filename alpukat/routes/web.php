@@ -25,9 +25,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [UserController::class, 'index'])->name('user.dashboard');
 
     // Profil
-    Route::get('/profile',  [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
     // Pengajuan / Dokumen
     Route::get('/pengajuan', [DokumenController::class, 'create'])->name('user.create');
@@ -39,7 +39,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Admin atau dinas koperasi
-Route::prefix('admin')->name('admin.')->middleware(['auth','can:admin'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:admin'])->group(function () {
     // Dashboard admin
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
 
@@ -50,7 +50,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth','can:admin'])->group(
         Route::post('/tambah', [SyaratController::class, 'postTambahSyarat'])->name('post_tambah_syarat');
         Route::get('/{id}/edit', [SyaratController::class, 'editSyarat'])->name('edit_syarat');
         Route::post('/{id}/edit', [SyaratController::class, 'postEditSyarat'])->name('post_edit_syarat');
-        Route::get('/{id}/hapus', [SyaratController::class, 'hapusSyarat'])->name('hapus_syarat'); 
+        Route::get('/{id}/hapus', [SyaratController::class, 'hapusSyarat'])->name('hapus_syarat');
     });
 
     // ---- Verifikasi (admin.verif.*)
@@ -62,7 +62,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth','can:admin'])->group(
     });
 
     // ---- Berkas Admin
-    Route::resource('berkas-admin', BerkasAdminController::class)->only(['index','create','store','show']);
+    Route::resource('berkas-admin', BerkasAdminController::class)->only(['index', 'create', 'store', 'show']);
     Route::get('berkas-admin/{id}/download', [BerkasAdminController::class, 'download'])->name('berkas-admin.download');
 
     // ---- Notifikasi Admin

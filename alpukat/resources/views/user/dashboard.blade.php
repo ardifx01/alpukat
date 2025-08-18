@@ -79,7 +79,7 @@
             <p>
               Dinas Koperasi dan UMKM Kepri adalah instansi pemerintah daerah yang bertanggung jawab
               dalam pembinaan, pengembangan, dan pemberdayaan Koperasi dan Usaha Mikro, Kecil, dan Menengah (UMKM)
-              di wilayah kerjanya.
+              di wilayah Kepulauan Riau.
             </p>
 
             <div class="about-list">
@@ -102,3 +102,4 @@
     </div>
   </section>
 @endsection
+
