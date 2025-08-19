@@ -16,7 +16,7 @@
                     type="text"
                     name="nama_syarat"
                     id="nama_syarat"
-                    placeholder="Contoh: Surat Permohonan Pengurus Koperasi"
+                    placeholder="Contoh: Surat Permohonan"
                     class="form-control"
                     required
                 >

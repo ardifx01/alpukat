@@ -63,7 +63,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="feedback" class="form-label">Feedback (Opsional):</label>
+            <label for="feedback" class="form-label">Pesan (Opsional):</label>
             <textarea name="feedback" class="form-control" rows="3">{{ old('feedback', $verifikasi?->feedback) }}</textarea>
         </div>
 

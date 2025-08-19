@@ -6,6 +6,8 @@
     <h2 class="mb-4 fw-bold">Lihat Persyaratan Berkas</h2>
     <p class="text-muted">Lihat Persyaratan Berkas yang Telah Anda Masukkan</p>
 
+    <a href="{{ route('admin.syarat.tambah_syarat') }}" class="btn btn-primary mb-4">Tambah Syarat</a>
+
     {{-- TAB NAV --}}
     <ul class="nav nav-tabs" id="syaratTab" role="tablist">
         <li class="nav-item">

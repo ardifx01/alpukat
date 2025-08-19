@@ -73,7 +73,7 @@ class BerkasAdminController extends Controller
         ]);
 
         // Tentukan pesan notifikasi berdasarkan jenis surat
-        $pesanNotif = $request->jenis_surat === 'sk_ukk' ? "Admin telah mengunggah SK UKK Anda." : "Admin telah mengunggah Berita Acara Anda.";
+        $pesanNotif = $request->jenis_surat === 'sk_ukk' ? "Admin telah mengunggah SK UKK Anda." : "Admin telah mengunggah Berita Acara sebagai hasil wawancara Anda.";
 
         // Simpan notifikasi untuk user 
         Notifikasi::create([

@@ -67,7 +67,7 @@
                 @error('dokumen.'.$syarat->id)
                 <div class="invalid-feedback">{{ $message }}</div>
                 @else
-                <div class="form-text">Format: PDF/JPG/PNG.</div>
+                <div class="text-muted mb-4">Format file yang dikirim adalah PDF/JPG/PNG dengan ukuran maksimal 5 MB.</div>
                 @enderror
             </div>
             @endforeach
@@ -96,7 +96,7 @@
                 @error('dokumen.'.$syarat->id)
                 <div class="invalid-feedback">{{ $message }}</div>
                 @else
-                <div class="form-text">Format: PDF/JPG/PNG.</div>
+                <div class="text-muted mb-4">Format file yang dikirim adalah PDF/JPG/PNG dengan ukuran maksimal 5 MB.</div>
                 @enderror
             </div>
             @endforeach
