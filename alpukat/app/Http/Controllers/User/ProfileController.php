@@ -46,12 +46,14 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return Redirect::route('profile.show')->with('status', 'profile-updated');
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     // Menampilkan profil
     public function show()
     {
-        return view('user.profile.show');
+        $user = Auth::user();
+
+        return view('user.profile.show', compact('user'));
     }
 }

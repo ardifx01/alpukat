@@ -1,7 +1,6 @@
-{{-- resources/views/user/profile/edit.blade.php --}}
 @extends('user.theme.default')
 
-@section('title', 'Profil Koperasi | ALPUKAT')
+@section('title', 'Edit Profil Koperasi | ALPUKAT')
 
 @section('content')
 <div class="container py-4">
@@ -51,10 +50,12 @@
 
         {{-- Avatar + Preview --}}
         <div class="mb-3">
-          <label for="avatar" class="form-label">Foto Koperasi (Avatar)</label>
+          <label for="avatar" class="form-label">Foto Koperasi</label>
           <input type="file" id="avatar" name="avatar" accept="image/*"
                  class="form-control @error('avatar') is-invalid @enderror">
-          @error('avatar') <div class="invalid-feedback">{{ $message }}</div> @enderror
+          @error('avatar') 
+            <div class="invalid-feedback">{{ $message }}</div> 
+          @enderror
           <div class="form-text">Format: jpg, jpeg, png, webp. Maks 2MB.</div>
         </div>
 

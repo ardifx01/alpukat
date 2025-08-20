@@ -16,27 +16,17 @@ use App\Http\Controllers\User\DokumenController;
 use App\Http\Controllers\User\NotifikasiController;
 use App\Http\Controllers\User\ProfileController;
 
-// Profil User
-use App\Http\Controllers\ProfileController;
 
 // ======================
 // Public
 // ======================
 Route::view('/', 'user.dashboard')->name('home');
 
-<<<<<<< Updated upstream
+
 // User atau koperasi
 // Kalau mau pakai verifikasi, bisa pakai ini -> Route::middleware(['auth','verified'])->group(function ()
 Route::middleware(['auth', 'role.user'])->group(function () {
     Route::get('/koperasi', [UserController::class, 'index'])->name('user.dashboard');
-=======
-// ======================
-// User / Koperasi
-// ======================
-Route::middleware(['auth'])->group(function () {
-    // Dashboard user
-    Route::get('/dashboard', [UserController::class, 'index'])->name('user.dashboard');
->>>>>>> Stashed changes
 
     // Profil
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
