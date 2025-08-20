@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('user.theme.default')
 
 @section('content')
 @php

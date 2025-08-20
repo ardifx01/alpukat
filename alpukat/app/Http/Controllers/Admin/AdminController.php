@@ -15,8 +15,8 @@ class AdminController extends Controller
 {
     public function dashboard(Request $request)
     {
-        // Menghitung jumlah user yang sudah mengirimkan dokumen
-        $hitungPengajuan = Dokumen::distinct('user_id')->count('user_id');
+        // Menghitung jumlah berkas yang telah diverifikasi
+        $hitungPengajuan = Verifikasi::count();
 
         // Menghitung jumlah berita acara yang diunggah
         $hitungBeritaAcara = BerkasAdmin::where('jenis_surat', 'berita_acara')->count();

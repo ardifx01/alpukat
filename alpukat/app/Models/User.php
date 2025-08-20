@@ -6,13 +6,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Verifikasi;
 use App\Models\Notifikasi;
 use App\Models\Dokumen;
 use App\Models\BerkasAdmin;
 
-class User extends Authenticatable implements MustVerifyEmail
+// class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -21,6 +22,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'user_type',
+        'avatar_path',
+        'alamat',
     ];
 
     /**
@@ -63,5 +66,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function berkasAdmin()
     {
         return $this->hasMany(BerkasAdmin::class);
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        return $this->avatar_path
+            ? asset( 'storage/'. $this->avatar_path)
+            : asset('public/front-end/images/default-avatar.png');
     }
 }

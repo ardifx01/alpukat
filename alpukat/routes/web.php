@@ -2,32 +2,32 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\ProfileController;
-
 // Admin
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminNotifController;
 use App\Http\Controllers\Admin\VerifikasiController;
 use App\Http\Controllers\Admin\BerkasAdminController;
 use App\Http\Controllers\Admin\SyaratController;
+use App\Http\Controllers\Admin\ProfilAdminController;
 
 // User
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\DokumenController;
 use App\Http\Controllers\User\NotifikasiController;
+use App\Http\Controllers\User\ProfileController;
 
 // Public
 Route::view('/', 'user.dashboard')->name('home');
 
 // User atau koperasi
 // Kalau mau pakai verifikasi, bisa pakai ini -> Route::middleware(['auth','verified'])->group(function ()
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [UserController::class, 'index'])->name('user.dashboard');
+Route::middleware(['auth', 'role.user'])->group(function () {
+    Route::get('/koperasi', [UserController::class, 'index'])->name('user.dashboard');
 
     // Profil
-    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
-    Route::get('/profile/edit', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Pengajuan / Dokumen
     Route::get('/pengajuan', [DokumenController::class, 'create'])->name('user.create');
@@ -66,7 +66,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:admin'])->group
     Route::get('berkas-admin/{id}/download', [BerkasAdminController::class, 'download'])->name('berkas-admin.download');
 
     // ---- Notifikasi Admin
-    Route::get('/notifikasi', [AdminNotifController::class, 'notifikasiAdmin'])->name('notifications.index');
+    Route::get('/notifikasi-admin', [AdminNotifController::class, 'notifikasiAdmin'])->name('notifications.index');
+
+    // ---- Profil Admin
+    Route::get('/profil-admin', [ProfilAdminController::class, 'profilAdmin'])->name('profil.index'); // lihat profil
 });
 
 require __DIR__ . '/auth.php';

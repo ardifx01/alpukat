@@ -32,4 +32,5 @@
     <script src="{{ asset('front_end/js/alpukat.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('theme/js/scripts.js') }}"></script>
+    @stack('scripts')
 </body>

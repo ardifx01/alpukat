@@ -38,7 +38,7 @@
                 <i class="fas fa-user fa-fw"></i>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#!">Profil</a></li>
+                <li><a class="dropdown-item" href="{{ route('admin.profil.index') }}">Profil</a></li>
                 <li>
                     <hr class="dropdown-divider" />
                 </li>

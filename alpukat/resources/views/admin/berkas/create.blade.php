@@ -1,4 +1,4 @@
-@extends('admin.dashboard')
+@extends('admin.theme.default')
 
 @section('content')
 <div class="container mt-5 mb-5">

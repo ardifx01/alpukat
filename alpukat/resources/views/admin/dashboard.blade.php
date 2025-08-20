@@ -24,7 +24,7 @@
     <div class="col-12 col-md-4">
       <div class="card shadow-sm border-0 h-100">
         <div class="card-body">
-          <div class="small text-muted">Total Pengajuan</div>
+          <div class="small text-muted">Total Berkas yang Telah Diverifikasi</div>
           <div class="display-6 fw-bold">{{ $countPengajuan }}</div>
         </div>
       </div>
