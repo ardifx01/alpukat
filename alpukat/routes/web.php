@@ -16,31 +16,50 @@ use App\Http\Controllers\User\DokumenController;
 use App\Http\Controllers\User\NotifikasiController;
 use App\Http\Controllers\User\ProfileController;
 
+// Profil User
+use App\Http\Controllers\ProfileController;
+
+// ======================
 // Public
+// ======================
 Route::view('/', 'user.dashboard')->name('home');
 
+<<<<<<< Updated upstream
 // User atau koperasi
 // Kalau mau pakai verifikasi, bisa pakai ini -> Route::middleware(['auth','verified'])->group(function ()
 Route::middleware(['auth', 'role.user'])->group(function () {
     Route::get('/koperasi', [UserController::class, 'index'])->name('user.dashboard');
+=======
+// ======================
+// User / Koperasi
+// ======================
+Route::middleware(['auth'])->group(function () {
+    // Dashboard user
+    Route::get('/dashboard', [UserController::class, 'index'])->name('user.dashboard');
+>>>>>>> Stashed changes
 
     // Profil
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-    // Pengajuan / Dokumen
+    // Pengajuan Dokumen
     Route::get('/pengajuan', [DokumenController::class, 'create'])->name('user.create');
     Route::post('/pengajuan', [DokumenController::class, 'store'])->name('user.store');
     Route::get('/lihat-berkas', [DokumenController::class, 'lihatBerkas'])->name('user.lihat_berkas');
 
-    // Notifikasi
+    // Notifikasi User
     Route::get('/notifikasi', [NotifikasiController::class, 'notifikasiUser'])->name('user.notifikasi');
 });
 
-// Admin atau dinas koperasi
+// ======================
+// Admin / Dinas
+// ======================
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:admin'])->group(function () {
-    // Dashboard admin
+    // Profil Admin
+    Route::get('/profil', [ProfilAdminController::class, 'profilAdmin'])->name('profil.index');
+
+    // Dashboard Admin
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
 
     // ---- Syarat (admin.syarat.*)
@@ -72,4 +91,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:admin'])->group
     Route::get('/profil-admin', [ProfilAdminController::class, 'profilAdmin'])->name('profil.index'); // lihat profil
 });
 
+// ======================
+// Auth
+// ======================
 require __DIR__ . '/auth.php';

@@ -3,125 +3,296 @@
 @section('title', 'Pengajuan | ALPUKAT')
 
 @section('content')
-<div class="container py-4">
-    <h2 class="mb-2 fw-bold">Upload Dokumen Permohonan SK UKK</h2>
-    <p class="text-muted mb-4">Unggah Dokumen Permohonan Surat Keputusan Uji Kelayakan dan Kepatutan (SK UKK) Anda di sini</p>
+@php
+    // Tentukan tab aktif
+    $activeTab = 'koperasi';
+    foreach (($syaratPengurus ?? []) as $s) {
+        if ($errors->has("dokumen.$s->id")) { $activeTab = 'pengurus'; break; }
+    }
+    if (request('tab') === 'pengurus') { $activeTab = 'pengurus'; }
+    $onCooldown = isset($cooldownUntil) && now()->lt($cooldownUntil);
+@endphp
 
-    @if(isset($cooldownUntil) && now()->lt($cooldownUntil))
-    <div class="alert alert-warning">
-        Anda bisa mengunggah lagi tunggu {{ $cooldownUntil->diffForHumans(['parts' => 2]) }}
+{{-- HERO SECTION --}}
+<section class="hero position-relative text-white mb-4">
+    <div class="hero-bg"
+         style="background:url('{{ asset('images/pengajuan.png') }}') center/cover no-repeat;
+                height:280px; position:relative;">
+        <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background:rgba(0,0,0,.45);"></div>
+        <div class="container h-100 d-flex flex-column justify-content-center align-items-center text-center position-relative">
+            <h1 class="fw-bold mb-2" style="font-size:2rem;">Pengajuan SK UKK</h1>
+            <p class="mb-0" style="max-width:720px;">Unggah dokumen persyaratan sesuai instruksi di bawah ini.</p>
+        </div>
     </div>
+</section>
+
+<div class="container py-4" style="max-width:1000px">
+    {{-- Cooldown --}}
+    @if($onCooldown)
+        <div class="alert alert-warning border-0 shadow-sm rounded-3">
+            <i class="fa fa-clock-o me-1"></i>
+            Anda bisa mengunggah lagi {{ $cooldownUntil->diffForHumans(['parts' => 2]) }}.
+        </div>
     @endif
 
-    @php
-        // Tentukan tab aktif: default "koperasi". Jika ada error di tab pengurus, aktifkan pengurus.
-        $activeTab = 'koperasi';
-        foreach (($syaratPengurus ?? []) as $s) {
-        if ($errors->has("dokumen.$s->id")) { $activeTab = 'pengurus'; break; }
-        }
-        // Opsional: izinkan query ?tab=pengurus untuk memaksa tab
-        if (request('tab') === 'pengurus') { $activeTab = 'pengurus'; }
-    @endphp
+    {{-- Info umum --}}
+    <div class="alert alert-info border-0 shadow-sm rounded-3">
+        <div class="d-flex align-items-start gap-2">
+            <i class="fa fa-info-circle mt-1"></i>
+            <div>
+                <strong>Catatan:</strong> Format file <code>PDF/JPG/PNG</code>, ukuran maksimal <strong>5 MB</strong> per file.
+                Anda bisa klik area unggah atau seret & letakkan berkas ke sana.
+            </div>
+        </div>
+    </div>
 
     {{-- NAV TABS --}}
-    <ul class="nav nav-tabs" id="uploadTab" role="tablist">
+    <ul class="nav nav-tabs gap-2 border-0" id="uploadTab" role="tablist">
         <li class="nav-item" role="presentation">
-        <button class="nav-link {{ $activeTab==='koperasi' ? 'active' : '' }}" id="koperasi-tab"
-                data-bs-toggle="tab" data-bs-target="#koperasi" type="button" role="tab"
-                aria-controls="koperasi" aria-selected="{{ $activeTab==='koperasi' ? 'true' : 'false' }}">
-            📁 Koperasi
-        </button>
+            <button class="nav-link rounded-pill {{ $activeTab==='koperasi' ? 'active' : '' }}"
+                    id="koperasi-tab" data-bs-toggle="tab" data-bs-target="#koperasi" type="button" role="tab">
+                📁 Dokumen Berkas Koperasi
+            </button>
         </li>
         <li class="nav-item" role="presentation">
-        <button class="nav-link {{ $activeTab==='pengurus' ? 'active' : '' }}" id="pengurus-tab"
-                data-bs-toggle="tab" data-bs-target="#pengurus" type="button" role="tab"
-                aria-controls="pengurus" aria-selected="{{ $activeTab==='pengurus' ? 'true' : 'false' }}">
-            🗂️ Pengurus/Pengawas
-        </button>
+            <button class="nav-link rounded-pill {{ $activeTab==='pengurus' ? 'active' : '' }}"
+                    id="pengurus-tab" data-bs-toggle="tab" data-bs-target="#pengurus" type="button" role="tab">
+                🗂️ Dokumen Berkas Pengurus/Pengawas
+            </button>
         </li>
     </ul>
 
     <form method="POST" action="{{ route('user.store') }}" enctype="multipart/form-data"
-            class="tab-content border-start border-end border-bottom p-3 rounded-bottom" id="uploadTabContent">
+          id="formPengajuan"
+          class="tab-content bg-white p-3 p-md-4 border rounded-bottom rounded-4 shadow-sm mt-2">
         @csrf
 
-        {{-- TAB: KOPERASI --}}
-        <div class="tab-pane fade {{ $activeTab==='koperasi' ? 'show active' : '' }}" id="koperasi" role="tabpanel" aria-labelledby="koperasi-tab" tabindex="0">
-        @if(collect($syaratKoperasi ?? [])->isEmpty())
-            <div class="alert alert-info mt-3">Belum ada persyaratan untuk kategori koperasi.</div>
-        @else
-            @foreach ($syaratKoperasi as $syarat)
-            <div class="mb-3">
-                <label for="dokumen_{{ $syarat->id }}" class="form-label">
-                {{ $syarat->nama_syarat }}
-                @if($syarat->is_required)
-                    <span class="badge text-bg-danger ms-2">Wajib</span>
-                @else
-                    <span class="badge text-bg-secondary ms-2">Opsional</span>
-                @endif
-                </label>
-                <input type="file" id="dokumen_{{ $syarat->id }}" name="dokumen[{{ $syarat->id }}]"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    class="form-control @error('dokumen.'.$syarat->id) is-invalid @enderror"
-                    @if($syarat->is_required) required @endif>
-                @error('dokumen.'.$syarat->id)
-                <div class="invalid-feedback">{{ $message }}</div>
-                @else
-                <div class="text-muted mb-4">Format file yang dikirim adalah PDF/JPG/PNG dengan ukuran maksimal 5 MB.</div>
-                @enderror
-            </div>
-            @endforeach
-        @endif
+        {{-- ========== TAB: KOPERASI ========== --}}
+        <div class="tab-pane fade {{ $activeTab==='koperasi' ? 'show active' : '' }}" id="koperasi" role="tabpanel">
+            @if(collect($syaratKoperasi ?? [])->isEmpty())
+                <div class="alert alert-secondary rounded-3">Belum ada persyaratan untuk kategori koperasi.</div>
+            @else
+                <div class="row g-3">
+                    @foreach ($syaratKoperasi as $syarat)
+                        @php $inputId = "dokumen_koperasi_{$syarat->id}"; @endphp
+                        <div class="col-12">
+                            <label class="form-label fw-semibold mb-2 d-block">
+                                {{ $syarat->nama_syarat }}
+                                @if($syarat->is_required)
+                                    <span class="badge rounded-pill bg-danger-subtle text-danger ms-2">Wajib</span>
+                                @else
+                                    <span class="badge rounded-pill bg-secondary-subtle text-secondary ms-2">Opsional</span>
+                                @endif
+                            </label>
+
+                            {{-- Dropzone sebagai LABEL agar klik selalu memicu input file --}}
+                            <label class="dz border rounded-3 p-3 d-flex flex-column align-items-center justify-content-center text-center"
+                                   for="{{ $inputId }}">
+                                <i class="fa fa-cloud-upload fa-2x mb-2 text-primary"></i>
+                                <div class="small text-muted">
+                                    Seret & letakkan berkas di sini, atau <span class="text-primary fw-semibold">klik untuk memilih</span>.
+                                </div>
+                                <span class="dz-file d-none mt-2">
+                                    <span class="badge bg-light text-dark border">
+                                        <i class="fa fa-file-o me-1"></i> <span class="dz-filename"></span>
+                                    </span>
+                                    <button type="button" class="dz-clear btn btn-link btn-sm text-danger">Hapus</button>
+                                </span>
+                                <small class="dz-msg text-muted mt-1"></small>
+                            </label>
+
+                            <input type="file" id="{{ $inputId }}" name="dokumen[{{ $syarat->id }}]"
+                                   accept=".pdf,.jpg,.jpeg,.png" hidden
+                                   data-required="{{ $syarat->is_required ? 1 : 0 }}"
+                                   class="@error('dokumen.'.$syarat->id) is-invalid @enderror">
+
+                            @error('dokumen.'.$syarat->id)
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
 
-        {{-- TAB: PENGURUS/PENGAWAS --}}
-        <div class="tab-pane fade {{ $activeTab==='pengurus' ? 'show active' : '' }}" id="pengurus" role="tabpanel" aria-labelledby="pengurus-tab" tabindex="0">
-        @if(collect($syaratPengurus ?? [])->isEmpty())
-            <div class="alert alert-info mt-3">Belum ada persyaratan untuk kategori pengurus/pengawas.</div>
-        @else
-            @foreach ($syaratPengurus as $syarat)
-            <div class="mb-3">
-                <label for="dokumen_{{ $syarat->id }}" class="form-label">
-                {{ $syarat->nama_syarat }}
-                @if($syarat->is_required)
-                    <span class="badge text-bg-danger ms-2">Wajib</span>
-                @else
-                    <span class="badge text-bg-secondary ms-2">Opsional</span>
-                @endif
-                </label>
-                <input type="file" id="dokumen_{{ $syarat->id }}" name="dokumen[{{ $syarat->id }}]"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    class="form-control @error('dokumen.'.$syarat->id) is-invalid @enderror"
-                    @if($syarat->is_required) required @endif>
-                @error('dokumen.'.$syarat->id)
-                <div class="invalid-feedback">{{ $message }}</div>
-                @else
-                <div class="text-muted mb-4">Format file yang dikirim adalah PDF/JPG/PNG dengan ukuran maksimal 5 MB.</div>
-                @enderror
-            </div>
-            @endforeach
-        @endif
+        {{-- ========== TAB: PENGURUS/PENGAWAS ========== --}}
+        <div class="tab-pane fade {{ $activeTab==='pengurus' ? 'show active' : '' }}" id="pengurus" role="tabpanel">
+            @if(collect($syaratPengurus ?? [])->isEmpty())
+                <div class="alert alert-secondary rounded-3">Belum ada persyaratan untuk kategori pengurus/pengawas.</div>
+            @else
+                <div class="row g-3">
+                    @foreach ($syaratPengurus as $syarat)
+                        @php $inputId = "dokumen_pengurus_{$syarat->id}"; @endphp
+                        <div class="col-12">
+                            <label class="form-label fw-semibold mb-2 d-block">
+                                {{ $syarat->nama_syarat }}
+                                @if($syarat->is_required)
+                                    <span class="badge rounded-pill bg-danger-subtle text-danger ms-2">Wajib</span>
+                                @else
+                                    <span class="badge rounded-pill bg-secondary-subtle text-secondary ms-2">Opsional</span>
+                                @endif
+                            </label>
+
+                            <label class="dz border rounded-3 p-3 d-flex flex-column align-items-center justify-content-center text-center"
+                                   for="{{ $inputId }}">
+                                <i class="fa fa-cloud-upload fa-2x mb-2 text-primary"></i>
+                                <div class="small text-muted">
+                                    Seret & letakkan berkas di sini, atau <span class="text-primary fw-semibold">klik untuk memilih</span>.
+                                </div>
+                                <span class="dz-file d-none mt-2">
+                                    <span class="badge bg-light text-dark border">
+                                        <i class="fa fa-file-o me-1"></i> <span class="dz-filename"></span>
+                                    </span>
+                                    <button type="button" class="dz-clear btn btn-link btn-sm text-danger">Hapus</button>
+                                </span>
+                                <small class="dz-msg text-muted mt-1"></small>
+                            </label>
+
+                            <input type="file" id="{{ $inputId }}" name="dokumen[{{ $syarat->id }}]"
+                                   accept=".pdf,.jpg,.jpeg,.png" hidden
+                                   data-required="{{ $syarat->is_required ? 1 : 0 }}"
+                                   class="@error('dokumen.'.$syarat->id) is-invalid @enderror">
+
+                            @error('dokumen.'.$syarat->id)
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
 
-        <div class="d-flex gap-2 mt-3">
-        @php $onCooldown = $cooldownUntil && now()->lt($cooldownUntil); @endphp
-        <button type="submit" name="action" value="submit" class="btn btn-primary" {{ $onCooldown ? 'disabled' : '' }}>
-            Kirim Pengajuan
-        </button>
+        {{-- Sticky Action Bar --}}
+        <div class="position-sticky mt-4" style="bottom:0;">
+            <div class="d-flex align-items-center justify-content-between gap-2 p-3 rounded-3 border bg-light-subtle">
+                <div class="small text-muted">
+                    <i class="fa fa-shield"></i> Pastikan berkas yang diunggah jelas dan sesuai persyaratan.
+                </div>
+                <button type="submit" name="action" value="submit"
+                        class="btn btn-primary px-4" {{ $onCooldown ? 'disabled' : '' }}>
+                    <i class="fa fa-paper-plane me-1"></i> Kirim Pengajuan
+                </button>
+            </div>
         </div>
     </form>
 </div>
-@endsection
 
-@push('scripts')
+{{-- Styles --}}
+<style>
+    .nav-tabs .nav-link { border:0; padding:.5rem 1rem; }
+    .nav-tabs .nav-link.active { background:#e9edff; color:#23349E; }
+    .dz { background:#f9fbff; border:1px dashed #bfc8ff; cursor:pointer; transition:.2s; }
+    .dz:hover { background:#f2f6ff; }
+</style>
+
+{{-- INLINE SCRIPT --}}
 <script>
-// Jika URL punya hash #pengurus, buka tab Pengurus saat load
 (function(){
-    const hash = window.location.hash;
-    if (hash === '#pengurus') {
+  const MAX = 5 * 1024 * 1024; // 5 MB
+  const ALLOWED = ['pdf','jpg','jpeg','png'];
+
+  // Buka tab pengurus via hash
+  if (window.location.hash === '#pengurus') {
     const trigger = document.querySelector('[data-bs-target="#pengurus"]');
-    if (trigger) new bootstrap.Tab(trigger).show();
+    if (trigger && window.bootstrap?.Tab) new bootstrap.Tab(trigger).show();
+  }
+
+  function setMessage(dz, text, isError){
+    const msgEl = dz.querySelector('.dz-msg');
+    if (!msgEl) return;
+    msgEl.textContent = text || '';
+    msgEl.classList.toggle('text-danger', !!isError);
+    msgEl.classList.toggle('text-muted', !isError);
+  }
+
+  function clearFile(dz, input){
+    const fileBox = dz.querySelector('.dz-file');
+    setMessage(dz, '', false);
+    if (fileBox) fileBox.classList.add('d-none');
+    input.value = '';
+  }
+
+  function showFile(dz, file){
+    const fileBox = dz.querySelector('.dz-file');
+    const fnameEl = dz.querySelector('.dz-filename');
+    if (fnameEl) fnameEl.textContent = file.name;
+    if (fileBox) fileBox.classList.remove('d-none');
+  }
+
+  function validateAndShow(dz, input, file){
+    if (!file) return false;
+    const ext = (file.name.split('.').pop() || '').toLowerCase();
+    if (!ALLOWED.includes(ext)) {
+      alert('Tipe file tidak didukung. Gunakan PDF/JPG/PNG.');
+      setMessage(dz, 'Tipe file tidak didukung. Gunakan PDF/JPG/PNG.', true);
+      clearFile(dz, input);
+      return false;
     }
+    if (file.size > MAX) {
+      alert('Ukuran file melebihi 5 MB.');
+      setMessage(dz, 'Ukuran file melebihi 5 MB.', true);
+      clearFile(dz, input);
+      return false;
+    }
+    setMessage(dz, 'Siap diunggah.', false);
+    showFile(dz, file);
+    return true;
+  }
+
+  // Init semua dropzone
+  document.querySelectorAll('label.dz').forEach(function(dz){
+    const inputId = dz.getAttribute('for');
+    const input   = document.getElementById(inputId);
+    if (!input) return;
+
+    // Perubahan via dialog
+    input.addEventListener('change', function(){
+      const f = this.files && this.files[0];
+      if (f) validateAndShow(dz, input, f);
+    });
+
+    // Tombol Hapus
+    dz.querySelector('.dz-clear')?.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      clearFile(dz, input);
+    });
+
+    // Drag & drop
+    ['dragenter','dragover'].forEach(ev => dz.addEventListener(ev, e => {
+      e.preventDefault(); e.stopPropagation(); dz.classList.add('shadow-sm');
+    }));
+    ['dragleave','drop'].forEach(ev => dz.addEventListener(ev, e => {
+      e.preventDefault(); e.stopPropagation(); dz.classList.remove('shadow-sm');
+    }));
+    dz.addEventListener('drop', function(e){
+      const file = e.dataTransfer.files && e.dataTransfer.files[0];
+      if (!file) return;
+      // taruh ke input agar terkirim saat submit
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      input.files = dt.files;
+      validateAndShow(dz, input, file);
+    });
+  });
+
+  // Validasi WAJIB saat submit (karena input hidden tidak memunculkan bubble bawaan)
+  document.getElementById('formPengajuan')?.addEventListener('submit', function(e){
+    let firstErrorDz = null;
+    document.querySelectorAll('input[type="file"][data-required="1"]').forEach(function(inp){
+      if (!inp.files || !inp.files.length) {
+        const dz = document.querySelector('label.dz[for="'+ inp.id +'"]');
+        if (dz) {
+          setMessage(dz, 'Berkas wajib diunggah.', true);
+          dz.classList.add('shadow-sm');
+          if (!firstErrorDz) firstErrorDz = dz;
+        }
+      }
+    });
+    if (firstErrorDz) {
+      e.preventDefault();
+      firstErrorDz.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  });
 })();
 </script>
-@endpush
+@endsection
