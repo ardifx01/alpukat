@@ -1,4 +1,4 @@
-@extends('user.dashboard')
+@extends('user.dashboard') 
 
 @section('title', 'Pengajuan | ALPUKAT')
 
@@ -16,224 +16,222 @@
   $hasPengurus = !empty($syaratPengurus) && count($syaratPengurus) > 0;
 @endphp
 
-<div class="container py-4" style="max-width: 1040px;">
+<div class="container py-4" style="max-width:1040px;">
 
-  {{-- ======= HEADER / COVER (tanpa ikon, teks agak diturunkan) ======= --}}
-<div class="card shadow-sm border-0 mb-4" style="border-radius:18px; overflow:hidden;">
-  <div class="position-relative"
-       style="
-         min-height: 220px;                       /* sedikit lebih tinggi */
-         padding: 56px 0 28px;                    /* dorong teks ke bawah */
-         background: linear-gradient(135deg,#1f2a7a 0%, #4456d1 60%, #7e8af0 100%);
-       ">
-    <span class="position-absolute rounded-circle" style="right:-40px;top:-40px;width:180px;height:180px;background:rgba(255,255,255,0.08)"></span>
-    <span class="position-absolute rounded-circle" style="left:-60px;bottom:-60px;width:240px;height:240px;background:rgba(255,255,255,0.06)"></span>
+  {{-- ======= HEADER / COVER (SERAGAM) ======= --}}
+  <div class="card shadow-sm border-0 mb-3" style="border-radius:18px; overflow:hidden;">
+    <div class="position-relative"
+         style="
+           min-height:220px;
+           padding:56px 0 28px;
+           background:linear-gradient(135deg,#1f2a7a 0%, #4456d1 60%, #7e8af0 100%);
+         ">
+      <span class="position-absolute rounded-circle" style="right:-40px;top:-40px;width:180px;height:180px;background:rgba(255,255,255,.08)"></span>
+      <span class="position-absolute rounded-circle" style="left:-60px;bottom:-60px;width:240px;height:240px;background:rgba(255,255,255,.06)"></span>
 
-    <div class="container text-white">
-      <h2 class="mb-1 fw-bold" style="font-size:2rem;">Pengajuan SK UKK</h2>
-      <div class="opacity-85">Unggah dokumen persyaratan sesuai instruksi di bawah ini.</div>
+      <div class="container text-white">
+        <h2 class="mb-1 fw-bold" style="font-size:2rem;">Pengajuan SK UKK</h2>
+        <div class="opacity-85">Unggah dokumen persyaratan sesuai instruksi di bawah ini.</div>
+      </div>
     </div>
-  </div>
 
-    {{-- body ringkas di bawah cover --}}
-    <div class="px-3 px-md-4 pt-3 pb-4">
+    {{-- Info ringkas tepat di bawah cover --}}
+    <div class="px-3 px-md-4 pt-3 pb-3">
       @if($onCooldown)
-        <div class="alert alert-warning border-0 shadow-sm rounded-3 mb-3">
+        <div class="alert alert-warning border-0 shadow-sm rounded-3 mb-2 small">
           <i class="fa fa-clock-o me-1"></i>
           Anda bisa mengunggah lagi {{ $cooldownUntil->diffForHumans(['parts' => 2]) }}.
         </div>
       @endif
 
-      <div class="alert alert-info border-0 shadow-sm rounded-3 mb-3">
+      <div class="alert alert-info border-0 shadow-sm rounded-3 mb-0 small">
         <div class="d-flex align-items-start gap-2">
           <i class="fa fa-info-circle mt-1"></i>
           <div>
-            <strong>Catatan:</strong> Format file <code>PDF/JPG/PNG</code>, ukuran maksimal <strong>5 MB</strong> per file.
-            Anda bisa klik area unggah atau seret & letakkan berkas ke sana.
+            <strong>Catatan:</strong> File <code>PDF/JPG/PNG</code>, maks. <strong>5 MB</strong> per file.
           </div>
         </div>
       </div>
+    </div>
+  </div>
 
-      {{-- ======= NAV TABS (pill lembut, konsisten) ======= --}}
+  {{-- ======= BOX: Tabs + Daftar Unggahan MENYATU ======= --}}
+  <div class="card shadow-sm border rounded-3">
+    {{-- Header box: tabs & chip status DI DALAM BOX YANG SAMA --}}
+    <div class="card-header bg-white border-0 pb-0">
       <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
         <ul class="nav nav-pills gap-2 mb-0" id="uploadTab" role="tablist">
           <li class="nav-item" role="presentation">
             <button class="nav-link soft-pill {{ $activeTab==='koperasi' ? 'active' : '' }}"
-                    id="koperasi-tab" data-bs-toggle="tab" data-bs-target="#koperasi" type="button" role="tab">
-              📁 Dokumen Berkas Koperasi
+                    id="koperasi-tab" data-bs-toggle="tab" data-bs-target="#pane-koperasi" type="button" role="tab">
+              Dokumen Berkas Koperasi
             </button>
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link soft-pill {{ $activeTab==='pengurus' ? 'active' : '' }}"
-                    id="pengurus-tab" data-bs-toggle="tab" data-bs-target="#pengurus" type="button" role="tab">
-              🗂️ Dokumen Berkas Pengurus/Pengawas
+                    id="pengurus-tab" data-bs-toggle="tab" data-bs-target="#pane-pengurus" type="button" role="tab">
+              Dokumen Berkas Pengurus/Pengawas
             </button>
           </li>
         </ul>
 
-        {{-- chip status per kategori --}}
-        <div class="d-flex align-items-center gap-2 small">
+        <div class="d-flex align-items-center gap-2 x-small">
           <span class="chip" id="chipKoperasi"><i class="fa fa-circle me-1"></i> Koperasi: <b>Belum</b></span>
           <span class="chip" id="chipPengurus"><i class="fa fa-circle me-1"></i> Pengurus: <b>Belum</b></span>
         </div>
       </div>
+    </div>
 
-      {{-- ======= FORM ======= --}}
-      <form method="POST" action="{{ route('user.store') }}" enctype="multipart/form-data"
-            id="formPengajuan"
-            class="tab-content bg-white p-3 p-md-4 border rounded-4 shadow-sm mt-3">
+    {{-- Form & Tab content dalam satu card-body --}}
+    <div class="card-body pt-2">
+      <form method="POST" action="{{ route('user.store') }}" enctype="multipart/form-data" id="formPengajuan">
         @csrf
 
-        {{-- === TAB KOPERASI === --}}
-        <div class="tab-pane fade {{ $activeTab==='koperasi' ? 'show active' : '' }}" id="koperasi" role="tabpanel">
-          @if(!$hasKoperasi)
-            <div class="alert alert-secondary rounded-3">Belum ada persyaratan untuk kategori koperasi.</div>
-          @else
-            <div class="row g-3">
-              @foreach ($syaratKoperasi as $syarat)
-                @php $inputId = "dokumen_koperasi_{$syarat->id}"; @endphp
-                <div class="col-12">
-                  <div class="p-3 p-md-4 rounded-4 border upload-card h-100">
-                    <div class="fw-semibold">{{ $syarat->nama_syarat }}</div>
-                    <div class="text-muted small">
-                      @if($syarat->is_required)
-                        <span class="badge rounded-pill bg-danger-subtle text-danger">*</span> Wajib
-                      @else
-                        <span class="badge rounded-pill bg-secondary-subtle text-secondary">Opsional</span>
-                      @endif
-                    </div>
+        <div class="tab-content">
 
-                    {{-- Dropzone (label) --}}
-                    <label class="dz mt-3 d-block text-center p-4 rounded-3 border"
-                           for="{{ $inputId }}">
-                      <i class="fa fa-cloud-upload fa-2x mb-2 text-primary"></i>
-                      <div class="small text-muted">
-                        Seret & letakkan berkas di sini, atau <span class="text-primary fw-semibold">klik untuk memilih</span>.
+          {{-- === PANE KOPERASI === --}}
+          <div class="tab-pane fade {{ $activeTab==='koperasi' ? 'show active' : '' }}" id="pane-koperasi" role="tabpanel">
+            @if(!$hasKoperasi)
+              <div class="alert alert-secondary rounded-3 small mb-2">Belum ada persyaratan untuk kategori koperasi.</div>
+            @else
+              <div class="row g-2">
+                @foreach ($syaratKoperasi as $syarat)
+                  @php $inputId = "dokumen_koperasi_{$syarat->id}"; @endphp
+                  <div class="col-12">
+                    <div class="p-2 rounded-3 border upload-card h-100">
+                      {{-- Nama syarat: BOLD + * wajib setelah nama --}}
+                      <div class="small text-dark">
+                        <strong>{{ $syarat->nama_syarat }}</strong>
+                        @if($syarat->is_required)
+                          <span class="ms-1 text-danger fw-bold">*</span>
+                          <span class="text-muted x-small">wajib</span>
+                        @else
+                          <span class="text-muted x-small ms-1">opsional</span>
+                        @endif
                       </div>
 
-                      <span class="dz-file d-none mt-3 d-inline-flex align-items-center gap-2">
-                        <span class="badge bg-light text-dark border">
-                          <i class="fa fa-file-o me-1"></i> <span class="dz-filename"></span>
+                      {{-- Dropzone (label) --}}
+                      <label class="dz mt-2 d-block text-center p-2 rounded-2 border" for="{{ $inputId }}">
+                        <span class="x-small text-muted">Seret & lepas / klik untuk memilih</span>
+
+                        <span class="dz-file d-none mt-2 d-inline-flex align-items-center gap-2">
+                          <span class="badge bg-light text-dark border x-small">
+                            <i class="fa fa-file-o me-1"></i> <span class="dz-filename"></span>
+                          </span>
+                          <button type="button" class="dz-clear btn btn-xs btn-outline-danger rounded-pill px-2 py-0" aria-label="Hapus berkas">
+                            <i class="fa fa-times"></i>
+                          </button>
                         </span>
-                        <button type="button" class="dz-clear btn btn-sm btn-outline-danger rounded-pill">
-                          <i class="fa fa-times"></i> Hapus
-                        </button>
-                      </span>
 
-                      <small class="dz-msg text-muted mt-2 d-block"></small>
-                    </label>
+                        <small class="dz-msg text-muted d-block mt-1 x-small"></small>
+                      </label>
 
-                    <input type="file" id="{{ $inputId }}" name="dokumen[{{ $syarat->id }}]"
-                           accept=".pdf,.jpg,.jpeg,.png" hidden
-                           data-required="{{ $syarat->is_required ? 1 : 0 }}"
-                           data-category="koperasi"
-                           class="@error('dokumen.'.$syarat->id) is-invalid @enderror">
+                      <input type="file" id="{{ $inputId }}" name="dokumen[{{ $syarat->id }}]"
+                             accept=".pdf,.jpg,.jpeg,.png" hidden
+                             data-required="{{ $syarat->is_required ? 1 : 0 }}"
+                             data-category="koperasi"
+                             class="@error('dokumen.'.$syarat->id) is-invalid @enderror">
 
-                    @error('dokumen.'.$syarat->id)
-                      <div class="invalid-feedback d-block">{{ $message }}</div>
-                    @enderror
-                  </div>
-                </div>
-              @endforeach
-            </div>
-          @endif
-        </div>
-
-        {{-- === TAB PENGURUS === --}}
-        <div class="tab-pane fade {{ $activeTab==='pengurus' ? 'show active' : '' }}" id="pengurus" role="tabpanel">
-          @if(!$hasPengurus)
-            <div class="alert alert-secondary rounded-3">Belum ada persyaratan untuk kategori pengurus/pengawas.</div>
-          @else
-            <div class="row g-3">
-              @foreach ($syaratPengurus as $syarat)
-                @php $inputId = "dokumen_pengurus_{$syarat->id}"; @endphp
-                <div class="col-12">
-                  <div class="p-3 p-md-4 rounded-4 border upload-card h-100">
-                    <div class="fw-semibold">{{ $syarat->nama_syarat }}</div>
-                    <div class="text-muted small">
-                      @if($syarat->is_required)
-                        <span class="badge rounded-pill bg-danger-subtle text-danger">*</span> Wajib
-                      @else
-                        <span class="badge rounded-pill bg-secondary-subtle text-secondary">Opsional</span>
-                      @endif
+                      @error('dokumen.'.$syarat->id)
+                        <div class="invalid-feedback d-block x-small">{{ $message }}</div>
+                      @enderror
                     </div>
+                  </div>
+                @endforeach
+              </div>
+            @endif
+          </div>
 
-                    <label class="dz mt-3 d-block text-center p-4 rounded-3 border"
-                           for="{{ $inputId }}">
-                      <i class="fa fa-cloud-upload fa-2x mb-2 text-primary"></i>
-                      <div class="small text-muted">
-                        Seret & letakkan berkas di sini, atau <span class="text-primary fw-semibold">klik untuk memilih</span>.
+          {{-- === PANE PENGURUS === --}}
+          <div class="tab-pane fade {{ $activeTab==='pengurus' ? 'show active' : '' }}" id="pane-pengurus" role="tabpanel">
+            @if(!$hasPengurus)
+              <div class="alert alert-secondary rounded-3 small mb-2">Belum ada persyaratan untuk kategori pengurus/pengawas.</div>
+            @else
+              <div class="row g-2">
+                @foreach ($syaratPengurus as $syarat)
+                  @php $inputId = "dokumen_pengurus_{$syarat->id}"; @endphp
+                  <div class="col-12">
+                    <div class="p-2 rounded-3 border upload-card h-100">
+                      <div class="small text-dark">
+                        <strong>{{ $syarat->nama_syarat }}</strong>
+                        @if($syarat->is_required)
+                          <span class="ms-1 text-danger fw-bold">*</span>
+                          <span class="text-muted x-small">wajib</span>
+                        @else
+                          <span class="text-muted x-small ms-1">opsional</span>
+                        @endif
                       </div>
 
-                      <span class="dz-file d-none mt-3 d-inline-flex align-items-center gap-2">
-                        <span class="badge bg-light text-dark border">
-                          <i class="fa fa-file-o me-1"></i> <span class="dz-filename"></span>
+                      <label class="dz mt-2 d-block text-center p-2 rounded-2 border" for="{{ $inputId }}">
+                        <span class="x-small text-muted">Seret & lepas / klik untuk memilih</span>
+
+                        <span class="dz-file d-none mt-2 d-inline-flex align-items-center gap-2">
+                          <span class="badge bg-light text-dark border x-small">
+                            <i class="fa fa-file-o me-1"></i> <span class="dz-filename"></span>
+                          </span>
+                          <button type="button" class="dz-clear btn btn-xs btn-outline-danger rounded-pill px-2 py-0" aria-label="Hapus berkas">
+                            <i class="fa fa-times"></i>
+                          </button>
                         </span>
-                        <button type="button" class="dz-clear btn btn-sm btn-outline-danger rounded-pill">
-                          <i class="fa fa-times"></i> Hapus
-                        </button>
-                      </span>
 
-                      <small class="dz-msg text-muted mt-2 d-block"></small>
-                    </label>
+                        <small class="dz-msg text-muted d-block mt-1 x-small"></small>
+                      </label>
 
-                    <input type="file" id="{{ $inputId }}" name="dokumen[{{ $syarat->id }}]"
-                           accept=".pdf,.jpg,.jpeg,.png" hidden
-                           data-required="{{ $syarat->is_required ? 1 : 0 }}"
-                           data-category="pengurus"
-                           class="@error('dokumen.'.$syarat->id) is-invalid @enderror">
+                      <input type="file" id="{{ $inputId }}" name="dokumen[{{ $syarat->id }}]"
+                             accept=".pdf,.jpg,.jpeg,.png" hidden
+                             data-required="{{ $syarat->is_required ? 1 : 0 }}"
+                             data-category="pengurus"
+                             class="@error('dokumen.'.$syarat->id) is-invalid @enderror">
 
-                    @error('dokumen.'.$syarat->id)
-                      <div class="invalid-feedback d-block">{{ $message }}</div>
-                    @enderror
+                      @error('dokumen.'.$syarat->id)
+                        <div class="invalid-feedback d-block x-small">{{ $message }}</div>
+                      @enderror
+                    </div>
                   </div>
-                </div>
-              @endforeach
-            </div>
-          @endif
+                @endforeach
+              </div>
+            @endif
+          </div>
+
         </div>
 
-        {{-- ======= Action bar (non-sticky) ======= --}}
-        <div class="mt-4">
-          <div class="d-flex align-items-center justify-content-between gap-2 p-3 rounded-3 border bg-light-subtle">
-            <div class="small text-muted">
+        {{-- ======= Action bar ======= --}}
+        <div class="mt-3">
+          <div class="d-flex align-items-center justify-content-between gap-2 p-2 rounded-2 border bg-light-subtle x-small">
+            <div class="text-muted">
               <i class="fa fa-shield"></i>
-              Pastikan semua <strong>syarat wajib</strong> di setiap kategori sudah diunggah.
+              Pastikan semua <strong>syarat wajib</strong> sudah diunggah.
             </div>
             <button id="btnKirim" type="submit" name="action" value="submit"
-                    class="btn btn-primary px-4" {{ $onCooldown ? 'disabled' : '' }}>
-              <i class="fa fa-paper-plane me-1"></i> Kirim Pengajuan
+                    class="btn btn-primary btn-sm px-3" {{ $onCooldown ? 'disabled' : '' }}>
+              <i class="fa fa-paper-plane me-1"></i> Kirim
             </button>
           </div>
-          <div id="barWarning" class="small text-danger mt-2 d-none">
-            Untuk mengirim pengajuan, unggah berkas pada <strong>Koperasi</strong> dan
-            <strong>Pengurus/Pengawas</strong> serta penuhi semua syarat (<strong>*</strong> = wajib).
+          <div id="barWarning" class="x-small text-danger mt-2 d-none">
+            Lengkapi unggahan pada <strong>Koperasi</strong> & <strong>Pengurus/Pengawas</strong> sebelum kirim.
           </div>
         </div>
+
       </form>
     </div>
   </div>
 </div>
 
-{{-- ======= Styles konsisten ======= --}}
+{{-- ======= Styles (compact & unified) ======= --}}
 <style>
-  .soft-pill{ background:#f1f4ff; color:#334; border:0; }
+  .soft-pill{ background:#f1f4ff; color:#334; border:0; font-size:.9rem; padding:.35rem .8rem }
   .soft-pill.active{ background:#e4e9ff; color:#23349E; font-weight:600; }
 
-  .chip{
-    padding:.35rem .65rem; border-radius:999px;
-    background:#f6f7fb; border:1px solid #e8eaf6; color:#546; display:inline-flex; align-items:center;
-  }
+  .chip{ padding:.22rem .5rem; border-radius:999px; background:#f6f7fb; border:1px solid #e8eaf6; color:#546; }
   .chip.ok{ background:#e9fbf0; border-color:#c9f1d9; color:#176d3a; }
-  .chip > .fa-circle{ font-size:.5rem; }
-  .chip.ok > .fa-circle{ color:#1db45a; }
-  .chip:not(.ok) > .fa-circle{ color:#d3d7f8; }
+  .chip > .fa-circle{ font-size:.5rem; vertical-align:middle }
 
-  .upload-card{ background:#fff; border-color:#eef1ff !important; }
-  .dz{ background:#f9fbff; border:1px dashed #c8d2ff !important; transition:.2s; cursor:pointer; }
+  .upload-card{ background:#fff; border-color:#eef1ff !important; font-size:.9rem }
+  .dz{ background:#f9fbff; border:1px dashed #c8d2ff !important; cursor:pointer; font-size:.85rem; transition:.15s }
   .dz:hover{ background:#f2f6ff; }
   .dz-file .badge{ font-weight:600; }
-  .dz-msg.text-danger{ color:#d9534f !important; }
+  .btn-xs{ font-size:.75rem; line-height:1; }
+  .x-small{ font-size:.8rem; }
 </style>
 
 {{-- ======= Script (validasi & enabling tombol) ======= --}}
@@ -244,7 +242,7 @@
 
   // Buka tab pengurus via hash
   if (window.location.hash === '#pengurus') {
-    const trigger = document.querySelector('[data-bs-target="#pengurus"]');
+    const trigger = document.querySelector('[data-bs-target="#pane-pengurus"]');
     if (trigger && window.bootstrap?.Tab) new bootstrap.Tab(trigger).show();
   }
 
@@ -257,16 +255,21 @@
   }
 
   function clearFile(dz, input){
-    dz.querySelector('.dz-file')?.classList.add('d-none');
+    const fileBox = dz.querySelector('.dz-file');
+    if (fileBox) fileBox.classList.add('d-none');
+    const fnameEl = dz.querySelector('.dz-filename');
+    if (fnameEl) fnameEl.textContent = '';
     setMessage(dz, '', false);
+    dz.classList.remove('shadow-sm');
     input.value = '';
     dz.dataset.hasfile = '0';
     updateSubmit();
   }
 
   function showFile(dz, file){
-    dz.querySelector('.dz-filename').textContent = file.name;
-    dz.querySelector('.dz-file').classList.remove('d-none');
+    const fnameEl = dz.querySelector('.dz-filename');
+    if (fnameEl) fnameEl.textContent = file.name;
+    dz.querySelector('.dz-file')?.classList.remove('d-none');
     dz.dataset.hasfile = '1';
     updateSubmit();
   }
@@ -329,9 +332,12 @@
       const f = this.files && this.files[0];
       f ? validateAndShow(dz, input, f) : clearFile(dz, input);
     });
+
     dz.querySelector('.dz-clear')?.addEventListener('click', e=>{
-      e.preventDefault(); e.stopPropagation(); clearFile(dz, input);
+      e.preventDefault(); e.stopPropagation();
+      clearFile(dz, input);
     });
+
     ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev, e=>{
       e.preventDefault(); e.stopPropagation(); dz.classList.add('shadow-sm');
     }));
@@ -351,8 +357,11 @@
     updateSubmit();
     if (!(catStatus('koperasi').ok && catStatus('pengurus').ok)) {
       e.preventDefault();
-      const firstErr = document.querySelector('input[type="file"][data-required="1"]:not([value])');
-      if (firstErr) document.querySelector('label.dz[for="'+firstErr.id+'"]').scrollIntoView({behavior:'smooth', block:'center'});
+      const firstErrReq = document.querySelector('input[type="file"][data-required="1"]:not([value])');
+      if (firstErrReq) {
+        const dz = document.querySelector('label.dz[for="'+firstErrReq.id+'"]');
+        if (dz) dz.scrollIntoView({behavior:'smooth', block:'center'});
+      }
     }
   });
 

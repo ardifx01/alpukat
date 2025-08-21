@@ -60,46 +60,46 @@
     </div>
   </section>
 
-  {{-- Tentang Kami --}}
-  <section class="about-section">
-    <div class="container">
-      <h2 class="mb-4" style="font-weight:800">Tentang Kami</h2>
-      <div class="about-card">
-        <div class="row align-items-start g-4">
-          <div class="col-lg-7">
-            <iframe
-              class="about-map"
-              title="Lokasi Dinas Koperasi, Usaha Kecil dan Menengah Kepulauan Riau"
-              loading="lazy"
-              src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Dinas+Koperasi+Usaha+Kecil+dan+Menengah+Kepulauan+Riau"
-              allowfullscreen>
-            </iframe>
-          </div>
-          <div class="col-lg-5 about-text">
-            <p>
-              Dinas Koperasi dan UMKM Kepri adalah instansi pemerintah daerah yang bertanggung jawab
-              dalam pembinaan, pengembangan, dan pemberdayaan Koperasi dan Usaha Mikro, Kecil, dan Menengah (UMKM)
-              di wilayah Kepulauan Riau.
-            </p>
+ {{-- Tentang Kami --}}
+<section class="about-section">
+  <div class="container">
+    <h2 class="mb-4" style="font-weight:800">Tentang Kami</h2>
+    <div class="about-card">
+      <div class="row align-items-start g-4">
+        <div class="col-lg-7">
+          <iframe
+            class="about-map"
+            title="Lokasi Dinas Koperasi, Usaha Kecil dan Menengah Kepulauan Riau"
+            loading="lazy"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Dinas+Koperasi+Usaha+Kecil+dan+Menengah+Kepulauan+Riau"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <div class="col-lg-5 about-text">
+          <p>
+            Dinas Koperasi dan UMKM Kepri adalah instansi pemerintah daerah yang bertanggung jawab
+            dalam pembinaan, pengembangan, dan pemberdayaan Koperasi dan Usaha Mikro, Kecil, dan Menengah (UMKM)
+            di wilayah Kepulauan Riau.
+          </p>
 
-            <div class="about-list">
-              <div class="about-item">
-                <span class="about-icon"><i class="fa fa-envelope"></i></span>
-                <a href="mailto:dkukmprovkepri@gmail.com" style="color:#222;text-decoration:none;">dkukmprovkepri@gmail.com</a>
-              </div>
-              <div class="about-item">
-                <span class="about-icon"><i class="fa fa-phone"></i></span>
-                <a href="tel:081234567890" style="color:#222;text-decoration:none;">0812-3456-7890</a>
-              </div>
-              <div class="about-item">
-                <span class="about-icon"><i class="fa fa-instagram"></i></span>
-                <a href="https://instagram.com/dkukmkepri" target="_blank" rel="noopener" style="color:#222;text-decoration:none;">@dkukmkepri</a>
-              </div>
+          <div class="about-list">
+            <div class="about-item">
+              <span class="about-icon"><i class="fa fa-envelope"></i></span>
+              <a href="mailto:dkukmprovkepri@gmail.com" style="color:#222;text-decoration:none;">dkukmprovkepri@gmail.com</a>
+            </div>
+            <div class="about-item">
+              <span class="about-icon"><i class="fa fa-phone"></i></span>
+              <a href="tel:081234567890" style="color:#222;text-decoration:none;">0812-3456-7890</a>
+            </div>
+            <div class="about-item">
+              <span class="about-icon"><i class="fa fa-instagram"></i></span>
+              <a href="https://instagram.com/dkukmkepri" target="_blank" rel="noopener" style="color:#222;text-decoration:none;">@dkukmkepri</a>
             </div>
           </div>
         </div>
-      </div>  
-    </div>
-  </section>
+      </div>
+    </div>  
+  </div>
+</section>
 @endsection
 
