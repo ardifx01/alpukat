@@ -11,6 +11,9 @@
     }
     if (request('tab') === 'pengurus') { $activeTab = 'pengurus'; }
     $onCooldown = isset($cooldownUntil) && now()->lt($cooldownUntil);
+
+    $hasKoperasi = !empty($syaratKoperasi) && count($syaratKoperasi) > 0;
+    $hasPengurus = !empty($syaratPengurus) && count($syaratPengurus) > 0;
 @endphp
 
 {{-- HERO SECTION --}}
@@ -40,27 +43,29 @@
         <div class="d-flex align-items-start gap-2">
             <i class="fa fa-info-circle mt-1"></i>
             <div>
-                <strong>Catatan:</strong> Format file <code>PDF/JPG/PNG</code>, ukuran maksimal <strong>5 MB</strong> per file.
+                <strong><br>Catatan:</strong> Format file <code>PDF/JPG/PNG</code>, ukuran maksimal <strong>5 MB</strong> per file.
                 Anda bisa klik area unggah atau seret & letakkan berkas ke sana.
             </div>
         </div>
     </div>
 
-    {{-- NAV TABS --}}
-    <ul class="nav nav-tabs gap-2 border-0" id="uploadTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill {{ $activeTab==='koperasi' ? 'active' : '' }}"
-                    id="koperasi-tab" data-bs-toggle="tab" data-bs-target="#koperasi" type="button" role="tab">
-                📁 Dokumen Berkas Koperasi
-            </button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill {{ $activeTab==='pengurus' ? 'active' : '' }}"
-                    id="pengurus-tab" data-bs-toggle="tab" data-bs-target="#pengurus" type="button" role="tab">
-                🗂️ Dokumen Berkas Pengurus/Pengawas
-            </button>
-        </li>
-    </ul>
+    {{-- NAV TABS + tombol lihat --}}
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <ul class="nav nav-tabs gap-2 border-0 mb-0" id="uploadTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-pill {{ $activeTab==='koperasi' ? 'active' : '' }}"
+                        id="koperasi-tab" data-bs-toggle="tab" data-bs-target="#koperasi" type="button" role="tab">
+                    📁 Dokumen Berkas Koperasi
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link rounded-pill {{ $activeTab==='pengurus' ? 'active' : '' }}"
+                        id="pengurus-tab" data-bs-toggle="tab" data-bs-target="#pengurus" type="button" role="tab">
+                    🗂️ Dokumen Berkas Pengurus/Pengawas
+                </button>
+            </li>
+        </ul>
+    </div>
 
     <form method="POST" action="{{ route('user.store') }}" enctype="multipart/form-data"
           id="formPengajuan"
@@ -69,7 +74,7 @@
 
         {{-- ========== TAB: KOPERASI ========== --}}
         <div class="tab-pane fade {{ $activeTab==='koperasi' ? 'show active' : '' }}" id="koperasi" role="tabpanel">
-            @if(collect($syaratKoperasi ?? [])->isEmpty())
+            @if(!$hasKoperasi)
                 <div class="alert alert-secondary rounded-3">Belum ada persyaratan untuk kategori koperasi.</div>
             @else
                 <div class="row g-3">
@@ -79,7 +84,7 @@
                             <label class="form-label fw-semibold mb-2 d-block">
                                 {{ $syarat->nama_syarat }}
                                 @if($syarat->is_required)
-                                    <span class="badge rounded-pill bg-danger-subtle text-danger ms-2">Wajib</span>
+                                    <span class="badge rounded-pill bg-danger-subtle text-danger ms-2">*</span>
                                 @else
                                     <span class="badge rounded-pill bg-secondary-subtle text-secondary ms-2">Opsional</span>
                                 @endif
@@ -104,6 +109,7 @@
                             <input type="file" id="{{ $inputId }}" name="dokumen[{{ $syarat->id }}]"
                                    accept=".pdf,.jpg,.jpeg,.png" hidden
                                    data-required="{{ $syarat->is_required ? 1 : 0 }}"
+                                   data-category="koperasi"
                                    class="@error('dokumen.'.$syarat->id) is-invalid @enderror">
 
                             @error('dokumen.'.$syarat->id)
@@ -117,7 +123,7 @@
 
         {{-- ========== TAB: PENGURUS/PENGAWAS ========== --}}
         <div class="tab-pane fade {{ $activeTab==='pengurus' ? 'show active' : '' }}" id="pengurus" role="tabpanel">
-            @if(collect($syaratPengurus ?? [])->isEmpty())
+            @if(!$hasPengurus)
                 <div class="alert alert-secondary rounded-3">Belum ada persyaratan untuk kategori pengurus/pengawas.</div>
             @else
                 <div class="row g-3">
@@ -127,7 +133,7 @@
                             <label class="form-label fw-semibold mb-2 d-block">
                                 {{ $syarat->nama_syarat }}
                                 @if($syarat->is_required)
-                                    <span class="badge rounded-pill bg-danger-subtle text-danger ms-2">Wajib</span>
+                                    <span class="badge rounded-pill bg-danger-subtle text-danger ms-2">*</span>
                                 @else
                                     <span class="badge rounded-pill bg-secondary-subtle text-secondary ms-2">Opsional</span>
                                 @endif
@@ -151,6 +157,7 @@
                             <input type="file" id="{{ $inputId }}" name="dokumen[{{ $syarat->id }}]"
                                    accept=".pdf,.jpg,.jpeg,.png" hidden
                                    data-required="{{ $syarat->is_required ? 1 : 0 }}"
+                                   data-category="pengurus"
                                    class="@error('dokumen.'.$syarat->id) is-invalid @enderror">
 
                             @error('dokumen.'.$syarat->id)
@@ -166,12 +173,15 @@
         <div class="position-sticky mt-4" style="bottom:0;">
             <div class="d-flex align-items-center justify-content-between gap-2 p-3 rounded-3 border bg-light-subtle">
                 <div class="small text-muted">
-                    <i class="fa fa-shield"></i> Pastikan berkas yang diunggah jelas dan sesuai persyaratan.
+                    <i class="fa fa-shield"></i> Pastikan semua <strong>syarat wajib</strong> di setiap kategori sudah diunggah.
                 </div>
-                <button type="submit" name="action" value="submit"
+                <button id="btnKirim" type="submit" name="action" value="submit"
                         class="btn btn-primary px-4" {{ $onCooldown ? 'disabled' : '' }}>
                     <i class="fa fa-paper-plane me-1"></i> Kirim Pengajuan
                 </button>
+            </div>
+            <div id="barWarning" class="small text-danger mt-2 d-none">
+                Untuk mengirim pengajuan, unggah berkas pada <strong>Koperasi</strong> dan <strong>Pengurus/Pengawas</strong> serta penuhi semua syarat (* = wajib).
             </div>
         </div>
     </form>
@@ -210,6 +220,8 @@
     setMessage(dz, '', false);
     if (fileBox) fileBox.classList.add('d-none');
     input.value = '';
+    dz.dataset.hasfile = '0';
+    updateSubmitState();
   }
 
   function showFile(dz, file){
@@ -217,6 +229,8 @@
     const fnameEl = dz.querySelector('.dz-filename');
     if (fnameEl) fnameEl.textContent = file.name;
     if (fileBox) fileBox.classList.remove('d-none');
+    dz.dataset.hasfile = '1';
+    updateSubmitState();
   }
 
   function validateAndShow(dz, input, file){
@@ -239,16 +253,52 @@
     return true;
   }
 
+  // Hitung status kategori
+  function categoryStatus(category){
+    const inputs = document.querySelectorAll('input[type="file"][data-category="'+category+'"]');
+    if (!inputs.length) {
+      // kategori tanpa syarat, dianggap lolos
+      return { hasAny:false, allRequired:true, ok:true };
+    }
+    let hasAny = false;
+    let allRequired = true;
+    inputs.forEach(inp => {
+      const dz = document.querySelector('label.dz[for="'+ inp.id +'"]');
+      const hasFile = !!(inp.files && inp.files.length);
+      if (hasFile) hasAny = true;
+      if (parseInt(inp.dataset.required || '0',10) === 1 && !hasFile) {
+        allRequired = false;
+      }
+    });
+    // aturan: harus ada minimal satu file DI kategori tsb + semua yang wajib terisi
+    const ok = hasAny && allRequired;
+    return { hasAny, allRequired, ok };
+  }
+
+  function updateSubmitState(){
+    const koperasi = categoryStatus('koperasi');
+    const pengurus = categoryStatus('pengurus');
+    const btn = document.getElementById('btnKirim');
+    const warn = document.getElementById('barWarning');
+    const overallOK = koperasi.ok && pengurus.ok;
+
+    if (btn) btn.disabled = !overallOK;
+    if (warn) warn.classList.toggle('d-none', overallOK);
+  }
+
   // Init semua dropzone
   document.querySelectorAll('label.dz').forEach(function(dz){
     const inputId = dz.getAttribute('for');
     const input   = document.getElementById(inputId);
     if (!input) return;
 
+    dz.dataset.hasfile = '0';
+
     // Perubahan via dialog
     input.addEventListener('change', function(){
       const f = this.files && this.files[0];
       if (f) validateAndShow(dz, input, f);
+      else { clearFile(dz, input); }
     });
 
     // Tombol Hapus
@@ -275,24 +325,46 @@
     });
   });
 
-  // Validasi WAJIB saat submit (karena input hidden tidak memunculkan bubble bawaan)
+  // Validasi saat submit (pastikan dua kategori memenuhi aturan)
   document.getElementById('formPengajuan')?.addEventListener('submit', function(e){
-    let firstErrorDz = null;
-    document.querySelectorAll('input[type="file"][data-required="1"]').forEach(function(inp){
-      if (!inp.files || !inp.files.length) {
-        const dz = document.querySelector('label.dz[for="'+ inp.id +'"]');
-        if (dz) {
-          setMessage(dz, 'Berkas wajib diunggah.', true);
-          dz.classList.add('shadow-sm');
-          if (!firstErrorDz) firstErrorDz = dz;
-        }
-      }
-    });
-    if (firstErrorDz) {
+    // refresh state
+    updateSubmitState();
+
+    const koperasi = categoryStatus('koperasi');
+    const pengurus = categoryStatus('pengurus');
+
+    if (!koperasi.ok || !pengurus.ok) {
       e.preventDefault();
-      firstErrorDz.scrollIntoView({behavior:'smooth', block:'center'});
+
+      // Sorot pesan pada kategori yang kurang
+      if (!koperasi.ok) {
+        document.querySelectorAll('input[type="file"][data-category="koperasi"][data-required="1"]').forEach(function(inp){
+          if (!inp.files || !inp.files.length) {
+            const dz = document.querySelector('label.dz[for="'+ inp.id +'"]');
+            if (dz) setMessage(dz, 'Berkas wajib diunggah (Koperasi).', true);
+          }
+        });
+      }
+      if (!pengurus.ok) {
+        document.querySelectorAll('input[type="file"][data-category="pengurus"][data-required="1"]').forEach(function(inp){
+          if (!inp.files || !inp.files.length) {
+            const dz = document.querySelector('label.dz[for="'+ inp.id +'"]');
+            if (dz) setMessage(dz, 'Berkas wajib diunggah (Pengurus/Pengawas).', true);
+          }
+        });
+      }
+
+      // Scroll ke area pertama yang error
+      const firstErrDz = document.querySelector('.dz .text-danger:not(.d-none)')?.closest('.dz') ||
+                         document.querySelector('label.dz[data-hasfile="0"]');
+      if (firstErrDz) firstErrDz.scrollIntoView({behavior:'smooth', block:'center'});
+      return false;
     }
   });
+
+  // Set state awal tombol
+  updateSubmitState();
+
 })();
 </script>
 @endsection
