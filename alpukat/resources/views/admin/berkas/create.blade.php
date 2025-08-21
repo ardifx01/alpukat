@@ -26,7 +26,7 @@
                 @foreach($verifikasis as $verifikasi)
                     <option 
                         value="{{ $verifikasi->id }}" 
-                        data-tanggal="{{ $verifikasi->tanggal_wawancara ? \Carbon\Carbon::parse($verifikasi->tanggal_wawancara)->format('d-m-Y') : '' }}">
+                        data-datetime="{{ optional($verifikasi->tanggal_wawancara) ? \Carbon\Carbon::parse($verifikasi->tanggal_wawancara)->format('Y-m-d\TH:i:sP') : '' }}">
                         {{ $verifikasi->user->name ?? 'User' }}
                     </option>  
                 @endforeach 
@@ -93,14 +93,14 @@
 
             const isDemo = Number.isFinite(DEMO_SECONDS);
 
-            function addBusinessDays(date, days) {
+            function addBusinessDays(start, days) {
                 const d = new Date(date.getTime());
                 let added = 0;
                 while (added < days) {
-                d.setDate(d.getDate() + 1);
-                const day = d.getDay(); // 0=Min,6=Sab
-                if (day !== 0 && day !== 6) added++;
-                }
+                    d.setDate(d.getDate() + 1);
+                    const day = d.getDay(); // 0=Min,6=Sab
+                    if (day !== 0 && day !== 6) added++;
+                    }
                 return d;
             }
 
@@ -112,25 +112,27 @@
 
             selectVerifikasi.addEventListener('change', function () {
                 const opt = this.options[this.selectedIndex];
-                const tanggal = opt.getAttribute('data-tanggal') || '';
-                document.getElementById('tanggal_wawancara').value = tanggal;
 
-                if (!tanggal) { batasInfo.textContent = ''; deadline = null; return; }
+                const iso = opt?.getAttribute('data-datetime') || '';
+                if (!iso) {
+                    document.getElementById('tanggal_wawancara').value = tanggal;
+                    batasInfo.textContent = '';
+                    deadline = null;
+                    return;
+                }
 
-                // tanggal dalam format dd-mm-YYYY
-                const [dd, mm, yyyy] = tanggal.split('-').map(Number);
-                const start = new Date(yyyy, mm - 1, dd, 0, 0, 0);
+                const start = new Date(iso);
+    
+                // tampilkan datetime ke input readonly (supaya admin bisa melihat jamnya)
+                document.getElementById('tanggal_wawancara').value = formatID(start) + ' WIB';
 
+                // Hitung tenggat: demo = detik dari jam wawancara; hari = 30 hari kerja dari jam wawancara
                 deadline = isDemo
                     ? new Date(start.getTime() + DEMO_SECONDS * 1000)
                     : addBusinessDays(start, DAYS);
 
-                // mode hari kerja → paksa akhir hari (23:59:59)
-                if (!isDemo) {
-                    deadline.setHours(23, 59, 59, 0);
-                }
-
-                batasInfo.textContent = 'Batas unggah: ' + formatID(deadline) + ' WIB';
+                // batas tidak di set ke 23:59 karena mengikuti jam wawancara
+                batasInfo.textContent = `Batas unggah (${isDemo ? `demo ${DEMO_SECONDS} detik` : `${DAYS} hari kerja`}): ${formatID(deadline)} WIB`;
             });
 
             form.addEventListener('submit', function (event) {

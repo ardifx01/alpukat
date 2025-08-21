@@ -19,6 +19,10 @@ class Verifikasi extends Model
         'lokasi_wawancara',
     ];
 
+    protected $casts = [
+        'tanggal_wawancara' => 'datetime',
+    ];
+
     // Relasi ke user (koperasi)
     public function user()
     {

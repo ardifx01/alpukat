@@ -97,11 +97,9 @@ class BerkasAdminController extends Controller
         return redirect()->route('admin.berkas-admin.index')->with('success', 'Berkas berhasil ditambahkan');
     }
 
-    /**
-     * Hitung batas unggah dari tanggal wawancara.
-     * - Jika config 'seconds' diisi (mode demo), pakai detik kalender.
-     * - Jika tidak, pakai 'hari kerja' (skip Sabtu/Minggu) sebanyak 'days'.
-     */
+    // Hitung batas unggah dari tanggal wawancara.
+     // - Jika config 'seconds' diisi (mode demo), pakai detik kalender.
+     // - Jika tidak, pakai 'hari kerja' (skip Sabtu/Minggu) sebanyak 'days'.
     private function uploadDeadline(Carbon $tanggalWawancara): Carbon
     {
         $seconds = config('app.batas_unggah_wawancara_seconds');
@@ -110,8 +108,8 @@ class BerkasAdminController extends Controller
         }
 
         $days = (int) config('app.batas_unggah_wawancara_days', 30);
-        $batas = $this->addBusinessDays($tanggalWawancara, $days)->endOfDay();
-        return $batas;
+       
+        return $this->addBusinessDays($tanggalWawancara, $days);
     }
 
     // Tambah n hari kerja dari tanggal tertentu (hari 1 = hari kerja berikutnya)
