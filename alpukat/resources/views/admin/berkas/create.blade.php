@@ -38,6 +38,7 @@
         <div class="mb-3">
             <label for="tanggal_wawancara" class="form-label">Tanggal Wawancara</label>
             <input type="text" id="tanggal_wawancara" class="form-control" readonly>
+            <div class="form-text" id="batasInfo"></div>
         </div>
 
         {{-- Jenis Surat --}}
@@ -65,26 +66,77 @@
         </div>
     </form>
 
+    <div id="cfg"
+        data-days="{{ (int) config('app.batas_unggah_wawancara_days', 30) }}"
+        data-seconds="{{ config('app.batas_unggah_wawancara_seconds') }}">
+    </div>
+
     {{-- Script --}}
     <script>
-        // Auto-set tanggal wawancara
-        document.getElementById('verifikasi_id').addEventListener('change', function() {
-            let selectedOption = this.options[this.selectedIndex];
-            let tanggal = selectedOption.getAttribute('data-tanggal') || '';
-            document.getElementById('tanggal_wawancara').value = tanggal;
-        });
-
         // Validasi file & form
         (function () {
             'use strict';
 
             const form = document.getElementById('formTambahBerkas');
+            const selectVerifikasi = document.getElementById('verifikasi_id');
             const fileInput = document.getElementById('file');
             const maxSize = 5 * 1024 * 1024; // 5 MB
+            const batasInfo = document.getElementById('batasInfo');
+
+            const cfgEl = document.getElementById('cfg');
+            const DAYS = Number(cfgEl.dataset.days) || 30;
+
+            const rawSeconds = cfgEl.getAttribute('data-seconds'); // null kalau atribut tidak ada
+            const DEMO_SECONDS = (rawSeconds !== null && rawSeconds !== '')
+            ? Number(rawSeconds)
+            : null;
+
+            const isDemo = Number.isFinite(DEMO_SECONDS);
+
+            function addBusinessDays(date, days) {
+                const d = new Date(date.getTime());
+                let added = 0;
+                while (added < days) {
+                d.setDate(d.getDate() + 1);
+                const day = d.getDay(); // 0=Min,6=Sab
+                if (day !== 0 && day !== 6) added++;
+                }
+                return d;
+            }
+
+            function formatID(d) {
+                return d.toLocaleString('id-ID', { timeZone: 'Asia/Jakarta', day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+            }
+
+            let deadline = null;
+
+            selectVerifikasi.addEventListener('change', function () {
+                const opt = this.options[this.selectedIndex];
+                const tanggal = opt.getAttribute('data-tanggal') || '';
+                document.getElementById('tanggal_wawancara').value = tanggal;
+
+                if (!tanggal) { batasInfo.textContent = ''; deadline = null; return; }
+
+                // tanggal dalam format dd-mm-YYYY
+                const [dd, mm, yyyy] = tanggal.split('-').map(Number);
+                const start = new Date(yyyy, mm - 1, dd, 0, 0, 0);
+
+                deadline = isDemo
+                    ? new Date(start.getTime() + DEMO_SECONDS * 1000)
+                    : addBusinessDays(start, DAYS);
+
+                // mode hari kerja → paksa akhir hari (23:59:59)
+                if (!isDemo) {
+                    deadline.setHours(23, 59, 59, 0);
+                }
+
+                batasInfo.textContent = 'Batas unggah: ' + formatID(deadline) + ' WIB';
+            });
 
             form.addEventListener('submit', function (event) {
                 fileInput.classList.remove('is-invalid');
 
+                // Validasi file
                 if (fileInput.files.length > 0) {
                     const file = fileInput.files[0];
                     if (file.type !== 'application/pdf' || file.size > maxSize) {
@@ -95,6 +147,13 @@
                     }
                 }
 
+                // blokir submit jika sudah lewat deadline (client-side helper)
+                if (deadline && new Date() > deadline) {
+                alert('Batas waktu unggah sudah lewat.');
+                event.preventDefault(); event.stopPropagation();
+                return;
+                }
+
                 if (!form.checkValidity()) {
                     event.preventDefault();
                     event.stopPropagation();
@@ -102,6 +161,11 @@
 
                 form.classList.add('was-validated');
             }, false);
+
+            // kalau sudah ada pilihan (old value), hitung ulang saat load
+            if (selectVerifikasi.value) {
+                selectVerifikasi.dispatchEvent(new Event('change'));
+            }
         })();
     </script>
 </div>

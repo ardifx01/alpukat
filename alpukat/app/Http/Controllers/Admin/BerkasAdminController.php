@@ -51,10 +51,20 @@ class BerkasAdminController extends Controller
 
         // Hitung batas waktu
         $tanggalWawancara = Carbon::parse($verifikasi->tanggal_wawancara);
-        $batasWawancara = $this->addBusinessDays($tanggalWawancara, 30);
+        $batas = $this->uploadDeadline($tanggalWawancara); // <<— sumber kebenaran
+        $now   = now();
 
-        if (Carbon::now()->greaterThan($batasWawancara)) {
-            return back()->withErrors(['file' => 'Batas waktu upload sudah lewat 30 hari kerja setelah wawancara']);
+        if ($now->greaterThan($batas)) {
+            $labelDurasi = config('app.batas_unggah_wawancara_seconds')
+                ? config('app.batas_unggah_wawancara_seconds').' detik (demo)'
+                : config('app.batas_unggah_wawancara_days', 30).' hari kerja';
+
+            $batasStr = $batas->locale('id')->timezone(config('app.timezone'))
+                        ->translatedFormat('d F Y H:i');
+
+            return back()->withErrors([
+                'file' => "Batas waktu unggah sudah lewat ($labelDurasi). Batas unggah: $batasStr WIB."
+            ])->withInput();
         }
 
         // Simpan file dengan nama rapi
@@ -87,24 +97,37 @@ class BerkasAdminController extends Controller
         return redirect()->route('admin.berkas-admin.index')->with('success', 'Berkas berhasil ditambahkan');
     }
 
-    // Fungsi untuk menambahkan hari kerja 
-    private function addBusinessDays(Carbon $date, int $days)
+    /**
+     * Hitung batas unggah dari tanggal wawancara.
+     * - Jika config 'seconds' diisi (mode demo), pakai detik kalender.
+     * - Jika tidak, pakai 'hari kerja' (skip Sabtu/Minggu) sebanyak 'days'.
+     */
+    private function uploadDeadline(Carbon $tanggalWawancara): Carbon
     {
-        $addedDays = 0;
-        $resultDate = $date->copy();
-
-        while ($addedDays < $days) {
-            $resultDate->addDay();
-
-            // Cek kalau bukan Sabtu atau Minggu
-            if (!in_array($resultDate->dayOfWeek, [Carbon::SATURDAY, Carbon::SUNDAY])) {
-                $addedDays++;
-            }
+        $seconds = config('app.batas_unggah_wawancara_seconds');
+        if (!empty($seconds)) {
+            return $tanggalWawancara->copy()->addSeconds((int) $seconds);
         }
 
-        return $resultDate;
+        $days = (int) config('app.batas_unggah_wawancara_days', 30);
+        $batas = $this->addBusinessDays($tanggalWawancara, $days);
+        return $batas->endOfDay();
     }
 
+    // Tambah n hari kerja dari tanggal tertentu (hari 1 = hari kerja berikutnya)
+    private function addBusinessDays(Carbon $date, int $days): Carbon
+    {
+        $added = 0;
+        $d = $date->copy();
+
+        while ($added < $days) {
+            $d->addDay();
+            if (!$d->isWeekend()) {
+                $added++;
+            }
+        }
+        return $d;
+    }
 
     public function download($id)
     {

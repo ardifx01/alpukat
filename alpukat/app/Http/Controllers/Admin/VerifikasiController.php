@@ -111,9 +111,9 @@ class VerifikasiController extends Controller
         $user = User::find($id);
 
         // Siapkan pesan notifikasi berdasarkan status
-        $pesan = $request->status === 'diterima' 
-        ? "Selamat! Berkas Anda sudah lengkap. Silahkan ikut wawancara pada tanggal " . date('d M Y', strtotime($request->tanggal_wawancara)) . " di " . $request->lokasi_wawancara . "." 
-        : "Maaf, pengajuan Anda ditolak. " . $request->feedback;
+        $pesan = $request->status === 'diterima'
+            ? "Selamat! Berkas Anda sudah lengkap. Silahkan ikut wawancara pada tanggal " . date('d M Y', strtotime($request->tanggal_wawancara)) . " di " . $request->lokasi_wawancara . "."
+            : "Maaf, pengajuan Anda ditolak. " . $request->feedback;
 
         // Simpan notifikasi
         Notifikasi::create([
