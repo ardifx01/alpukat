@@ -110,8 +110,8 @@ class BerkasAdminController extends Controller
         }
 
         $days = (int) config('app.batas_unggah_wawancara_days', 30);
-        $batas = $this->addBusinessDays($tanggalWawancara, $days);
-        return $batas->endOfDay();
+        $batas = $this->addBusinessDays($tanggalWawancara, $days)->endOfDay();
+        return $batas;
     }
 
     // Tambah n hari kerja dari tanggal tertentu (hari 1 = hari kerja berikutnya)
