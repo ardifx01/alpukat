@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
     :root{
-      --hero-a:#1f2a7a;    /* sama seperti Pengajuan/Lihat Berkas */
+      --hero-a:#1f2a7a;
       --hero-b:#4456d1;
       --hero-c:#7e8af0;
       --text:#fff;
@@ -16,9 +16,11 @@
       --input-bd:#e3e7ff;
       --input-bd-focus:#c9d2ff;
       --danger:#b42318;
+      --placeholder:#a9b6cc;          /* << lebih muda dari teks ketik */
+      --placeholder-focus:#c3ccda;     /* << makin muda saat fokus */
+      --input-text:#111;               /* warna teks yang diketik */
     }
     html,body{height:100%; margin:0;}
-    /* beri latar gelap pada body utk jaga-jaga */
     body{background:#10205e; font-family:system-ui, -apple-system, Segoe UI, Roboto, sans-serif;}
 
     /* ===== FULL HERO LOGIN ===== */
@@ -26,7 +28,6 @@
       position:relative;
       display:flex; align-items:center; justify-content:center;
       padding:56px 16px;
-      /* 100svh untuk device mobile modern + fallback 100vh */
       min-height:100svh; min-height:100vh;
       background:linear-gradient(135deg,var(--hero-a) 0%, var(--hero-b) 60%, var(--hero-c) 100%);
       color:var(--text);
@@ -38,21 +39,45 @@
 
     .login-container{width:100%;max-width:520px;z-index:1}
     .login-title{margin:0 0 .25rem 0;font-weight:800;font-size:2.1rem;text-align:center}
-    .login-title span{font-weight:900}
     .login-subtitle{margin:0 0 1.25rem 0;text-align:center;opacity:.95}
 
     .alert-status{margin-bottom:.75rem}
 
     .login-form{display:flex;flex-direction:column;gap:16px}
-    .form-group{}
     .label-row{display:flex;justify-content:space-between;align-items:center}
     .form-label{font-weight:600;color:#eef1ff}
+
+    /* === INPUT: teks jelas, placeholder lebih muda & beda saat fokus === */
     .form-input{
       width:100%; margin-top:6px;
       padding:12px 14px; border-radius:12px; font-size:1rem;
-      background:var(--input-bg); border:1px solid var(--input-bd);
+      background:var(--input-bg) !important;
+      border:1px solid var(--input-bd);
+      color:var(--input-text) !important;
+      caret-color:var(--input-text);
     }
-    .form-input:focus{outline:none; background:#fff; border-color:var(--input-bd-focus)}
+    /* placeholder normal */
+    .form-input::placeholder{color:var(--placeholder); opacity:1}
+    /* dukungan vendor lama */
+    .form-input::-webkit-input-placeholder{color:var(--placeholder)}
+    .form-input:-ms-input-placeholder{color:var(--placeholder)}
+    /* saat fokus: placeholder makin pudar */
+    .form-input:focus{
+      outline:none; background:#fff !important; border-color:var(--input-bd-focus);
+      color:var(--input-text) !important;
+    }
+    .form-input:focus::placeholder{color:var(--placeholder-focus)}
+    .form-input:focus::-webkit-input-placeholder{color:var(--placeholder-focus)}
+    .form-input:focus:-ms-input-placeholder{color:var(--placeholder-focus)}
+
+    /* Autofill Chrome/Safari */
+    input.form-input:-webkit-autofill{
+      -webkit-text-fill-color:var(--input-text) !important;
+      transition: background-color 9999s ease-in-out 0s;
+      box-shadow:0 0 0px 1000px #fff inset;
+    }
+    input.form-input::-ms-reveal{filter:invert(0)}
+
     .form-error{color:var(--danger); background:#fff; border-radius:8px; padding:6px 8px; margin-top:6px}
 
     .remember-row{display:inline-flex;align-items:center;gap:8px;color:#eef1ff;cursor:pointer}
@@ -60,15 +85,11 @@
 
     .btn-primary{
       background:#23349E; color:#fff; font-weight:700;
-      padding:12px; border:none; border-radius:14px; cursor:pointer;
-      width:100%;
+      padding:12px; border:none; border-radius:14px; cursor:pointer; width:100%;
     }
     .btn-primary:hover{background:#1a2877}
     .link-small{color:#fff; text-decoration:underline; font-weight:600}
     .signup-hint{color:#eef1ff; text-align:left}
-
-    /* pastikan tidak ada jarak kosong di bawah pada layar tinggi */
-    .login-footer-spacer{height:0}
   </style>
 </head>
 <body>
@@ -90,16 +111,16 @@
         @csrf
 
         {{-- Email --}}
-        <div class="form-group">
+        <div>
           <x-input-label for="email" :value="__('Email')" class="form-label" />
           <x-text-input id="email" class="form-input"
             type="email" name="email" :value="old('email')" required autofocus
-            autocomplete="username" placeholder="nama@email.com" />
+            autocomplete="username" placeholder=" Masukkan Alamat Email" />
           <x-input-error :messages="$errors->get('email')" class="form-error" />
         </div>
 
         {{-- Password --}}
-        <div class="form-group">
+        <div>
           <div class="label-row">
             <x-input-label for="password" :value="__('Password')" class="form-label" />
             @if (Route::has('password.request'))
@@ -108,7 +129,7 @@
           </div>
           <x-text-input id="password" class="form-input"
             type="password" name="password" required autocomplete="current-password"
-            placeholder="••••••••" />
+            placeholder="Masukkan Password" />
           <x-input-error :messages="$errors->get('password')" class="form-error" />
         </div>
 
@@ -128,9 +149,6 @@
         @endif
       </form>
     </div>
-
-    {{-- spacer nol: memastikan tidak ada strip putih apa pun --}}
-    <div class="login-footer-spacer"></div>
   </section>
 
 </body>

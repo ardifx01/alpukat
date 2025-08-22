@@ -12,19 +12,25 @@
       --hero-b:#4456d1;
       --hero-c:#7e8af0;
       --text:#fff;
+
+      /* input theme — SAMA dengan login */
       --input-bg:#f9fbff;
       --input-bd:#e3e7ff;
       --input-bd-focus:#c9d2ff;
+      --input-text:#111;           /* warna teks yang diketik */
+      --placeholder:#a9b6cc;       /* placeholder normal */
+      --placeholder-focus:#c3ccda; /* placeholder saat fokus */
+
       --danger:#b42318;
     }
     html,body{height:100%; margin:0;}
     body{background:#10205e; font-family:system-ui, -apple-system, Segoe UI, Roboto, sans-serif;}
 
-    /* ===== FULL HERO REGISTER (lebih pendek) ===== */
+    /* ===== FULL HERO REGISTER (ringkas) ===== */
     .hero{
       position:relative;
       display:flex; align-items:center; justify-content:center;
-      padding:32px 16px;       /* lebih kecil dari sebelumnya */
+      padding:32px 16px;
       min-height:100vh;
       background:linear-gradient(135deg,var(--hero-a) 0%, var(--hero-b) 60%, var(--hero-c) 100%);
       color:var(--text);
@@ -34,19 +40,40 @@
     .decor-1{right:-60px;top:-60px;width:200px;height:200px}
     .decor-2{left:-60px;bottom:-60px;width:260px;height:260px;background:rgba(255,255,255,.06)}
 
-    .wrap{width:100%;max-width:460px;z-index:1} /* lebih ramping */
-    .title{margin:0 0 .25rem 0;font-weight:800;font-size:1.8rem;text-align:center}
+    .wrap{width:100%;max-width:460px;z-index:1}
+    .title{margin:0 0 .25rem 0;font-weight:800;font-size:1.9rem;text-align:center}
     .subtitle{margin:0 0 1rem 0;text-align:center;opacity:.95;font-size:.95rem}
 
     .form{display:flex;flex-direction:column;gap:14px}
-    .label-row{display:flex;justify-content:space-between;align-items:center}
     .form-label{font-weight:600;color:#eef1ff;font-size:.9rem}
+
+    /* === INPUT: match login palette & behavior === */
     .form-input{
       width:100%; margin-top:4px;
       padding:10px 12px; border-radius:10px; font-size:.95rem;
-      background:var(--input-bg); border:1px solid var(--input-bd);
+      background:var(--input-bg) !important;
+      border:1px solid var(--input-bd);
+      color:var(--input-text) !important;     /* teks diketik */
+      caret-color:var(--input-text);
     }
-    .form-input:focus{outline:none; background:#fff; border-color:var(--input-bd-focus)}
+    .form-input::placeholder{color:var(--placeholder); opacity:1}
+    .form-input::-webkit-input-placeholder{color:var(--placeholder)}
+    .form-input:-ms-input-placeholder{color:var(--placeholder)}
+    .form-input:focus{
+      outline:none; background:#fff !important; border-color:var(--input-bd-focus);
+      color:var(--input-text) !important;
+    }
+    .form-input:focus::placeholder{color:var(--placeholder-focus)}
+    .form-input:focus::-webkit-input-placeholder{color:var(--placeholder-focus)}
+    .form-input:focus:-ms-input-placeholder{color:var(--placeholder-focus)}
+
+    /* Autofill Chrome/Safari */
+    input.form-input:-webkit-autofill{
+      -webkit-text-fill-color:var(--input-text) !important;
+      transition: background-color 9999s ease-in-out 0s;
+      box-shadow:0 0 0px 1000px #fff inset;
+    }
+
     .form-error{color:var(--danger); background:#fff; border-radius:8px; padding:5px 8px; margin-top:4px;font-size:.8rem}
 
     .btn-primary{
@@ -77,7 +104,7 @@
           <x-input-label for="name" :value="__('Nama Lengkap')" class="form-label" />
           <x-text-input id="name" class="form-input"
                         type="text" name="name" :value="old('name')" required autofocus
-                        autocomplete="name" placeholder="Nama lengkap" />
+                        autocomplete="name" placeholder="Masukkan Nama Lengkap" />
           <x-input-error :messages="$errors->get('name')" class="form-error" />
         </div>
 
@@ -86,7 +113,7 @@
           <x-input-label for="email" :value="__('Email')" class="form-label" />
           <x-text-input id="email" class="form-input"
                         type="email" name="email" :value="old('email')" required
-                        autocomplete="username" placeholder="nama@email.com" />
+                        autocomplete="username" placeholder="Masukkan Alamat Email" />
           <x-input-error :messages="$errors->get('email')" class="form-error" />
         </div>
 
@@ -95,7 +122,7 @@
           <x-input-label for="password" :value="__('Password')" class="form-label" />
           <x-text-input id="password" class="form-input"
                         type="password" name="password" required
-                        autocomplete="new-password" placeholder="Minimal 8 karakter" />
+                        autocomplete="new-password" placeholder="Masukkan Password (Minimal 8 karakter)" />
           <x-input-error :messages="$errors->get('password')" class="form-error" />
         </div>
 
@@ -104,7 +131,7 @@
           <x-input-label for="password_confirmation" :value="__('Konfirmasi Password')" class="form-label" />
           <x-text-input id="password_confirmation" class="form-input"
                         type="password" name="password_confirmation" required
-                        autocomplete="new-password" placeholder="Ulangi password" />
+                        autocomplete="new-password" placeholder="Ulangi Password" />
           <x-input-error :messages="$errors->get('password_confirmation')" class="form-error" />
         </div>
 
