@@ -91,7 +91,7 @@ class VerifikasiController extends Controller
         if ($request->status === 'diterima' && $request->filled('tanggal_wawancara')) {
             // parsing dari format datetime-local (Y-m-d\TH:i)
             $tanggalWawancara = Carbon::createFromFormat(
-                'Y-m-d\TH:i', 
+                'Y-m-d\TH:i',
                 $request->input('tanggal_wawancara'),
                 config('app.timezone') // pastikan timezone Asia/Jakarta
             );
@@ -105,7 +105,7 @@ class VerifikasiController extends Controller
             $batasWawancara = $this->hitungBatasWawancara(30);
 
             if ($request->tanggal_wawancara && Carbon::parse($request->tanggal_wawancara)->gt($batasWawancara)) {
-                return back()->with('error', 'Tanggal wawancara tidak boleh melebihi batas maksimal (' . $batasWawancara->translatedFormat('d F Y') . ')');
+                return back()->with('error', 'Tanggal wawancara tidak boleh melebihi batas maksimal (' . $batasWawancara->translatedFormat('d F Y \p\u{k}ul H:i') . 'WIB)');
             }
         }
 
@@ -123,7 +123,7 @@ class VerifikasiController extends Controller
 
         // Siapkan pesan notifikasi berdasarkan status
         $pesan = $request->status === 'diterima'
-            ? "Selamat! Berkas Anda sudah lengkap. Silahkan ikut wawancara pada tanggal " . date('d M Y', strtotime($request->tanggal_wawancara)) . " di " . $request->lokasi_wawancara . ".". $request->feedback
+            ? "Selamat! Berkas Anda sudah lengkap. Silahkan ikut wawancara pada tanggal " . date('d M Y, H:i', strtotime($request->tanggal_wawancara)) . " di " . $request->lokasi_wawancara . "." . $request->feedback
             : "Maaf, pengajuan Anda ditolak. " . $request->feedback;
 
         // Simpan notifikasi
