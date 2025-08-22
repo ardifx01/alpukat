@@ -31,7 +31,7 @@
                     <td>{{ \Carbon\Carbon::parse($item->updated_at)->format('d M Y') }}</td>
                     <td class="{{ $item->feedback ? '' : 'text-muted' }}">{{ $item->feedback ?? '-' }}</td>
                     <td class="{{ $item->tanggal_wawancara ? '' : 'text-muted' }}">
-                        {{ $item->tanggal_wawancara ? \Carbon\Carbon::parse($item->tanggal_wawancara)->format('d M Y') : '-' }}
+                        {{ $item->tanggal_wawancara ? \Carbon\Carbon::parse($item->tanggal_wawancara)->format('d F Y, H:i') : '-' }}
                     </td>
                     <td class="{{ $item->lokasi_wawancara ? '' : 'text-muted' }}">{{ $item->lokasi_wawancara ?? '-' }}</td>
                 </tr>

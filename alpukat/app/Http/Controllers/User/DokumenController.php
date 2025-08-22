@@ -171,6 +171,7 @@ class DokumenController extends Controller
     {
         $users = \App\Models\User::whereHas('dokumens')
             ->with(['dokumens.syarat'])
+            ->latest()
             ->paginate(1);
 
         return view('admin.verif.daftar_pengajuan', compact('users'));

@@ -38,16 +38,19 @@
 
         <div id="wawancara-fields" style="display: none;">
             <div class="mb-3">
-                <label for="tanggal_wawancara" class="form-label">Tanggal Wawancara:</label>
+                <label for="tanggal_wawancara" class="form-label">Tanggal dan Jam Wawancara:</label>
                 <input 
-                    type="date" 
-                    name="tanggal_wawancara" 
-                    class="form-control" 
-                    value="{{ old('tanggal_wawancara', $verifikasi?->tanggal_wawancara) }}" 
-                    max="{{ $verifikasi?->batas_wawancara }}"
+                type="datetime-local" 
+                name="tanggal_wawancara" 
+                class="form-control" 
+                value="{{ old('tanggal_wawancara', $verifikasi && $verifikasi->tanggal_wawancara 
+                        ? $verifikasi->tanggal_wawancara->timezone(config('app.timezone'))->format('Y-m-d\TH:i') 
+                        : now()->timezone(config('app.timezone'))->format('Y-m-d\TH:i')) }}" 
+                max="{{ optional($batasMax)->format('Y-m-d\TH:i') }}"
                 >
+
                 <small class="text-muted">
-                    Batas maksimal wawancara: <strong>{{ $batasMax }}</strong>
+                    Batas maksimal wawancara: <strong>{{ optional($batasMax)->timezone(config('app.timezone'))->translatedFormat('d F Y H:i') }}</strong>
                 </small>
             </div>
 

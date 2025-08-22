@@ -77,13 +77,24 @@ class VerifikasiController extends Controller
         $request->validate([
             'status' => 'required|in:diterima,ditolak',
             'feedback' => 'nullable|string|max:1000',
-            'tanggal_wawancara' => 'required_if:status,diterima|nullable|date',
+            'tanggal_wawancara' => 'required_if:status,diterima|nullable|date_format:Y-m-d\TH:i',
             'lokasi_wawancara' => 'required_if:status,diterima|nullable|string|max:255',
         ]);
 
         // Cek apakah verifikasi sudah ada
         if (Verifikasi::where('user_id', $id)->exists()) {
             return back()->with('error', 'Verifikasi hanya bisa diberikan sekali.');
+        }
+
+        // parsing datetime dari input (lokal Asia/Jakarta)
+        $tanggalWawancara = null;
+        if ($request->status === 'diterima' && $request->filled('tanggal_wawancara')) {
+            // parsing dari format datetime-local (Y-m-d\TH:i)
+            $tanggalWawancara = Carbon::createFromFormat(
+                'Y-m-d\TH:i', 
+                $request->input('tanggal_wawancara'),
+                config('app.timezone') // pastikan timezone Asia/Jakarta
+            );
         }
 
         // Simpan hasil verifikasi ke dalam variabel
@@ -112,7 +123,7 @@ class VerifikasiController extends Controller
 
         // Siapkan pesan notifikasi berdasarkan status
         $pesan = $request->status === 'diterima'
-            ? "Selamat! Berkas Anda sudah lengkap. Silahkan ikut wawancara pada tanggal " . date('d M Y', strtotime($request->tanggal_wawancara)) . " di " . $request->lokasi_wawancara . "."
+            ? "Selamat! Berkas Anda sudah lengkap. Silahkan ikut wawancara pada tanggal " . date('d M Y', strtotime($request->tanggal_wawancara)) . " di " . $request->lokasi_wawancara . ".". $request->feedback
             : "Maaf, pengajuan Anda ditolak. " . $request->feedback;
 
         // Simpan notifikasi
