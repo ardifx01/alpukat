@@ -17,10 +17,15 @@
 @endphp
 
 <div class="container py-4" style="max-width:1040px;">
+
   {{-- ======= HEADER / COVER (SERAGAM) ======= --}}
   <div class="card shadow-sm border-0 mb-3" style="border-radius:18px; overflow:hidden;">
     <div class="position-relative"
-         style="min-height:220px; padding:56px 0 28px; background:linear-gradient(135deg,#1f2a7a 0%, #4456d1 60%, #7e8af0 100%);">
+         style="
+           min-height:220px;
+           padding:56px 0 28px;
+           background:linear-gradient(135deg,#1f2a7a 0%, #4456d1 60%, #7e8af0 100%);
+         ">
       <span class="position-absolute rounded-circle" style="right:-40px;top:-40px;width:180px;height:180px;background:rgba(255,255,255,.08)"></span>
       <span class="position-absolute rounded-circle" style="left:-60px;bottom:-60px;width:240px;height:240px;background:rgba(255,255,255,.06)"></span>
 
@@ -92,7 +97,7 @@
               <div class="row g-2">
                 @foreach ($syaratKoperasi as $syarat)
                   @php $inputId = "dokumen_koperasi_{$syarat->id}"; @endphp
-                  <div class="col-md-6">
+                  <div class="col-12">
                     <div class="p-2 rounded-3 border upload-card h-100">
                       {{-- Nama syarat: BOLD + * wajib setelah nama --}}
                       <div class="small text-dark">
@@ -145,7 +150,7 @@
               <div class="row g-2">
                 @foreach ($syaratPengurus as $syarat)
                   @php $inputId = "dokumen_pengurus_{$syarat->id}"; @endphp
-                  <div class="col-md-6">
+                  <div class="col-12">
                     <div class="p-2 rounded-3 border upload-card h-100">
                       <div class="small text-dark">
                         <strong>{{ $syarat->nama_syarat }}</strong>
@@ -231,6 +236,136 @@
 
 {{-- ======= Script (validasi & enabling tombol) ======= --}}
 <script>
-// Semua script yang telah diberikan tetap sama, tidak ada perubahan yang dibutuhkan
+(function(){
+  const MAX = 5 * 1024 * 1024; // 5 MB
+  const ALLOWED = ['pdf','jpg','jpeg','png'];
+
+  // Buka tab pengurus via hash
+  if (window.location.hash === '#pengurus') {
+    const trigger = document.querySelector('[data-bs-target="#pane-pengurus"]');
+    if (trigger && window.bootstrap?.Tab) new bootstrap.Tab(trigger).show();
+  }
+
+  function setMessage(dz, text, isError){
+    const msgEl = dz.querySelector('.dz-msg');
+    if (!msgEl) return;
+    msgEl.textContent = text || '';
+    msgEl.classList.toggle('text-danger', !!isError);
+    msgEl.classList.toggle('text-muted', !isError);
+  }
+
+  function clearFile(dz, input){
+    const fileBox = dz.querySelector('.dz-file');
+    if (fileBox) fileBox.classList.add('d-none');
+    const fnameEl = dz.querySelector('.dz-filename');
+    if (fnameEl) fnameEl.textContent = '';
+    setMessage(dz, '', false);
+    dz.classList.remove('shadow-sm');
+    input.value = '';
+    dz.dataset.hasfile = '0';
+    updateSubmit();
+  }
+
+  function showFile(dz, file){
+    const fnameEl = dz.querySelector('.dz-filename');
+    if (fnameEl) fnameEl.textContent = file.name;
+    dz.querySelector('.dz-file')?.classList.remove('d-none');
+    dz.dataset.hasfile = '1';
+    updateSubmit();
+  }
+
+  function validateAndShow(dz, input, file){
+    if (!file) return false;
+    const ext = (file.name.split('.').pop() || '').toLowerCase();
+    if (!ALLOWED.includes(ext)) {
+      alert('Tipe file tidak didukung. Gunakan PDF/JPG/PNG.');
+      setMessage(dz, 'Tipe file tidak didukung. Gunakan PDF/JPG/PNG.', true);
+      clearFile(dz, input);
+      return false;
+    }
+    if (file.size > MAX) {
+      alert('Ukuran file melebihi 5 MB.');
+      setMessage(dz, 'Ukuran file melebihi 5 MB.', true);
+      clearFile(dz, input);
+      return false;
+    }
+    setMessage(dz, 'Siap diunggah.', false);
+    showFile(dz, file);
+    return true;
+  }
+
+  function catStatus(cat){
+    const inputs = document.querySelectorAll('input[type="file"][data-category="'+cat+'"]');
+    if (!inputs.length) return {hasAny:false, allReq:true, ok:true};
+    let hasAny=false, allReq=true;
+    inputs.forEach(inp=>{
+      const has = !!(inp.files && inp.files.length);
+      if (has) hasAny = true;
+      if ((inp.dataset.required|0)===1 && !has) allReq = false;
+    });
+    return {hasAny, allReq, ok: hasAny && allReq};
+  }
+
+  function updateChips(){
+    const k = catStatus('koperasi'), p = catStatus('pengurus');
+    const ck = document.getElementById('chipKoperasi');
+    const cp = document.getElementById('chipPengurus');
+    if (ck){ ck.classList.toggle('ok', k.ok); ck.querySelector('b').textContent = k.ok?'Lengkap':'Belum'; }
+    if (cp){ cp.classList.toggle('ok', p.ok); cp.querySelector('b').textContent = p.ok?'Lengkap':'Belum'; }
+  }
+
+  function updateSubmit(){
+    const ok = catStatus('koperasi').ok && catStatus('pengurus').ok;
+    const btn = document.getElementById('btnKirim');
+    const warn= document.getElementById('barWarning');
+    if (btn) btn.disabled = !ok;
+    if (warn) warn.classList.toggle('d-none', ok);
+    updateChips();
+  }
+
+  // Init dropzone
+  document.querySelectorAll('label.dz').forEach(dz=>{
+    const input = document.getElementById(dz.getAttribute('for'));
+    if (!input) return;
+
+    input.addEventListener('change', function(){
+      const f = this.files && this.files[0];
+      f ? validateAndShow(dz, input, f) : clearFile(dz, input);
+    });
+
+    dz.querySelector('.dz-clear')?.addEventListener('click', e=>{
+      e.preventDefault(); e.stopPropagation();
+      clearFile(dz, input);
+    });
+
+    ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev, e=>{
+      e.preventDefault(); e.stopPropagation(); dz.classList.add('shadow-sm');
+    }));
+    ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev, e=>{
+      e.preventDefault(); e.stopPropagation(); dz.classList.remove('shadow-sm');
+    }));
+    dz.addEventListener('drop', e=>{
+      const f = e.dataTransfer.files && e.dataTransfer.files[0];
+      if (!f) return;
+      const dt = new DataTransfer(); dt.items.add(f); input.files = dt.files;
+      validateAndShow(dz, input, f);
+    });
+  });
+
+  // Submit guard
+  document.getElementById('formPengajuan')?.addEventListener('submit', function(e){
+    updateSubmit();
+    if (!(catStatus('koperasi').ok && catStatus('pengurus').ok)) {
+      e.preventDefault();
+      const firstErrReq = document.querySelector('input[type="file"][data-required="1"]:not([value])');
+      if (firstErrReq) {
+        const dz = document.querySelector('label.dz[for="'+firstErrReq.id+'"]');
+        if (dz) dz.scrollIntoView({behavior:'smooth', block:'center'});
+      }
+    }
+  });
+
+  updateSubmit();
+})();
 </script>
 @endsection
