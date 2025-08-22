@@ -12,26 +12,27 @@
       --hero-b:#4456d1;
       --hero-c:#7e8af0;
       --text:#fff;
+
       --input-bg:#f9fbff;
       --input-bd:#e3e7ff;
       --input-bd-focus:#c9d2ff;
+      --input-text:#111;
+      --placeholder:#a9b6cc;
+      --placeholder-focus:#c3ccda;
+
+      --btn:#23349E;
+      --btn-hover:#1a2877;
       --danger:#b42318;
-      --placeholder:#a9b6cc;          /* << lebih muda dari teks ketik */
-      --placeholder-focus:#c3ccda;     /* << makin muda saat fokus */
-      --input-text:#111;               /* warna teks yang diketik */
     }
     html,body{height:100%; margin:0;}
-    body{background:#10205e; font-family:system-ui, -apple-system, Segoe UI, Roboto, sans-serif;}
+    body{background:#10205e; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;}
 
     /* ===== FULL HERO LOGIN ===== */
     .login-hero{
-      position:relative;
-      display:flex; align-items:center; justify-content:center;
-      padding:56px 16px;
-      min-height:100svh; min-height:100vh;
+      position:relative; display:flex; align-items:center; justify-content:center;
+      padding:56px 16px; min-height:100svh; min-height:100vh;
       background:linear-gradient(135deg,var(--hero-a) 0%, var(--hero-b) 60%, var(--hero-c) 100%);
-      color:var(--text);
-      overflow:hidden;
+      color:var(--text); overflow:hidden;
     }
     .decor{position:absolute;border-radius:999px;background:rgba(255,255,255,.08);pointer-events:none}
     .decor-1{right:-60px;top:-60px;width:260px;height:260px}
@@ -47,36 +48,32 @@
     .label-row{display:flex;justify-content:space-between;align-items:center}
     .form-label{font-weight:600;color:#eef1ff}
 
-    /* === INPUT: teks jelas, placeholder lebih muda & beda saat fokus === */
+    /* input + placeholder */
     .form-input{
-      width:100%; margin-top:6px;
-      padding:12px 14px; border-radius:12px; font-size:1rem;
-      background:var(--input-bg) !important;
-      border:1px solid var(--input-bd);
-      color:var(--input-text) !important;
-      caret-color:var(--input-text);
+      width:100%; margin-top:6px; padding:12px 44px 12px 14px;  /* ruang kanan buat ikon */
+      border-radius:12px; font-size:1rem; background:var(--input-bg) !important;
+      border:1px solid var(--input-bd); color:var(--input-text) !important; caret-color:var(--input-text);
     }
-    /* placeholder normal */
-    .form-input::placeholder{color:var(--placeholder); opacity:1}
-    /* dukungan vendor lama */
-    .form-input::-webkit-input-placeholder{color:var(--placeholder)}
-    .form-input:-ms-input-placeholder{color:var(--placeholder)}
-    /* saat fokus: placeholder makin pudar */
+    .form-input::placeholder{color:var(--placeholder);opacity:1}
     .form-input:focus{
       outline:none; background:#fff !important; border-color:var(--input-bd-focus);
       color:var(--input-text) !important;
     }
     .form-input:focus::placeholder{color:var(--placeholder-focus)}
-    .form-input:focus::-webkit-input-placeholder{color:var(--placeholder-focus)}
-    .form-input:focus:-ms-input-placeholder{color:var(--placeholder-focus)}
-
-    /* Autofill Chrome/Safari */
     input.form-input:-webkit-autofill{
       -webkit-text-fill-color:var(--input-text) !important;
       transition: background-color 9999s ease-in-out 0s;
-      box-shadow:0 0 0px 1000px #fff inset;
+      box-shadow:0 0 0 1000px #fff inset;
     }
-    input.form-input::-ms-reveal{filter:invert(0)}
+
+    /* wrapper untuk field dengan ikon (password) */
+    .input-wrap{position:relative}
+    .toggle-pass{
+      position:absolute; right:10px; top:50%; transform:translateY(-50%);
+      background:transparent; border:none; padding:6px; border-radius:8px;
+      color:#5060b3; cursor:pointer;
+    }
+    .toggle-pass:hover{background:#eef2ff}
 
     .form-error{color:var(--danger); background:#fff; border-radius:8px; padding:6px 8px; margin-top:6px}
 
@@ -84,10 +81,10 @@
     .remember-check{width:16px;height:16px}
 
     .btn-primary{
-      background:#23349E; color:#fff; font-weight:700;
+      background:var(--btn); color:#fff; font-weight:700;
       padding:12px; border:none; border-radius:14px; cursor:pointer; width:100%;
     }
-    .btn-primary:hover{background:#1a2877}
+    .btn-primary:hover{background:var(--btn-hover)}
     .link-small{color:#fff; text-decoration:underline; font-weight:600}
     .signup-hint{color:#eef1ff; text-align:left}
   </style>
@@ -119,7 +116,7 @@
           <x-input-error :messages="$errors->get('email')" class="form-error" />
         </div>
 
-        {{-- Password --}}
+        {{-- Password + toggle eye --}}
         <div>
           <div class="label-row">
             <x-input-label for="password" :value="__('Password')" class="form-label" />
@@ -127,9 +124,16 @@
               <a class="link-small" href="{{ route('password.request') }}">Lupa password?</a>
             @endif
           </div>
-          <x-text-input id="password" class="form-input"
-            type="password" name="password" required autocomplete="current-password"
-            placeholder="Masukkan Password" />
+
+          <div class="input-wrap">
+            <x-text-input id="password" class="form-input"
+              type="password" name="password" required autocomplete="current-password"
+              placeholder="Masukkan Password" />
+            <button type="button" class="toggle-pass" id="togglePass" aria-label="Tampilkan password">
+              <i class="fa fa-eye" id="toggleIcon" aria-hidden="true"></i>
+            </button>
+          </div>
+
           <x-input-error :messages="$errors->get('password')" class="form-error" />
         </div>
 
@@ -151,5 +155,24 @@
     </div>
   </section>
 
+  <script>
+    // Toggle show/hide password
+    (function(){
+      const input = document.getElementById('password');
+      const btn   = document.getElementById('togglePass');
+      const icon  = document.getElementById('toggleIcon');
+      if(!input || !btn || !icon) return;
+
+      btn.addEventListener('click', () => {
+        const isHidden = input.getAttribute('type') === 'password';
+        input.setAttribute('type', isHidden ? 'text' : 'password');
+        icon.classList.toggle('fa-eye', !isHidden);
+        icon.classList.toggle('fa-eye-slash', isHidden);
+        btn.setAttribute('aria-label', isHidden ? 'Sembunyikan password' : 'Tampilkan password');
+        // kembalikan fokus ke input agar UX mulus
+        input.focus({preventScroll:true});
+      });
+    })();
+  </script>
 </body>
 </html>
