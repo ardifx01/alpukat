@@ -69,11 +69,6 @@
         <h3 class="mb-1 fw-bold">{{ $user->name }}</h3>
         <div class="text-muted small d-inline-flex align-items-center gap-2">
           <i class="fa fa-envelope"></i> {{ $user->email }}
-          @if ($user->email_verified_at)
-            <span class="badge bg-success ms-2">Terverifikasi</span>
-          @else
-            <span class="badge bg-warning text-dark ms-2">Belum verifikasi</span>
-          @endif
         </div>
       </div>
 
