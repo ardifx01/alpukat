@@ -90,19 +90,19 @@
 
         {{-- Nama --}}
         <div>
-          <x-input-label for="name" :value="__('Nama Lengkap')" class="form-label" />
+          <x-input-label for="name" :value="__('Nama Koperasi')" class="form-label" />
           <x-text-input id="name" class="form-input"
                         type="text" name="name" :value="old('name')" required autofocus
-                        autocomplete="name" placeholder="Masukkan Nama Lengkap" />
+                        autocomplete="name" placeholder="Masukkan Nama Koperasi" />
           <x-input-error :messages="$errors->get('name')" class="form-error" />
         </div>
 
         {{-- Email --}}
         <div>
-          <x-input-label for="email" :value="__('Email')" class="form-label" />
+          <x-input-label for="email" :value="__('Email Koperasi')" class="form-label" />
           <x-text-input id="email" class="form-input"
                         type="email" name="email" :value="old('email')" required
-                        autocomplete="username" placeholder="Masukkan Alamat Email" />
+                        autocomplete="username" placeholder="Masukkan Email Koperasi" />
           <x-input-error :messages="$errors->get('email')" class="form-error" />
         </div>
 

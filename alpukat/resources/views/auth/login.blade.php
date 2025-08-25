@@ -109,7 +109,7 @@
 
         {{-- Email --}}
         <div>
-          <x-input-label for="email" :value="__('Email')" class="form-label" />
+          <x-input-label for="email" :value="__('Email Koperasi')" class="form-label" />
           <x-text-input id="email" class="form-input"
             type="email" name="email" :value="old('email')" required autofocus
             autocomplete="username" placeholder=" Masukkan Alamat Email" />

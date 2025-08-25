@@ -9,6 +9,8 @@ use App\Models\Notifikasi;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class BerkasAdminController extends Controller
 {
@@ -39,62 +41,133 @@ class BerkasAdminController extends Controller
     {
         $request->validate([
             'verifikasi_id' => 'required|exists:verifikasis,id',
-            'jenis_surat' => 'required|in:berita_acara,sk_ukk',
-            'file' => 'required|mimes:pdf|max:5120',
+            'jenis_surat'   => 'required|in:berita_acara,sk_ukk',
+            'file'          => 'required|mimes:pdf|max:5120',
         ]);
 
         $verifikasi = Verifikasi::findOrFail($request->verifikasi_id);
 
+        // Pastikan ada tanggal wawancara
         if (!$verifikasi->tanggal_wawancara) {
-            return back()->withErrors(['file_path' => 'Tanggal wawancara tidak ditemukan.']);
-        }
-
-        // Hitung batas waktu
-        $tanggalWawancara = Carbon::parse($verifikasi->tanggal_wawancara);
-        $batas = $this->uploadDeadline($tanggalWawancara); // <<— sumber kebenaran
-        $now   = now();
-
-        if ($now->greaterThan($batas)) {
-            $labelDurasi = config('app.batas_unggah_wawancara_seconds')
-                ? config('app.batas_unggah_wawancara_seconds').' detik (demo)'
-                : config('app.batas_unggah_wawancara_days', 30).' hari kerja';
-
-            $batasStr = $batas->locale('id')->timezone(config('app.timezone'))
-                        ->translatedFormat('d F Y H:i');
-
             return back()->withErrors([
-                'file' => "Batas waktu unggah sudah lewat ($labelDurasi). Batas unggah: $batasStr WIB."
+                'verifikasi_id' => 'Tanggal wawancara tidak ditemukan untuk verifikasi ini.'
             ])->withInput();
         }
 
-        // Simpan file dengan nama rapi
-        $file = $request->file('file');
-        $namaBersih = preg_replace('/\s+/', '_', strtolower($file->getClientOriginalName()));
-        $namaFileFinal = time() . '_' . $namaBersih;
+        // Cek status berkas yang sudah ada
+        $existsBA = BerkasAdmin::where('verifikasi_id', $verifikasi->id)
+                    ->where('jenis_surat', 'berita_acara')
+                    ->exists();
 
-        $file->storeAs('berkas_admin', $namaFileFinal, 'public');
+        $existsSK = BerkasAdmin::where('verifikasi_id', $verifikasi->id)
+                    ->where('jenis_surat', 'sk_ukk')
+                    ->exists();
 
-        // Simpan ke database (pakai nama yang sama seperti di storage)
-        BerkasAdmin::create([
-            'verifikasi_id' => $request->verifikasi_id,
-            'user_id' => $verifikasi->user_id,
-            'jenis_surat' => $request->jenis_surat,
-            'file_path' => $namaFileFinal,
-        ]);
+        // Aturan urutan & duplikasi:
+        if ($request->jenis_surat === 'berita_acara') {
+            if ($existsBA) {
+                return back()->withErrors([
+                    'jenis_surat' => 'Berita Acara sudah pernah diunggah untuk verifikasi ini.'
+                ])->withInput();
+            }
+            // Deadline hanya untuk Berita Acara
+            $tanggalWawancara = Carbon::parse($verifikasi->tanggal_wawancara);
+            $batas = $this->uploadDeadline($tanggalWawancara);
+            $now   = now();
+            if ($now->greaterThan($batas)) {
+                $labelDurasi = config('app.batas_unggah_wawancara_seconds')
+                    ? config('app.batas_unggah_wawancara_seconds').' detik (demo)'
+                    : config('app.batas_unggah_wawancara_days', 30).' hari kerja';
 
-        // Tentukan pesan notifikasi berdasarkan jenis surat
-        $pesanNotif = $request->jenis_surat === 'sk_ukk' ? "Admin telah mengunggah SK UKK Anda." : "Admin telah mengunggah Berita Acara sebagai hasil wawancara Anda.";
+                $batasStr = $batas->locale('id')->timezone(config('app.timezone'))
+                                ->translatedFormat('d F Y H:i');
 
-        // Simpan notifikasi untuk user 
-        Notifikasi::create([
-            'user_id' => $verifikasi->user_id,
-            'verifikasi_id' => $request->verifikasi_id,
-            'pesan' => $pesanNotif,
-            'file_path' => 'berkas_admin/' . $namaFileFinal,
-            'dibaca' => 0,
-        ]);
+                return back()->withErrors([
+                    'file' => "Batas waktu unggah Berita Acara sudah lewat ($labelDurasi). "
+                            . "Batas unggah: $batasStr WIB."
+                ])->withInput();
+            }
+        } else { // sk_ukk
+            if (!$existsBA) {
+                return back()->withErrors([
+                    'jenis_surat' => 'SK UKK hanya dapat diunggah setelah Berita Acara diunggah.'
+                ])->withInput();
+            }
 
-        return redirect()->route('admin.berkas-admin.index')->with('success', 'Berkas berhasil ditambahkan');
+            if ($existsSK) {
+                return back()->withErrors([
+                    'jenis_surat' => 'SK UKK sudah pernah diunggah untuk verifikasi ini.'
+                ])->withInput();
+            }
+
+            // Ambil BA (untuk ambil created_at sebagai basis deadline SK)
+            $berkasBA = BerkasAdmin::where('verifikasi_id', $verifikasi->id)
+                ->where('jenis_surat', 'berita_acara')
+                ->latest('created_at')
+                ->first();
+
+            if (!$berkasBA) {
+                return back()->withErrors([
+                    'jenis_surat' => 'Unggah Berita Acara terlebih dahulu.'
+                ])->withInput();
+            }
+
+            // Hitung deadline SK dari waktu upload BA
+            $baUploadedAt = $berkasBA->created_at instanceof \Carbon\Carbon
+                ? $berkasBA->created_at
+                : \Carbon\Carbon::parse($berkasBA->created_at);
+
+            $deadlineSk = $this->skUkkDeadlineFromBA($baUploadedAt);
+
+            if (now()->greaterThan($deadlineSk)) {
+                $labelSk = config('app.batas_unggah_sk_seconds')
+                    ? config('app.batas_unggah_sk_seconds').' detik (demo)'
+                    : (config('app.batas_unggah_sk_days', 30).' hari kerja');
+
+                $deadlineStr = $deadlineSk->locale('id')->timezone(config('app.timezone'))
+                    ->translatedFormat('d F Y H:i');
+
+                return back()->withErrors([
+                    'jenis_surat' => "Batas waktu untuk mengunggah SK UKK sudah lewat ($labelSk). Batas: $deadlineStr WIB."
+                ])->withInput();
+            }
+        }
+
+        // Simpan file & data atomik
+        return DB::transaction(function () use ($request, $verifikasi) {
+            $file = $request->file('file');
+
+            // Nama file rapi: timestamp_nama-asli.pdf
+            $namaBersih    = preg_replace('/\s+/', '_', strtolower($file->getClientOriginalName()));
+            $namaFileFinal = time() . '_' . $namaBersih;
+
+            // Simpan ke storage/app/public/berkas_admin
+            $file->storeAs('berkas_admin', $namaFileFinal, 'public');
+
+            BerkasAdmin::create([
+                'verifikasi_id' => $request->verifikasi_id,
+                'user_id'       => $verifikasi->user_id,
+                'jenis_surat'   => $request->jenis_surat,
+                'file_path'     => $namaFileFinal, // simpan nama saja, path public di-join saat akses
+            ]);
+
+            // Notifikasi
+            $pesanNotif = $request->jenis_surat === 'sk_ukk'
+                ? "Admin telah mengunggah SK UKK Anda."
+                : "Admin telah mengunggah Berita Acara sebagai hasil wawancara Anda.";
+
+            Notifikasi::create([
+                'user_id'       => $verifikasi->user_id,
+                'verifikasi_id' => $request->verifikasi_id,
+                'pesan'         => $pesanNotif,
+                'file_path'     => 'berkas_admin/' . $namaFileFinal, // untuk ditautkan di UI
+                'dibaca'        => 0,
+            ]);
+
+            return redirect()
+                ->route('admin.berkas-admin.index')
+                ->with('success', 'Berkas berhasil ditambahkan');
+        });
     }
 
     // Hitung batas unggah dari tanggal wawancara.
@@ -125,6 +198,19 @@ class BerkasAdminController extends Controller
             }
         }
         return $d;
+    }
+
+    private function skUkkDeadlineFromBA(Carbon $baUploadedAt): Carbon
+    {
+        // Mode demo: jika di config ada seconds → pakai detik
+        $skSeconds = config('app.batas_unggah_sk_seconds'); // contoh: 180 (3 menit)
+        if (!empty($skSeconds)) {
+            return $baUploadedAt->copy()->addSeconds((int) $skSeconds);
+        }
+
+        // Produksi: hari kerja
+        $skDays = (int) config('app.batas_unggah_sk_days', 30); // default 30 hari kerja
+        return $this->addBusinessDays($baUploadedAt, $skDays);
     }
 
     public function download($id)

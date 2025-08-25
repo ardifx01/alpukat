@@ -64,20 +64,20 @@
           <li class="nav-item" role="presentation">
             <button class="nav-link soft-pill {{ $activeTab==='koperasi' ? 'active' : '' }}"
                     id="koperasi-tab" data-bs-toggle="tab" data-bs-target="#pane-koperasi" type="button" role="tab">
-              Dokumen Berkas Koperasi
+              Koperasi
             </button>
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link soft-pill {{ $activeTab==='pengurus' ? 'active' : '' }}"
                     id="pengurus-tab" data-bs-toggle="tab" data-bs-target="#pane-pengurus" type="button" role="tab">
-              Dokumen Berkas Pengurus/Pengawas
+              Pengurus/Pengawas Koperasi
             </button>
           </li>
         </ul>
 
         <div class="d-flex align-items-center gap-2 x-small">
           <span class="chip" id="chipKoperasi"><i class="fa fa-circle me-1"></i> Koperasi: <b>Belum</b></span>
-          <span class="chip" id="chipPengurus"><i class="fa fa-circle me-1"></i> Pengurus: <b>Belum</b></span>
+          <span class="chip" id="chipPengurus"><i class="fa fa-circle me-1"></i> Pengurus/Pengawas Koperasi: <b>Belum</b></span>
         </div>
       </div>
     </div>
@@ -104,9 +104,9 @@
                         <strong>{{ $syarat->nama_syarat }}</strong>
                         @if($syarat->is_required)
                           <span class="ms-1 text-danger fw-bold">*</span>
-                          <span class="text-muted x-small">wajib</span>
+                          <span class="text-muted x-small">Wajib</span>
                         @else
-                          <span class="text-muted x-small ms-1">opsional</span>
+                          <span class="text-muted x-small ms-1">Opsional</span>
                         @endif
                       </div>
 
@@ -156,9 +156,9 @@
                         <strong>{{ $syarat->nama_syarat }}</strong>
                         @if($syarat->is_required)
                           <span class="ms-1 text-danger fw-bold">*</span>
-                          <span class="text-muted x-small">wajib</span>
+                          <span class="text-muted x-small">Wajib</span>
                         @else
-                          <span class="text-muted x-small ms-1">opsional</span>
+                          <span class="text-muted x-small ms-1">Opsional</span>
                         @endif
                       </div>
 
@@ -208,7 +208,7 @@
             </button>
           </div>
           <div id="barWarning" class="x-small text-danger mt-2 d-none">
-            Lengkapi unggahan pada <strong>Koperasi</strong> & <strong>Pengurus/Pengawas</strong> sebelum kirim.
+            Lengkapi unggahan pada <strong>Koperasi</strong> & <strong>Pengurus/Pengawas Koperasi</strong> sebelum kirim.
           </div>
         </div>
 
@@ -222,7 +222,7 @@
   .soft-pill{ background:#f1f4ff; color:#334; border:0; font-size:.9rem; padding:.35rem .8rem }
   .soft-pill.active{ background:#e4e9ff; color:#23349E; font-weight:600; }
 
-  .chip{ padding:.22rem .5rem; border-radius:999px; background:#f6f7fb; border:1px solid #e8eaf6; color:#546; }
+  .chip{ padding:.22rem .5rem; border-radius:999px; background:#ff0000ff; border:1px solid #ff0000ff; color:#fff; }
   .chip.ok{ background:#e9fbf0; border-color:#c9f1d9; color:#176d3a; }
   .chip > .fa-circle{ font-size:.5rem; vertical-align:middle }
 
