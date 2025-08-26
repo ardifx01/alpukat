@@ -4,21 +4,60 @@
 
 @section('content')
 {{-- Hero --}}
-<section class="hero-section">
+<section class="hero-section py-5">
   <div class="container">
     <div class="row align-items-center">
+      
+      {{-- Kiri: Teks --}}
       <div class="col-md-7 animate-up">
-        <h3 class="hero-title"><strong>Selamat Datang di </strong></h3>
+        <h3 class="hero-title"><strong>Selamat Datang di</strong></h3>
         <h1 class="hero-brand"><strong>ALPUKAT</strong></h1>
         <p class="hero-desc">Aplikasi Uji Kelayakan dan Kepatutan</p>
-        <a href="{{ asset('files/juklak_ukk.pdf') }}" class="btn btn-primary mb-2" download>Download Juklak UKK</a>
+        
+        <a href="{{ asset('files/juklak_ukk.pdf') }}" 
+           class="btn btn-primary mb-2" download>
+          Download Juklak UKK
+        </a>
+        
         @guest
-        <br>
-        <a href="{{ route('login') }}" class="btn btn-light">Login untuk Pengajuan</a>
+          <br>
+          <a href="{{ route('login') }}" class="btn btn-light">Login untuk Pengajuan</a>
         @endguest
       </div>
+
+      {{-- Kanan: Animasi Koperasi --}}
       <div class="col-md-5 animate-right">
-        <img src="{{ asset('front_end/images/profile DKUKM.jpeg') }}" alt="Dinas Koperasi Usaha Kecil & Menengah Kepulauan Riau" class="img-fluid rounded hero-img" loading="lazy">
+        <div class="hero-anim-pro" aria-hidden="true">
+          <!-- orbs latar -->
+          <span class="orb2 orb-a"></span>
+          <span class="orb2 orb-b"></span>
+
+          <!-- SVG Gedung Koperasi -->
+          <svg class="coop-svg" viewBox="0 0 240 180" role="img" aria-label="Gedung Koperasi">
+            <ellipse cx="120" cy="160" rx="90" ry="12" class="land"></ellipse>
+            <g class="building">
+              <rect x="60" y="60" width="120" height="80" rx="10" class="b-body"/>
+              <rect x="88" y="82" width="64" height="36" rx="6" class="b-door"/>
+              <rect x="64" y="64" width="112" height="10" rx="5" class="b-top"/>
+              <text x="120" y="56" text-anchor="middle" class="b-title">KOPERASI</text>
+              <rect x="70" y="96" width="12" height="18" rx="3" class="win"/>
+              <rect x="158" y="96" width="12" height="18" rx="3" class="win"/>
+            </g>
+            <g class="sparkles">
+              <circle cx="30" cy="40" r="2" class="sp"></circle>
+              <circle cx="210" cy="36" r="2" class="sp"></circle>
+              <circle cx="194" cy="120" r="2" class="sp"></circle>
+              <circle cx="26" cy="118" r="2" class="sp"></circle>
+            </g>
+          </svg>
+
+          <!-- Orbit avatar pengurus -->
+          <div class="orbit-pro">
+            <span class="avatar chip"><i class="fa fa-user-tie"></i></span>
+            <span class="avatar chip"><i class="fa fa-user-check"></i></span>
+            <span class="avatar chip"><i class="fa fa-user-shield"></i></span>
+          </div>
+        </div>
       </div>
     </div>
   </div>

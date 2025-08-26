@@ -43,6 +43,132 @@ nav a.active{font-weight:bold}
 @media (max-width:575.98px){.hero-section{padding:28px 0}.hero-img{max-width:300px}}
 .hero-section .btn-primary{background:#0071e3;border:none;padding:10px 20px;font-size:16px;border-radius:6px}
 
+/* ===========================
+   HERO ANIMATION – KOPERASI
+   =========================== */
+
+/* container animasi di kolom kanan */
+.hero-anim-pro{
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1 / 1;            /* kotak responsif */
+  margin: 12px auto 0;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0,0,0,.18);
+}
+
+/* orbs lembut latar */
+.orb2{
+  position:absolute; border-radius:999px; filter: blur(18px);
+  opacity:.55; pointer-events:none;
+}
+.orb-a{ width:180px;height:180px; right:-40px; top:-40px; background:#7e8af0; animation: floatY 6s ease-in-out infinite; }
+.orb-b{ width:220px;height:220px; left:-60px; bottom:-60px; background:#4456d1; animation: floatX 7s ease-in-out infinite; }
+
+/* SVG gedung koperasi */
+.coop-svg{
+  position:absolute; inset:0; width:100%; height:100%;
+}
+.coop-svg .land{ fill:rgba(0,0,0,.18); }
+.coop-svg .b-body{ fill:#ffffff; opacity:.9; }
+.coop-svg .b-door{ fill:#e9edff; }
+.coop-svg .b-top{ fill:#23349E; opacity:.85; }
+.coop-svg .b-title{ font: 700 12px/1 "Inter",system-ui; fill:#eaf0ff; letter-spacing:.16em; }
+.coop-svg .win{ fill:#dfe6ff; }
+.coop-svg .sparkles .sp{ fill:#fff; opacity:.8; animation: twinkle 2.6s ease-in-out infinite; }
+.coop-svg .sparkles .sp:nth-child(2){ animation-delay:.6s }
+.coop-svg .sparkles .sp:nth-child(3){ animation-delay:1.1s }
+.coop-svg .sparkles .sp:nth-child(4){ animation-delay:1.7s }
+
+/* tumpukan kartu dokumen */
+.doc-stack{
+  position:absolute; right:12px; top:12px; left:auto;
+  display:flex; flex-direction:column; gap:8px; z-index:3;
+}
+.doc-card{
+  display:flex; align-items:center; gap:8px;
+  background:#ffffff; border:1px solid #eef1ff; color:#23349E;
+  padding:8px 10px; border-radius:12px; font:600 12px/1.2 "Inter",system-ui;
+  box-shadow:0 6px 18px rgba(35,52,158,.12);
+  transform-origin: right center;
+  animation: cardDrop .6s ease both;
+}
+.doc-card i{ font-size:14px }
+.doc-card:nth-child(2){ transform: translateX(8px) rotate(-2deg); animation-delay:.12s }
+.doc-card:nth-child(3){ transform: translateX(16px) rotate(-4deg); animation-delay:.24s }
+
+/* orbit avatar pengurus/pengawas */
+.orbit-pro{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:66%; height:66%; border-radius:999px;
+  border:1px dashed rgba(255,255,255,.35);
+  animation: spin 14s linear infinite;
+}
+.orbit-pro .avatar{
+  position:absolute; width:38px; height:38px; border-radius:999px;
+  display:flex; align-items:center; justify-content:center;
+  background:#ffffff; color:#23349E;
+  box-shadow: 0 8px 20px rgba(0,0,0,.12), inset 0 0 0 2px #e7ecff;
+  font-size:16px;
+}
+.orbit-pro .avatar:nth-child(1){ top:-12px; left:50%; transform:translateX(-50%); }
+.orbit-pro .avatar:nth-child(2){ right:-12px; top:50%; transform:translateY(-50%); }
+.orbit-pro .avatar:nth-child(3){ left:-12px; bottom:12%; }
+
+/* stempel verifikasi */
+.stamp{
+  position:absolute; left:18px; bottom:14px; z-index:4;
+  display:inline-flex; align-items:center; gap:8px;
+  background: rgba(33, 197, 94, .15);
+  border:1px solid rgba(33, 197, 94, .35);
+  color:#0f6e41;
+  padding:8px 12px; border-radius:999px;
+  font:700 12px/1 "Inter",system-ui;
+  backdrop-filter: blur(3px);
+  animation: popIn .5s ease .35s both;
+}
+.stamp i{ font-size:14px }
+.stamp span{ letter-spacing:.08em }
+
+/* keyframes */
+@keyframes spin{ to{ transform: translate(-50%,-50%) rotate(360deg); } }
+@keyframes floatY{
+  0%,100%{ transform: translateY(0) }
+  50%{ transform: translateY(10px) }
+}
+@keyframes floatX{
+  0%,100%{ transform: translateX(0) }
+  50%{ transform: translateX(12px) }
+}
+@keyframes twinkle{
+  0%,100%{ opacity:.15; transform: scale(1) }
+  50%{ opacity:.9; transform: scale(1.25) }
+}
+@keyframes cardDrop{
+  from{ opacity:0; transform: translateY(-10px) scale(.98) }
+  to  { opacity:1; transform: translateY(0) }
+}
+@keyframes popIn{
+  from{ opacity:0; transform: scale(.9) }
+  to  { opacity:1; transform: scale(1) }
+}
+
+/* responsive tweaks biar rapi di mobile */
+@media (max-width: 991.98px){
+  .hero-anim-pro{ max-width: 440px; }
+}
+@media (max-width: 575.98px){
+  .hero-anim-pro{ max-width: 360px; }
+  .doc-card{ font-size:11px; padding:7px 9px }
+  .orbit-pro .avatar{ width:34px; height:34px; font-size:14px }
+  .stamp{ font-size:11px; padding:7px 10px }
+}
+
+
 /* ===== STEPS (latar batik + grid + hover) ===== */
 .steps-section{
   padding:56px 0;
