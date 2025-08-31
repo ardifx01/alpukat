@@ -15,8 +15,6 @@ class SyaratController extends Controller
 
     public function postTambahSyarat(Request $request)
     {
-        // dd($request->only('nama_syarat','kategori_syarat','is_required'));
-
         // Validasi input
         $data = $request->validate([
             'nama_syarat' => 'required|string|max:255',
@@ -27,12 +25,6 @@ class SyaratController extends Controller
         $data['is_required'] = $request->boolean('is_required');
 
         Syarat::create($data);
-
-        // Simpan ke database pakai Eloquent
-        // $syarat=new Syarat();
-        // $syarat->nama_syarat = $request->nama_syarat;
-        // $syarat->kategori_syarat = $request->kategori_syarat;
-        // $syarat->save();
 
         return redirect()->route('admin.syarat.lihat_syarat')->with('success', 'Persyaratan berhasil ditambahkan!');
     }
