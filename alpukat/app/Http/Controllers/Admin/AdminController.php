@@ -3,28 +3,23 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Dokumen;
 use App\Models\BerkasAdmin;
-use App\Models\User;
 use App\Models\Verifikasi;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function dashboard(Request $request)
+    public function dashboard()
     {
         // Menghitung jumlah berkas yang telah diverifikasi
-        $hitungPengajuan = Verifikasi::count();
+        $hitungVerifikasi = Verifikasi::count();
 
-        // Menghitung jumlah berita acara yang diunggah
+        // Menghitung jumlah berita acara yang telah diunggah
         $hitungBeritaAcara = BerkasAdmin::where('jenis_surat', 'berita_acara')->count();
 
-        // Menghitung jumlah SK UKK yang diunggah
+        // Menghitung jumlah SK UKK yang telah diunggah
         $hitungSkUkk = BerkasAdmin::where('jenis_surat', 'sk_ukk')->count();
 
-        // Menghitung status verifikasi diterima dan ditolak
+        // Menghitung status verifikasi yang diterima dan ditolak
         $statusCounts = Verifikasi::selectRaw("
             SUM(CASE WHEN status = 'diterima' THEN 1 ELSE 0 END) AS diterima,
             SUM(CASE WHEN status = 'ditolak' THEN 1 ELSE 0 END) AS ditolak
@@ -36,7 +31,7 @@ class AdminController extends Controller
 
         // Mengirimkan hasil ke view
         return view('admin.dashboard', [
-            'countPengajuan' => $hitungPengajuan,
+            'countPengajuan' => $hitungVerifikasi,
             'countApproved' => $hitungDiterima,
             'countRejected' => $hitungDitolak,
             'countBeritaAcara' => $hitungBeritaAcara,

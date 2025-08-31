@@ -12,7 +12,7 @@
     <link href="{{ asset('theme/css/styles.css') }}" rel="stylesheet" />
     <link rel="shortcut icon" href="{{ asset('theme/assets/img/logo_kepri.png') }}">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('css_admin/default.css') }}">
 </head>
 
 <body class="sb-nav-fixed">

@@ -141,7 +141,6 @@ class VerifikasiController extends Controller
     {
         $verifikasi = Verifikasi::with('user')->orderBy('updated_at', 'desc')->paginate(3);
 
-        // dd($verifikasi);
         return view('admin.verif.hasil_verifikasi', compact('verifikasi'));
     }
 }
