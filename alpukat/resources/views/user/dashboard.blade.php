@@ -31,7 +31,7 @@
           <span class="orb2 orb-a"></span>
           <span class="orb2 orb-b"></span>
 
-          {{-- Logo Koperasi (ganti path gambar sesuai lokasi file Anda) --}}
+          {{-- Logo Koperasi --}}
           <div class="coop-logo">
             <span class="glow-ring"></span>
             <img
@@ -41,14 +41,14 @@
             >
           </div>
 
-          {{-- Orbit ikon pengurus mengelilingi logo --}}
+          {{-- Orbit ikon --}}
           <div class="orbit-pro">
             <span class="avatar chip"><i class="fa fa-user-tie"></i></span>
             <span class="avatar chip"><i class="fa fa-user-check"></i></span>
             <span class="avatar chip"><i class="fa fa-user-shield"></i></span>
           </div>
 
-          {{-- satelit kecil tambahan --}}
+          {{-- satelit kecil --}}
           <span class="sat dot-1"></span>
           <span class="sat dot-2"></span>
           <span class="sat dot-3"></span>
@@ -96,8 +96,10 @@
 
 {{-- Tentang Kami --}}
 <section class="about-section">
+  {{-- gelembung latar tepi (dipakai CSS ::before / ::after) --}}
   <div class="container">
     <h2 class="mb-4" style="font-weight:800">Tentang Kami</h2>
+
     <div class="about-card">
       <div class="row align-items-start g-4">
         <div class="col-lg-7">
@@ -109,6 +111,7 @@
             allowfullscreen>
           </iframe>
         </div>
+
         <div class="col-lg-5 about-text">
           <p>
             Dinas Koperasi, Usaha Kecil dan Menengah Provinsi Kepulauan Riau adalah instansi pemerintah daerah yang bertanggung jawab
