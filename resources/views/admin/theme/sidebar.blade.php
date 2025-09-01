@@ -31,7 +31,7 @@ $menus = [
                 'icon' => 'fas fa-columns',
                 'children' => [
                     ['label' => 'Tambah Persyaratan', 'route' => 'admin.syarat.tambah_syarat'],
-                    ['label' => 'Kelola Persyaratan', 'route' => 'admin.syarat.lihat_syarat'],
+                    ['label' => 'Lihat Persyaratan', 'route' => 'admin.syarat.lihat_syarat'],
                 ]
             ]
         ]

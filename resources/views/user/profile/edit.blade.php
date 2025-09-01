@@ -80,7 +80,7 @@
             <span class="d-block text-muted mb-2">Pratinjau:</span>
             <img id="avatarPreview"
                  src="{{ $user->avatar_url }}"
-                 data-fallback="{{ asset('front-end/images/default-avatar.png') }}"
+                 data-fallback="{{ asset('front-end/images/logo-koperasi.png') }}"
                  alt="Avatar"
                  class="shadow-sm border"
                  style="width:96px;height:96px;object-fit:cover;border-radius:.75rem;">

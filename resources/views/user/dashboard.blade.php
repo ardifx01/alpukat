@@ -7,7 +7,7 @@
 <section class="hero-section py-5">
   <div class="container">
     <div class="row align-items-center">
-      
+
       {{-- Kiri: Teks --}}
       <div class="col-md-7 animate-up">
         <h3 class="hero-title"><strong>Selamat Datang di</strong></h3>
@@ -19,8 +19,8 @@
         </a>
 
         @guest
-          <br>
-          <a href="{{ route('login') }}" class="btn btn-light">Login untuk Pengajuan</a>
+        <br>
+        <a href="{{ route('login') }}" class="btn btn-light">Login untuk Pengajuan</a>
         @endguest
       </div>
 
@@ -37,8 +37,7 @@
             <img
               src="{{ asset('front_end/images/logo-koperasi1.png') }}"
               alt="Logo Koperasi Indonesia"
-              loading="lazy"
-            >
+              loading="lazy">
           </div>
 
           {{-- Orbit ikon --}}
@@ -64,31 +63,31 @@
   <div class="container">
     <h2 class="mb-4" style="font-weight:800">Tata Cara Pengajuan</h2>
     @php
-      $steps = [
-        ['title'=>'Pendaftaran','desc'=>'Login/Register. Unduh Juklak UKK untuk menyiapkan berkas.','icon'=>'fa-user-plus'],
-        ['title'=>'Unggah','desc'=>'Isi formulir dan unggah seluruh berkas persyaratan sesuai juklak.','icon'=>'fa-upload'],
-        ['title'=>'Verifikasi','desc'=>'Tim memeriksa kelengkapan dan keabsahan berkas. Lengkapi jika ada catatan.','icon'=>'fa-check-square'],
-        ['title'=>'Wawancara','desc'=>'Ikuti wawancara sesuai jadwal. Siapkan dokumen asli bila diminta.','icon'=>'fa-comments'],
-        ['title'=>'Hasil','desc'=>'Lihat keputusan UKK (Lulus/Tidak Lulus) di notifikasi. Unduh berita acara.','icon'=>'fa-flag-checkered'],
-      ];
+    $steps = [
+    ['title'=>'Pendaftaran','desc'=>'Login/Register. Unduh Juklak UKK untuk menyiapkan berkas.','icon'=>'fa-user-plus'],
+    ['title'=>'Unggah','desc'=>'Isi formulir dan unggah seluruh berkas persyaratan sesuai juklak.','icon'=>'fa-upload'],
+    ['title'=>'Verifikasi','desc'=>'Tim memeriksa kelengkapan dan keabsahan berkas. Lengkapi jika ada catatan.','icon'=>'fa-check-square'],
+    ['title'=>'Wawancara','desc'=>'Ikuti wawancara sesuai jadwal. Siapkan dokumen asli bila diminta.','icon'=>'fa-comments'],
+    ['title'=>'Hasil','desc'=>'Lihat keputusan UKK (Lulus/Tidak Lulus) di notifikasi. Unduh berita acara.','icon'=>'fa-flag-checkered'],
+    ];
     @endphp
 
     <div class="steps-grid">
       @foreach ($steps as $i => $s)
-        <div class="step-box" style="animation: fadeUp 0.6s ease {{ $i * 0.2 }}s forwards;">
-          <div class="step-main">
-            <div class="step-main-number">{{ $i+1 }}.</div>
-            <div class="step-main-title">{{ $s['title'] }}</div>
-          </div>
+      <div class="step-box" style="animation: fadeUp 0.6s ease {{ $i * 0.2 }}s forwards;">
+        <div class="step-main">
+          <div class="step-main-number">{{ $i+1 }}.</div>
+          <div class="step-main-title">{{ $s['title'] }}</div>
+        </div>
 
-          <div class="step-panel">
-            <span class="step-icon"><i class="fa {{ $s['icon'] }}" aria-hidden="true"></i></span>
-            <div>
-              <div class="step-title">{{ $s['title'] }}</div>
-              <p class="step-desc mb-0">{{ $s['desc'] }}</p>
-            </div>
+        <div class="step-panel">
+          <span class="step-icon"><i class="fa {{ $s['icon'] }}" aria-hidden="true"></i></span>
+          <div>
+            <div class="step-title">{{ $s['title'] }}</div>
+            <p class="step-desc mb-0">{{ $s['desc'] }}</p>
           </div>
         </div>
+      </div>
       @endforeach
     </div>
   </div>
@@ -144,7 +143,7 @@
           </div>
         </div>
       </div>
-    </div>  
+    </div>
   </div>
 </section>
 @endsection

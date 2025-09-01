@@ -47,7 +47,7 @@
             <button class="nav-link soft-pill {{ $activeTab==='pengurus' ? 'active' : '' }}"
                     id="pengurus-tab" data-bs-toggle="tab" data-bs-target="#pengurus" type="button" role="tab"
                     aria-controls="pengurus" aria-selected="{{ $activeTab==='pengurus' ? 'true' : 'false' }}">
-              Dokumen Pengurus/Pengawas
+              Dokumen Pengurus dan Pengawas
               <span class="badge badge-soft-primary ms-2">{{ $peng->count() }}</span>
             </button>
           </li>
@@ -118,10 +118,10 @@
             @endif
           </div>
 
-          {{-- TAB: PENGURUS/PENGAWAS --}}
+          {{-- TAB: PENGURUS dan PENGAWAS --}}
           <div class="tab-pane fade {{ $activeTab==='pengurus' ? 'show active' : '' }}" id="pengurus" role="tabpanel" aria-labelledby="pengurus-tab" tabindex="0">
             @if($peng->isEmpty())
-              <div class="p-5 text-center text-muted">Belum ada dokumen kategori pengurus/pengawas.</div>
+              <div class="p-5 text-center text-muted">Belum ada dokumen kategori pengurus dan pengawas.</div>
             @else
               <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">

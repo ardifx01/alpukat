@@ -72,6 +72,6 @@ class User extends Authenticatable
     {
         return $this->avatar_path
             ? asset( 'storage/'. $this->avatar_path)
-            : asset('public/front-end/images/default-avatar.png');
+            : asset('public/front-end/images/logo-koperasi.png');
     }
 }

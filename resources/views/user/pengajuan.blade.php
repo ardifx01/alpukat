@@ -73,14 +73,14 @@
             <li class="nav-item" role="presentation">
               <button class="nav-link soft-pill {{ $activeTab==='pengurus' ? 'active' : '' }}"
                       id="pengurus-tab" data-bs-toggle="tab" data-bs-target="#pane-pengurus" type="button" role="tab">
-                Pengurus/Pengawas Koperasi
+                Pengurus dan Pengawas Koperasi
               </button>
             </li>
           </ul>
 
           <div class="d-flex align-items-center gap-2 x-small">
             <span class="chip" id="chipKoperasi"><i class="fa fa-circle me-1"></i> Koperasi: <b>Belum</b></span>
-            <span class="chip" id="chipPengurus"><i class="fa fa-circle me-1"></i> Pengurus/Pengawas Koperasi: <b>Belum</b></span>
+            <span class="chip" id="chipPengurus"><i class="fa fa-circle me-1"></i> Pengurus dan Pengawas Koperasi: <b>Belum</b></span>
           </div>
         </div>
       </div>
@@ -148,7 +148,7 @@
             {{-- === PANE PENGURUS === --}}
             <div class="tab-pane fade {{ $activeTab==='pengurus' ? 'show active' : '' }}" id="pane-pengurus" role="tabpanel">
               @if(!$hasPengurus)
-                <div class="alert alert-secondary rounded-3 small mb-2">Belum ada persyaratan untuk kategori pengurus/pengawas.</div>
+                <div class="alert alert-secondary rounded-3 small mb-2">Belum ada persyaratan untuk kategori pengurus dan pengawas koperasi.</div>
               @else
                 <div class="row g-2">
                   @foreach ($syaratPengurus as $syarat)
@@ -211,7 +211,7 @@
               </button>
             </div>
             <div id="barWarning" class="x-small text-danger mt-2 d-none">
-              Lengkapi unggahan pada <strong>Koperasi</strong> & <strong>Pengurus/Pengawas Koperasi</strong> sebelum kirim.
+              Lengkapi unggahan pada <strong>Koperasi</strong> serta <strong>Pengurus dan Pengawas Koperasi</strong> sebelum kirim.
             </div>
           </div>
 
