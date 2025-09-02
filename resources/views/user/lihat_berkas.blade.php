@@ -6,7 +6,9 @@
 @php
   $kop   = collect($berkasUser ?? [])->filter(fn($i) => optional($i->syarat)->kategori_syarat === 'koperasi')->values();
   $peng  = collect($berkasUser ?? [])->filter(fn($i) => optional($i->syarat)->kategori_syarat === 'pengurus')->values();
-  $activeTab = request('tab') === 'pengurus' ? 'pengurus' : 'koperasi';
+  $was  = collect($berkasUser ?? [])->filter(fn($i) => optional($i->syarat)->kategori_syarat === 'pengawas')->values();
+
+  $activeTab = in_array(request('tab'), ['pengurus','pengawas']) ? request('tab') : 'koperasi';
 @endphp
 
 {{-- ====== LATAR HALAMAN (DI LUAR CARD) ====== --}}
@@ -22,7 +24,7 @@
 
         <div class="container text-white">
           <h2 class="mb-1 fw-bold" style="font-size:2rem;">Lihat Berkas</h2>
-          <div class="opacity-85">Dokumen yang telah Anda unggah, dipisah berdasarkan kategori.</div>
+          <div class="opacity-85">Dokumen yang telah Anda unggah, dipisah berdasarkan jenis.</div>
         </div>
       </div>
 
@@ -47,8 +49,16 @@
             <button class="nav-link soft-pill {{ $activeTab==='pengurus' ? 'active' : '' }}"
                     id="pengurus-tab" data-bs-toggle="tab" data-bs-target="#pengurus" type="button" role="tab"
                     aria-controls="pengurus" aria-selected="{{ $activeTab==='pengurus' ? 'true' : 'false' }}">
-              Dokumen Pengurus dan Pengawas
+              Dokumen Pengurus Koperasi
               <span class="badge badge-soft-primary ms-2">{{ $peng->count() }}</span>
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link soft-pill {{ $activeTab==='pengawas' ? 'active' : '' }}"
+                    id="pengawas-tab" data-bs-toggle="tab" data-bs-target="#pengawas" type="button" role="tab"
+                    aria-controls="pengawas" aria-selected="{{ $activeTab==='pengawas' ? 'true' : 'false' }}">
+              Dokumen Pengawas Koperasi
+              <span class="badge badge-soft-primary ms-2">{{ $was->count() }}</span>
             </button>
           </li>
         </ul>
@@ -61,7 +71,7 @@
           {{-- TAB: KOPERASI --}}
           <div class="tab-pane fade {{ $activeTab==='koperasi' ? 'show active' : '' }}" id="koperasi" role="tabpanel" aria-labelledby="koperasi-tab" tabindex="0">
             @if($kop->isEmpty())
-              <div class="p-5 text-center text-muted">Belum ada dokumen kategori koperasi.</div>
+              <div class="p-5 text-center text-muted">Belum ada dokumen jenis koperasi.</div>
             @else
               <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
@@ -118,10 +128,10 @@
             @endif
           </div>
 
-          {{-- TAB: PENGURUS dan PENGAWAS --}}
+          {{-- TAB: PENGURUS --}}
           <div class="tab-pane fade {{ $activeTab==='pengurus' ? 'show active' : '' }}" id="pengurus" role="tabpanel" aria-labelledby="pengurus-tab" tabindex="0">
             @if($peng->isEmpty())
-              <div class="p-5 text-center text-muted">Belum ada dokumen kategori pengurus dan pengawas.</div>
+              <div class="p-5 text-center text-muted">Belum ada dokumen jenis pengurus koperasi.</div>
             @else
               <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
@@ -136,6 +146,66 @@
                   </thead>
                   <tbody>
                     @foreach ($peng as $item)
+                      @php
+                        $url  = $item->file_path ? Storage::url($item->file_path) : null;
+                        $name = $item->original_name ?? ($item->file_path ? basename($item->file_path) : '-');
+                      @endphp
+                      <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $item->syarat->nama_syarat ?? '-' }}</td>
+                        <td>
+                          @if($url)
+                            <a href="{{ $url }}" target="_blank" rel="noopener" class="text-decoration-none">
+                              <span class="d-inline-block text-truncate" style="max-width:360px;" title="{{ $name }}">{{ $name }}</span>
+                            </a>
+                            @if(!empty($item->size))
+                              <small class="text-muted d-block">{{ number_format($item->size/1024, 0) }} KB</small>
+                            @endif
+                          @else
+                            <span class="badge badge-soft-danger">Belum diunggah</span>
+                          @endif
+                        </td>
+                        <td>{{ optional($item->created_at)->format('d M Y, H:i') }}</td>
+                        <td>
+                          @if($url)
+                            <div class="btn-group btn-group-sm" role="group">
+                              <a href="{{ $url }}" target="_blank" rel="noopener" class="btn btn-outline-primary">
+                                <i class="fa fa-eye me-1"></i> Lihat
+                              </a>
+                              <a href="{{ $url }}" download="{{ $name }}" class="btn btn-outline-secondary">
+                                <i class="fa fa-download me-1"></i> Unduh
+                              </a>
+                            </div>
+                          @else
+                            <span class="text-muted">—</span>
+                          @endif
+                        </td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+            @endif
+          </div>
+
+          {{-- TAB: PENGAWAS --}}
+          <div class="tab-pane fade {{ $activeTab==='pengawas' ? 'show active' : '' }}" id="pengawas" role="tabpanel" aria-labelledby="pengawas-tab" tabindex="0">
+            @if($peng->isEmpty())
+              <div class="p-5 text-center text-muted">Belum ada dokumen jenis pengawas koperasi.</div>
+            @else
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th style="width:56px;">No</th>
+                      <th>Nama Dokumen</th>
+                      <th>Nama File</th>
+                      <th style="width:180px;">Diunggah</th>
+                      <th style="width:220px;">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach ($was as $item)
                       @php
                         $url  = $item->file_path ? Storage::url($item->file_path) : null;
                         $name = $item->original_name ?? ($item->file_path ? basename($item->file_path) : '-');
@@ -246,11 +316,11 @@
   (function(){
     var container = document.getElementById('berkasTab');
     var active = (container && container.getAttribute('data-active')) || 'koperasi';
-    if (active === 'pengurus') {
-      var trigger = document.querySelector('[data-bs-target="#pengurus"]');
-      if (trigger && window.bootstrap && bootstrap.Tab) {
-        new bootstrap.Tab(trigger).show();
-      }
+    var map = { koperasi:'#koperasi', pengurus:'#pengurus', pengawas:'#pengawas' };
+    var target = map[active] || '#koperasi';
+    var trigger = document.querySelector('[data-bs-target="'+target+'"]');
+    if (trigger && window.bootstrap && bootstrap.Tab) {
+      new bootstrap.Tab(trigger).show();
     }
   })();
 </script>

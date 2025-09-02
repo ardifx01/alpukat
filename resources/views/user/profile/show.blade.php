@@ -82,8 +82,8 @@
         </div>
 
         {{-- ===== Info Ringkas ===== --}}
-        <div class="row g-3 mt-4">
-          <div class="col-md-6">
+        <div class="row g-3 mt-4 row-cols-1 row-cols-md-3">
+          <div class="col">
             <div class="p-3 border rounded-3 h-100">
               <div class="d-flex align-items-center gap-3">
                 <span class="rounded-3 d-inline-flex align-items-center justify-content-center"
@@ -98,7 +98,7 @@
             </div>
           </div>
 
-          <div class="col-md-6">
+          <div class="col">
             <div class="p-3 border rounded-3 h-100">
               <div class="d-flex align-items-center gap-3">
                 <span class="rounded-3 d-inline-flex align-items-center justify-content-center"
@@ -106,7 +106,7 @@
                   <i class="fa fa-envelope"></i>
                 </span>
                 <div class="min-w-0">
-                  <div class="text-muted small">Email</div>
+                  <div class="text-muted small">Email Koperasi</div>
                   <div class="fw-semibold text-break">{{ $user->email }}</div>
                 </div>
               </div>
@@ -114,7 +114,7 @@
           </div>
 
           {{-- Alamat --}}
-          <div class="col-12">
+          <div class="col">
             <div class="p-3 border rounded-3 h-100">
               <div class="d-flex align-items-start gap-3">
                 <span class="rounded-3 d-inline-flex align-items-center justify-content-center"
@@ -122,7 +122,7 @@
                   <i class="fa fa-map-marker"></i>
                 </span>
                 <div class="min-w-0">
-                  <div class="text-muted small">Alamat</div>
+                  <div class="text-muted small">Alamat Koperasi</div>
                   <div class="fw-semibold">
                     {{ filled($user->alamat) ? $user->alamat : 'Belum diisi' }}
                   </div>

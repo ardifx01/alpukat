@@ -10,6 +10,8 @@ class SyaratController extends Controller
 {
     public function tambahSyarat()
     {
+        $syarat = new Syarat();
+        
         return view('admin.syarat.tambah_syarat');
     }
 
@@ -18,7 +20,7 @@ class SyaratController extends Controller
         // Validasi input
         $data = $request->validate([
             'nama_syarat' => 'required|string|max:255',
-            'kategori_syarat' => 'required|in:koperasi,pengurus',
+            'kategori_syarat' => 'required|in:koperasi,pengurus,pengawas',
             'is_required' => ['nullable'],
         ]);
 
@@ -33,8 +35,9 @@ class SyaratController extends Controller
     {
         $syarat_koperasi = Syarat::where('kategori_syarat', 'koperasi')->get();
         $syarat_pengurus = Syarat::where('kategori_syarat', 'pengurus')->get();
+        $syarat_pengawas = Syarat::where('kategori_syarat', 'pengawas')->get();
         
-        return view('admin.syarat.lihat_syarat', compact('syarat_koperasi', 'syarat_pengurus'));
+        return view('admin.syarat.lihat_syarat', compact('syarat_koperasi', 'syarat_pengurus', 'syarat_pengawas'));
     }
 
     public function hapusSyarat($id)
@@ -59,7 +62,7 @@ class SyaratController extends Controller
         // Validasi input
         $request->validate([
             'nama_syarat' => 'required|string|max:255',
-            'kategori_syarat' => 'required|in:koperasi,pengurus',
+            'kategori_syarat' => 'required|in:koperasi,pengurus,pengawas',
             'is_required' => ['nullable'],
         ]);
 

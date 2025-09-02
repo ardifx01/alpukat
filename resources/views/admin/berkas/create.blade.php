@@ -48,7 +48,7 @@
 
         {{-- Tanggal Wawancara + Info Deadline --}}
         <div class="mb-3">
-            <label for="tanggal_wawancara" class="form-label">Tanggal Wawancara</label>
+            <label for="tanggal_wawancara" class="form-label">Waktu Wawancara</label>
             <input type="text" id="tanggal_wawancara" class="form-control" readonly>
             <div class="form-text" id="batasInfo"></div>
         </div>

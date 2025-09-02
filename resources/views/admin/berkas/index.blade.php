@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-5">
-    <h1 class="mb-3">Daftar Berkas</h1>
+    <h1 class="mb-4 fw-bold">Lihat Berkas</h1>
     <p>Berikut adalah daftar berkas yang telah Anda kirim</p>
 
     <a href="{{ route('admin.berkas-admin.create') }}" class="btn btn-primary mb-4">Tambah Berkas</a>
@@ -11,8 +11,8 @@
         <thead class="table-dark text-center">
             <tr>
                 <th>Nama Berkas</th>
-                <th>User</th>
-                <th>Tanggal Ditambahkan</th>
+                <th>Nama Koperasi</th>
+                <th>Waktu Ditambahkan</th>
                 <th>File</th>
                 <th>Aksi</th>
             </tr>

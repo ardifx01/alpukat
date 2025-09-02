@@ -22,14 +22,20 @@ class DokumenController extends Controller
 
         $syaratPengurus = Syarat::where('kategori_syarat', 'pengurus')
             ->orderBy('nama_syarat')->get();
+        
+        $syaratPengawas = Syarat::where('kategori_syarat', 'pengawas')
+            ->orderBy('nama_syarat')->get();
 
         $cooldownUntil = null;
         if (Auth::check()) {
             $last = Dokumen::where('user_id', Auth::id())->max('created_at');
-            if ($last) $cooldownUntil = Carbon::parse($last)->addMinutes(2);
+            if ($last) {
+                $months = (int)config('app.batas_unggah_dokumen_koperasi_months', 3);
+                $cooldownUntil = Carbon::parse($last)->addMonths($months);
+            }
         }
 
-        return view('user.pengajuan', compact('syaratKoperasi', 'syaratPengurus', 'cooldownUntil'));
+        return view('user.pengajuan', compact('syaratKoperasi', 'syaratPengurus', 'syaratPengawas', 'cooldownUntil'));
     }
 
     public function store(Request $request)
@@ -40,29 +46,29 @@ class DokumenController extends Controller
         }
 
         // 0) Kebijakan pengajuan
-        // cooldown 2 menit
         $lastUploadAt = Dokumen::where('user_id', $user->id)->max('created_at');
+
         if ($lastUploadAt) {
-            $cooldownUntil = Carbon::parse($lastUploadAt)->addMinutes(2);
-            if (now()->lt($cooldownUntil)) {
-                // Tampilkan sisa waktu yang ramah
-                $sisa = now()->diffForHumans($cooldownUntil, [
-                    'parts' => 2,  // maksimal 2 bagian
-                    'syntax' => Carbon::DIFF_ABSOLUTE
+
+            $seconds = (int)config('app.batas_unggah_dokumen_koperasi_seconds');
+            $months = (int)config('app.batas_unggah_dokumen_koperasi_months');
+
+            if ($seconds > 0) {
+                // Mode demo, hitungan detik
+                $batasUpload = Carbon::parse($lastUploadAt)->addSeconds($seconds);
+            } else {
+                // Mode real, hitungan bulan
+                $batasUpload = Carbon::parse($lastUploadAt)->addMonths($months ?: 3);
+            }
+
+            if (now()->lessThan($batasUpload)) {
+                $sisa = now()->diffForHumans($batasUpload, [
+                    'parts' => 2,
+                    'syntax' => Carbon::DIFF_ABSOLUTE,
                 ]);
-                return back()->with('error', "Anda baru saja mengunggah berkas. Coba lagi sekitar $sisa.");
+                return back()->with('error', "Harus menunggu $sisa untuk bisa unggah ulang.");
             }
         }
-
-        // --- B. (OPSIONAL) SEKALI SAJA SEUMUR HIDUP: aktifkan blok ini, matikan kodingan yang cooldown 2 menit
-        /*
-        $pernah = Dokumen::where('user_id', $user->id)->exists();
-        if ($pernah) {
-            return back()->with('error', 'Pengajuan hanya dapat dilakukan satu kali.');
-        }
-        */
-
-        // Kalau mau ubah 3 bulan, ganti addMinutes(2) menjadi addMonths(3)
 
         // 1) Ambil daftar syarat
         $syaratWajib    = Syarat::where('is_required', true)->get(['id', 'nama_syarat']);

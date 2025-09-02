@@ -244,7 +244,7 @@
           <x-input-label for="email" :value="__('Email Koperasi')" class="form-label" />
           <x-text-input id="email" class="form-input"
             type="email" name="email" :value="old('email')" required autofocus
-            autocomplete="username" placeholder=" Masukkan Alamat Email" />
+            autocomplete="username" placeholder=" Masukkan Alamat Email Koperasi" />
           <x-input-error :messages="$errors->get('email')" class="form-error" />
         </div>
 

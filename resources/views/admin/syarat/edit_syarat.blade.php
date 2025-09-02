@@ -10,7 +10,7 @@
 
         {{-- Nama Persyaratan --}}
         <div class="mb-3">
-            <label for="nama_syarat" class="form-label">Nama Persyaratan</label>
+            <label for="nama_syarat" class="form-label">Nama Syarat</label>
             <input 
                 type="text" 
                 name="nama_syarat" 
@@ -24,7 +24,7 @@
 
         {{-- Kategori Persyaratan --}}
         <div class="mb-3">
-            <label for="kategori_syarat" class="form-label">Kategori Persyaratan</label>
+            <label for="kategori_syarat" class="form-label">Kategori Syarat</label>
             <select 
                 name="kategori_syarat" 
                 id="kategori_syarat"
@@ -33,7 +33,8 @@
             >
                 <option value="">-- Pilih Kategori --</option>
                 <option value="koperasi" {{ $syarat->kategori_syarat == 'koperasi' ? 'selected' : '' }}>Koperasi</option>
-                <option value="pengurus" {{ $syarat->kategori_syarat == 'pengurus' ? 'selected' : '' }}>Pengurus/Pengawas Koperasi</option>
+                <option value="pengurus" {{ $syarat->kategori_syarat == 'pengurus' ? 'selected' : '' }}>Pengurus Koperasi</option>
+                <option value="pengawas" {{ $syarat->kategori_syarat == 'pengawas' ? 'selected' : '' }}>Pengawas Koperasi</option>
             </select>
         </div>
 

@@ -54,14 +54,14 @@
                    value="{{ old('email', $user->email) }}"
                    class="form-control @error('email') is-invalid @enderror">
             @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
-            @if (is_null($user->email_verified_at))
+            <!-- @if (is_null($user->email_verified_at))
               <small class="text-warning d-block mt-1">Email belum terverifikasi.</small>
-            @endif
+            @endif -->
           </div>
 
           {{-- Alamat --}}
           <div class="mb-3">
-            <label for="alamat" class="form-label fw-semibold">Alamat</label>
+            <label for="alamat" class="form-label fw-semibold">Alamat Koperasi</label>
             <textarea id="alamat" name="alamat" rows="3"
                       class="form-control @error('alamat') is-invalid @enderror">{{ old('alamat', $user->alamat) }}</textarea>
             @error('alamat') <div class="invalid-feedback">{{ $message }}</div> @enderror
