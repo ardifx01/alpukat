@@ -74,7 +74,7 @@
         </div>
 
         {{-- Meta / Joined --}}
-        <div class="mt-3 text-center text-md-start">
+        <div class="mt-3 text-center">
           <span class="badge rounded-pill bg-light text-dark border">
             <i class="fa fa-calendar-o"></i>
             Bergabung {{ optional($user->created_at)->translatedFormat('d M Y') }}
@@ -133,7 +133,7 @@
         </div>
 
         {{-- ===== Aksi ===== --}}
-        <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-start mt-4">
+        <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-md-center mt-4">
           <a href="{{ route('profile.edit') }}" class="btn btn-primary">
             <i class="fa fa-pencil"></i> Edit Profil
           </a>

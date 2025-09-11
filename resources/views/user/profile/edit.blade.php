@@ -6,19 +6,19 @@
 {{-- ====== WRAPPER LATAR HALAMAN ====== --}}
 <div class="profile-surface">
 
-  <div class="container py-4" style="max-width:880px;">
+  <div class="container py-4" style="max-width:1040px;">
 
     {{-- ===== Header / Cover ===== --}}
     <div class="card shadow-sm border-0 mb-4" style="border-radius:18px; overflow:hidden;">
       <div class="position-relative"
-           style="min-height:180px;padding:40px 0 28px;background:linear-gradient(135deg,#1f2a7a 0%, #4456d1 60%, #7e8af0 100%);">
+           style="min-height:220px;padding:56px 0 28px;background:linear-gradient(135deg,#1f2a7a 0%, #4456d1 60%, #7e8af0 100%);">
         <span class="position-absolute rounded-circle"
               style="right:-40px;top:-40px;width:180px;height:180px;background:rgba(255,255,255,.08)"></span>
         <span class="position-absolute rounded-circle"
-              style="left:-60px;bottom:-60px;width:220px;height:220px;background:rgba(255,255,255,.06)"></span>
+              style="left:-60px;bottom:-60px;width:240px;height:240px;background:rgba(255,255,255,.06)"></span>
 
         <div class="container text-white">
-          <h2 class="mb-1 fw-bold" style="font-size:1.9rem;">Edit Profil Koperasi</h2>
+          <h2 class="mb-1 fw-bold" style="font-size:2rem;">Edit Profil Koperasi</h2>
           <div class="opacity-85">Perbarui data profil koperasi Anda di bawah ini.</div>
         </div>
       </div>
@@ -104,7 +104,7 @@
   /* ====== LATAR HALAMAN (seragam dengan pengajuan/berkas) ====== */
   .profile-surface{
     position: relative;
-    padding: 20px 0 40px;
+    padding: 18px 0 36px;
     background:
       radial-gradient(360px 360px at calc(50% + 420px) 120px, rgba(126,138,240,.22), transparent 60%),
       radial-gradient(420px 420px at calc(50% - 480px) 560px, rgba(68,86,209,.18), transparent 60%),

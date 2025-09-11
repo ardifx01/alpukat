@@ -3,7 +3,6 @@ html { box-sizing: border-box; }
 *, *:before, *:after { box-sizing: inherit; }
 body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #fff; padding-top: 65px; }
 
-/* Header */
 header{
   background:#E6F4FB;
   display:flex;justify-content:space-between;align-items:center;
@@ -113,7 +112,7 @@ nav a.active{font-weight:bold}
 /* responsive tweaks */
 @media (max-width: 991.98px){ .hero-anim-pro{ max-width: 420px; } }
 @media (max-width: 575.98px){
-  .hero-anim-pro{ max-width: 340px; }
+  .hero-anim-pro{ max-width: 440px; }
   .orbit-pro .avatar{ width:34px; height:34px; font-size:14px }
 }
 
@@ -138,7 +137,8 @@ nav a.active{font-weight:bold}
 .step-box{
   position:relative;background:#fff;border-radius:14px;box-shadow:0 4px 12px rgba(0,0,0,.5);
   transition:box-shadow .2s ease, transform .2s ease;overflow:hidden;
-  min-height:250px;display:flex;align-items:center;justify-content:center
+  min-height:250px;display:flex;align-items:center;justify-content:center;
+  animation: fadeUp .6s ease var(--delay) forwards;
 }
 .step-box:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.12)}
 .step-panel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-left:6px solid #23349E;padding-left:12px;opacity:0;transform:translateY(10px);transition:opacity .25s ease, transform .35s ease;pointer-events:none;background:rgba(255,255,255,.97);text-align:center}
@@ -168,7 +168,7 @@ nav a.active{font-weight:bold}
   position:absolute;
   border-radius:50%;
   pointer-events:none;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.70), rgba(255,255,255,10) 60%);
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.70), rgba(255,255,255,0.10) 60%);
 }
 .about-section::before{ /* kiri-bawah */
   width: 260px; height: 260px;

@@ -73,18 +73,19 @@
     @endphp
 
     <div class="steps-grid">
-      @foreach ($steps as $i => $s)
-      <div class="step-box" style="animation: fadeUp 0.6s ease {{ $i * 0.2 }}s forwards;">
+      @foreach ($steps as $s)
+      @php $delay = sprintf('%.1f', $loop->index * 0.2); @endphp
+      <div class="step-box" style="--delay: {{ $delay }}s">
         <div class="step-main">
-          <div class="step-main-number">{{ $i+1 }}.</div>
-          <div class="step-main-title">{{ $s['title'] }}</div>
+          <div class="step-main-number">{{ $loop->iteration }}.</div>
+          <div class="step-main-title">{{ data_get($s,'title') }}</div>
         </div>
 
         <div class="step-panel">
-          <span class="step-icon"><i class="fa {{ $s['icon'] }}" aria-hidden="true"></i></span>
+          <span class="step-icon"><i class="fa {{ data_get($s,'icon','fa-circle') }}" aria-hidden="true"></i></span>
           <div>
-            <div class="step-title">{{ $s['title'] }}</div>
-            <p class="step-desc mb-0">{{ $s['desc'] }}</p>
+            <div class="step-title">{{ data_get($s,'title') }}</div>
+            <p class="step-desc mb-0">{{ data_get($s,'desc') }}</p>
           </div>
         </div>
       </div>

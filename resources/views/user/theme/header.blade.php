@@ -7,13 +7,13 @@
     </div>
   </div>
 
-  <nav class="main-nav">
+  <nav>
     <a href="{{ route('home') }}" class="{{ request()->routeIs('home', 'user.dashboard') ? 'active' : '' }}">Beranda</a>
     <a href="{{ route('user.create') }}" class="{{ request()->routeIs('user.create') ? 'active' : '' }}">Pengajuan</a>
     <a href="{{ route('user.lihat_berkas') }}" class="{{ request()->routeIs('user.lihat_berkas') ? 'active' : '' }}">Lihat Berkas</a>
 
     @php
-    $jumlahNotif = auth()->check() ? (int) auth()->user()->notifikasi()->where('dibaca', false)->count() : 0;
+      $jumlahNotif = auth()->check() ? (int) auth()->user()->notifikasi()->where('dibaca', false)->count() : 0;
     @endphp
 
     <a href="{{ route('user.notifikasi') }}" class="{{ request()->routeIs('user.notifikasi') ? 'active' : '' }}">

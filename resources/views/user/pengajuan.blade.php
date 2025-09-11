@@ -1,4 +1,4 @@
-@extends('user.dashboard')
+@extends('user.theme.default')
 
 @section('title', 'Pengajuan | ALPUKAT')
 
@@ -28,7 +28,7 @@ $hasPengawas = !empty($syaratPengawas) && count($syaratPengawas) > 0;
   <div class="container py-4" style="max-width:1040px;">
 
     {{-- ======= HEADER / COVER (SERAGAM) ======= --}}
-    <div class="card shadow-sm border-0 mb-3" style="border-radius:18px; overflow:hidden;">
+    <div class="card shadow-sm border-0 mb-4" style="border-radius:18px; overflow:hidden;">
       <div class="position-relative"
         style="
              min-height:220px;
