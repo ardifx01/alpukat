@@ -6,7 +6,7 @@
     <p>Berikut adalah daftar berkas yang telah masuk</p>
 
     <div class="table-responsive">
-        <table class="table table-bordered align-middle">
+        <table class="table table-bordered align-middle mb-0">
             <thead class="table-dark">
                 <tr>
                     <th>Nama Koperasi</th>
@@ -51,7 +51,7 @@
                 @endforeach
                 @empty
                 <tr>
-                    <td colspan="6">
+                    <td colspan="6" class="text-center">
                         Belum ada dokumen yang diunggah.
                     </td>
                 </tr>

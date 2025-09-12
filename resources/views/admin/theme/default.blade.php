@@ -9,6 +9,7 @@
     <meta name="author" content="" />
     <title>Dinas Koperasi dan UKM Provinsi Kepulauan Riau</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="{{ asset('theme/css/styles.css') }}" rel="stylesheet" />
     <link rel="shortcut icon" href="{{ asset('theme/assets/img/logo_kepri.png') }}">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>

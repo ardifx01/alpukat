@@ -4,7 +4,7 @@
 
 <div class="container mt-5">
     <h2 class="mb-4 fw-bold">Hasil Verifikasi Pengajuan</h2>
-    <p class="text-muted">Berikut adalah hasil verifikasi pengajuan surat</p>
+    <p>Berikut adalah hasil verifikasi pengajuan surat</p>
 
     <a href="{{ route('admin.verif.daftar_pengajuan') }}" class="btn btn-primary mb-4">Lihat Daftar Pengajuan</a>
 
@@ -21,7 +21,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($verifikasi as $item)
+                @forelse($verifikasi as $item)
                     <tr class="{{ $item->status == 'diterima' ? 'table-success' : 'table-danger' }}">
                         <td>{{ $item->user->name }}</td>
                         <td>
@@ -38,13 +38,19 @@
                         </td>
                         <td class="{{ $item->lokasi_wawancara ? '' : 'text-muted' }}">{{ $item->lokasi_wawancara ?? '-' }}</td>
                     </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="6" class="text-center">
+                        Belum ada hasil verifikasi yang diberikan.
+                    </td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
     
 
-    <!-- Pagination -->
+    {{-- Pagination --}}
     <div class="mt-3">
         {{ $verifikasi->links() }}
     </div>

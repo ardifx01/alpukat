@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <h2 class="mb-4 fw-bold">Tambah Persyaratan Dokumen</h2>
-    <p class="text-muted">Masukkan persyaratan berkas yang perlu pihak koperasi masukkan</p>
+    <p>Masukkan persyaratan berkas yang perlu pihak koperasi masukkan</p>
 
     <form action="{{ route('admin.syarat.post_tambah_syarat') }}" method="POST">
         @csrf

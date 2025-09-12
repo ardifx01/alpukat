@@ -4,7 +4,7 @@
 
 <div class="container mt-5">
     <h2 class="mb-4 fw-bold">Lihat Persyaratan Berkas</h2>
-    <p class="text-muted">Lihat Persyaratan Berkas yang Telah Anda Masukkan</p>
+    <p>Lihat Persyaratan Berkas yang Telah Anda Masukkan</p>
 
     <a href="{{ route('admin.syarat.tambah_syarat') }}" class="btn btn-primary mb-4">Tambah Syarat</a>
 
@@ -33,7 +33,7 @@
         {{-- Tab Koperasi --}}
         <div class="tab-pane fade show active" id="koperasi" role="tabpanel" aria-labelledby="koperasi-tab">
             @if($syarat_koperasi->isEmpty())
-            <div class="alert alert-info mt-2">Belum ada persyaratan untuk kategori koperasi.</div>
+            <div colspan="6" class="text-center">Belum ada persyaratan untuk kategori koperasi.</div>
             @else
             <table class="table table-bordered table-striped mt-2">
                 <thead class="table-dark">
@@ -41,7 +41,7 @@
                         <th>No</th>
                         <th>Nama Syarat</th>
                         <th>Waktu Ditambahkan</th>
-                        <th>Aksi</th>
+                        <th style="width: 150px;" class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,9 +50,18 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $syarat->nama_syarat }}</td>
                         <td>{{ $syarat->created_at->format('d-m-Y H:i') }}</td>
-                        <td>
-                            <a href="{{ route('admin.syarat.edit_syarat', $syarat->id) }}" style="color: green;">Edit</a>
-                            <a href="{{ route('admin.syarat.hapus_syarat', $syarat->id) }}" onclick="return confirm('Apakah Anda yakin?')">Hapus</a>
+                        <td class="text-center" style="white-space: nowrap;">
+                            <a href="{{ route('admin.syarat.edit_syarat', $syarat->id) }}" 
+                            class="btn btn-sm btn-outline-success rounded-pill me-2" 
+                            title="Edit">
+                            <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a href="{{ route('admin.syarat.hapus_syarat', $syarat->id) }}" 
+                            class="btn btn-sm btn-outline-danger rounded-pill" 
+                            onclick="return confirm('Apakah Anda yakin?')" 
+                            title="Hapus">
+                            <i class="fas fa-trash"></i> Hapus
+                            </a>
                         </td>
                     </tr>
                     @endforeach
@@ -64,7 +73,7 @@
         {{-- Tab Pengurus --}}
         <div class="tab-pane fade" id="pengurus" role="tabpanel" aria-labelledby="pengurus-tab">
             @if($syarat_pengurus->isEmpty())
-            <div class="alert alert-info mt-2">Belum ada syarat untuk kategori pengurus.</div>
+            <div colspan="6" class="text-center">Belum ada persyaratan untuk kategori pengurus koperasi.</div>
             @else
             <table class="table table-bordered table-striped mt-2">
                 <thead class="table-dark">
@@ -72,7 +81,7 @@
                         <th>No</th>
                         <th>Nama Syarat</th>
                         <th>Waktu Ditambahkan</th>
-                        <th>Aksi</th>
+                        <th style="width: 150px;" class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,9 +90,18 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $syarat->nama_syarat }}</td>
                         <td>{{ $syarat->created_at->format('d-m-Y H:i') }}</td>
-                        <td>
-                            <a href="{{ route('admin.syarat.edit_syarat', $syarat->id) }}" style="color: green;">Edit</a>
-                            <a href="{{ route('admin.syarat.hapus_syarat', $syarat->id) }}" onclick="return confirm('Apakah Anda yakin?')">Hapus</a>
+                        <td class="text-center" style="white-space: nowrap;">
+                            <a href="{{ route('admin.syarat.edit_syarat', $syarat->id) }}" 
+                            class="btn btn-sm btn-outline-success rounded-pill me-2" 
+                            title="Edit">
+                            <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a href="{{ route('admin.syarat.hapus_syarat', $syarat->id) }}" 
+                            class="btn btn-sm btn-outline-danger rounded-pill" 
+                            onclick="return confirm('Apakah Anda yakin?')" 
+                            title="Hapus">
+                            <i class="fas fa-trash"></i> Hapus
+                            </a>
                         </td>
                     </tr>
                     @endforeach
@@ -95,7 +113,7 @@
         {{-- Tab Pengawas --}}
         <div class="tab-pane fade" id="pengawas" role="tabpanel" aria-labelledby="pengawas-tab">
             @if($syarat_pengawas->isEmpty())
-            <div class="alert alert-info mt-2">Belum ada syarat untuk kategori pengawas.</div>
+            <div colspan="6" class="text-center">Belum ada persyaratan untuk kategori pengawas koperasi.</div>
             @else
             <table class="table table-bordered table-striped mt-2">
                 <thead class="table-dark">
@@ -103,7 +121,7 @@
                         <th>No</th>
                         <th>Nama Syarat</th>
                         <th>Waktu Ditambahkan</th>
-                        <th>Aksi</th>
+                        <th style="width: 150px;" class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -112,9 +130,18 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $syarat->nama_syarat }}</td>
                         <td>{{ $syarat->created_at->format('d-m-Y H:i') }}</td>
-                        <td>
-                            <a href="{{ route('admin.syarat.edit_syarat', $syarat->id) }}" style="color: green;">Edit</a>
-                            <a href="{{ route('admin.syarat.hapus_syarat', $syarat->id) }}" onclick="return confirm('Apakah Anda yakin?')">Hapus</a>
+                        <td class="text-center" style="white-space: nowrap;">
+                            <a href="{{ route('admin.syarat.edit_syarat', $syarat->id) }}" 
+                            class="btn btn-sm btn-outline-success rounded-pill me-2" 
+                            title="Edit">
+                            <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a href="{{ route('admin.syarat.hapus_syarat', $syarat->id) }}" 
+                            class="btn btn-sm btn-outline-danger rounded-pill" 
+                            onclick="return confirm('Apakah Anda yakin?')" 
+                            title="Hapus">
+                            <i class="fas fa-trash"></i> Hapus
+                            </a>
                         </td>
                     </tr>
                     @endforeach

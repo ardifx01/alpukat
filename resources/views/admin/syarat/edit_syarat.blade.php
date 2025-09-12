@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mt-5">
     <h2 class="mb-4 fw-bold">Edit Syarat Dokumen</h2>
-    <p class="text-muted">Edit Persyaratan Dokumen yang Harus Dimasukkan oleh Koperasi</p>
+    <p>Edit Persyaratan Dokumen yang Harus Dimasukkan oleh Koperasi</p>
 
     <form action="{{ route('admin.syarat.post_edit_syarat', $syarat->id) }}" method="POST">
         @csrf

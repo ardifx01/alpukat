@@ -40,7 +40,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="3" class="text-center text-muted">Belum ada berkas yang dikirim.</td>
+                <td colspan="6" class="text-center">Belum ada berkas yang dikirim.</td>
             </tr>
             @endforelse
         </tbody>
