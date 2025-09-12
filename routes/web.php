@@ -46,9 +46,6 @@ Route::middleware(['auth', 'role.user'])->group(function () {
 // Admin / Dinas
 // ======================
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:admin'])->group(function () {
-    // Profil Admin
-    Route::get('/profil', [ProfilAdminController::class, 'profilAdmin'])->name('profil.index');
-
     // Dashboard Admin
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
 
