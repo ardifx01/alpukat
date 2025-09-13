@@ -5,10 +5,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>@yield('title', 'ALPUKAT - Aplikasi Uji Kelayakan dan Kepatutan')</title>
-  <link rel="stylesheet" href="{{ asset('css_user/alpukat.css') }}">
-  <link rel="stylesheet" href="{{ asset('css_user/responsive.css') }}">
-  <link rel="stylesheet" href="{{ asset('css_user/style.css') }}">
-  <link rel="shortcut icon" href="{{ asset('images/logo_kepri.png') }}" type="image/x-icon">
+  <link rel="stylesheet" href="{{ asset('css_user/alpukat.css') }}?v={{ env('ASSET_VER',1) }}">
+  <link rel="stylesheet" href="{{ asset('css_user/responsive.css') }}?v={{ env('ASSET_VER',1) }}">
+  <link rel="stylesheet" href="{{ asset('css_user/style.css') }}?v={{ env('ASSET_VER',1) }}">
+  <link rel="shortcut icon" href="{{ asset('images/logo_kepri.png') }}?v={{ env('ASSET_VER',1) }}" type="image/x-icon">
 
   {{-- CSS vendor --}}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -27,7 +27,7 @@
 
 
   {{-- JS kustom halaman ini --}}
-  <script src="{{ asset('js_user/alpukat.js') }}"></script>
+  <script src="{{ asset('js_user/alpukat.js') }}?v={{ env('ASSET_VER',1) }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   @stack('scripts')
   <script>

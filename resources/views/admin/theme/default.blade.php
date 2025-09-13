@@ -13,9 +13,9 @@
         integrity="sha384-..." crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="{{ asset('css_admin/admin.css') }}">
-    <link rel="stylesheet" href="{{ asset('css_admin/styles.css') }}">
-    <link rel="shortcut icon" href="{{ asset('images/logo_kepri.png') }}">
+    <link rel="stylesheet" href="{{ asset('css_admin/admin.css') }}?v={{ env('ASSET_VER',1) }}">
+    <link rel="stylesheet" href="{{ asset('css_admin/styles.css') }}?v={{ env('ASSET_VER',1) }}">
+    <link rel="shortcut icon" href="{{ asset('images/logo_kepri.png') }}?v={{ env('ASSET_VER',1) }}">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 
@@ -46,7 +46,7 @@
 
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-...hash..." crossorigin="anonymous"></script>
 
-            <script src="{{ asset('js_admin/scripts.js') }}"></script>
+            <script src="{{ asset('js_admin/scripts.js') }}?v={{ env('ASSET_VER',1) }}"></script>
 
             {{-- Script animasi flash message --}}
             <style>

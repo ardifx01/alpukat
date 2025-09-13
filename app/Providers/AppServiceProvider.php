@@ -21,5 +21,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Definisikan Gate bernama 'admin'
         Gate::define('admin', fn(User $u) => $u->user_type === 'admin');
+
+        
     }
 }
