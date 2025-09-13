@@ -1,5 +1,7 @@
 import './bootstrap';
-import './front_end/js';
+import './alpukat.js';
+import './bootstrap.js';
+import './custom.js';
 
 import Alpine from 'alpinejs';
 

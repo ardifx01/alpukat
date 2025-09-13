@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-@import './css_admin/default.css';
-@import './front_end';
-@import './theme';
+@import './admin.css';
+@import './alpukat.css';
+@import './font-awesome.min.css';
+@import './responsive.css';
+@import './style.css';
+@import './style.css.map';
+@import './style.scss';

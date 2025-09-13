@@ -4,18 +4,17 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <title>@yield('title', 'ALPUKAT - Aplikasi Uji Kelayakan dan Kepatutan')</title>
-
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
   <link rel="shortcut icon" href="{{ asset('front_end/images/logo_kepri.png') }}" type="image/x-icon">
 
   {{-- CSS vendor --}}
-  <!-- <link rel="stylesheet" href="{{ asset('front_end/css/bootstrap.css') }}"> -->
-  <link rel="stylesheet" href="{{ asset('front_end/css/style.css') }}">
-  <link rel="stylesheet" href="{{ asset('front_end/css/responsive.css') }}">
+  <!-- <link rel="stylesheet" href="{{ asset('front_end/css/style.css') }}">
+  <link rel="stylesheet" href="{{ asset('front_end/css/responsive.css') }}"> -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   {{-- CSS kustom halaman ini --}}
-  <link rel="stylesheet" href="{{ asset('front_end/css/alpukat.css') }}">
+  <!-- <link rel="stylesheet" href="{{ asset('front_end/css/alpukat.css') }}"> -->
 </head>
 <body class="d-flex flex-column min-vh-100">
     @include('user.theme.header')
