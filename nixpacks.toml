@@ -4,4 +4,4 @@
 nixPkgs = ["php82"]
 
 [start]
-command = "php -v && php artisan storage:link && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"
+command = "php artisan storage:link && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"
