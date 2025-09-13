@@ -4,4 +4,4 @@
 nixPkgs = ["php82"]
 
 [start]
-command = "php artisan storage:link && php artisan migrate --force && vendor/bin/heroku-php-apache2 public/"
+command = "php -v && php artisan storage:link && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"
