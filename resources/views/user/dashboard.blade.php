@@ -35,7 +35,7 @@
           <div class="coop-logo">
             <span class="glow-ring"></span>
             <img
-              src="{{ asset('front_end/images/logo-koperasi1.png') }}"
+              src="{{ asset('images/logo-koperasi1.png') }}"
               alt="Logo Koperasi Indonesia"
               loading="lazy">
           </div>

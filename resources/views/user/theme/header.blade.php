@@ -1,6 +1,6 @@
 <header class="site-header">
   <div class="logo-container">
-    <img src="{{ asset('front_end/images/logo_kepri.png') }}" alt="Logo Provinsi Kepulauan Riau">
+    <img src="{{ asset('images/logo_kepri.png') }}" alt="Logo Provinsi Kepulauan Riau">
     <div class="logo-text">
       <h1>Dinas Koperasi, Usaha Kecil dan Menengah</h1>
       <p>Dompak, Kec. Bukit Bestari, Kota Tanjungpinang, Kepulauan Riau</p>
