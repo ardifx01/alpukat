@@ -1,0 +1,13 @@
+# Abaikan file-file Git
+.git
+.gitignore
+
+# Abaikan environment file lokal
+.env
+
+# Abaikan folder dependency, karena akan di-install saat build
+node_modules
+vendor
+
+# INI YANG PALING PENTING: Abaikan symlink storage
+public/storage
