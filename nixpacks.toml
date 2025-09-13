@@ -1,0 +1,7 @@
+# File: nixpacks.toml
+
+[phases.setup]
+nixPkgs = ["php82"]
+
+[start]
+command = "php artisan storage:link && php artisan migrate --force && vendor/bin/heroku-php-apache2 public/"
