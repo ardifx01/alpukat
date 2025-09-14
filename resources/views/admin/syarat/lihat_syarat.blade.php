@@ -119,7 +119,7 @@
             @if($syarat_pengawas->isEmpty())
             <div colspan="6" class="text-center">Belum ada persyaratan untuk kategori pengawas koperasi.</div>
             @else
-            <div class="responsive-table">
+            <div class="table-responsive">
                 <table class="table table-bordered table-striped mt-2">
                     <thead class="table-dark">
                         <tr>

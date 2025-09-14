@@ -15,7 +15,7 @@
                     <th>Nama Koperasi</th>
                     <th>Status</th>
                     <th>Tanggal Verifikasi</th>
-                    <th>Feedback Admin</th>
+                    <th>Pesan Admin</th>
                     <th>Tanggal Wawancara</th>
                     <th>Lokasi Wawancara</th>
                 </tr>
