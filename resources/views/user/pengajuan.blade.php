@@ -316,7 +316,7 @@ $hasPengawas = !empty($syaratPengawas) && count($syaratPengawas) > 0;
   }
 
   /* dekor lingkaran halus */
-  .pengajuan-surface::before,
+  /* .pengajuan-surface::before,
   .pengajuan-surface::after {
     content: "";
     position: absolute;
@@ -325,7 +325,7 @@ $hasPengawas = !empty($syaratPengawas) && count($syaratPengawas) > 0;
     opacity: .22;
     background: #c2cdf2;
     filter: blur(2px);
-  }
+  } */
 
   .pengajuan-surface::before {
     width: 220px;

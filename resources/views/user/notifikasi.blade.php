@@ -93,12 +93,12 @@
       linear-gradient(180deg, #f6f8ff 0%, #eef2ff 55%, #eaf6ff 100%);
     min-height: 100%;
   }
-  .notif-surface::before,
+  /* .notif-surface::before,
   .notif-surface::after{
     content:"";
     position:absolute; border-radius:50%; pointer-events:none; opacity:.22;
     background:#c2cdf2; filter: blur(2px);
-  }
+  } */
   .notif-surface::before{ width:220px;height:220px; left:-70px; top:120px; }
   .notif-surface::after { width:180px;height:180px; right:-60px; bottom:80px; }
 
