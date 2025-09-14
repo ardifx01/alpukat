@@ -20,7 +20,7 @@ class ProdUserSeeder extends Seeder
             [
                 'id' => 27,
                 'name' => 'admin',
-                'password' => '$2y$12$kaRMo0O/wuy9fNnE960.0ePKdn1.UuZ/eyqP1FYKmcc7a8/BmEKCi',
+                'password' => Hash::make('admin123'),
                 'user_type' => 'admin',
                 'created_at' => '2025-09-12 22:14:46',
                 'updated_at' => '2025-09-12 22:14:46',
@@ -35,7 +35,7 @@ class ProdUserSeeder extends Seeder
                 'name' => 'Amelia',
                 'avatar_path' => 'avatars/wIWpWbozLS3ciRh7tyzhbPYgqSbSHbzpP8AnO0Js.png',
                 'alamat' => 'Jalan Raya Dompak',
-                'password' => '$2y$12$AZaya2gZL96h4kWjkQ6IR.y5rqKvvyV1yabo3hmhYQGvNYsRrs6nG',
+                'password' => Hash::make('koperasiamelia'),
                 'user_type' => 'user',
                 'created_at' => '2025-09-12 22:45:55',
                 'updated_at' => '2025-09-13 00:23:20',
