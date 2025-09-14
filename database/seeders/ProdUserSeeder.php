@@ -20,7 +20,7 @@ class ProdUserSeeder extends Seeder
             [
                 'id' => 27,
                 'name' => 'admin',
-                'password' => Hash::make('admin123'),
+                'password' => Hash::make('admin1234'),
                 'user_type' => 'admin',
                 'created_at' => '2025-09-12 22:14:46',
                 'updated_at' => '2025-09-12 22:14:46',
@@ -35,7 +35,7 @@ class ProdUserSeeder extends Seeder
                 'name' => 'Amelia',
                 'avatar_path' => 'avatars/wIWpWbozLS3ciRh7tyzhbPYgqSbSHbzpP8AnO0Js.png',
                 'alamat' => 'Jalan Raya Dompak',
-                'password' => Hash::make('koperasiamelia'),
+                'password' => Hash::make('koperasiamel'),
                 'user_type' => 'user',
                 'created_at' => '2025-09-12 22:45:55',
                 'updated_at' => '2025-09-13 00:23:20',
