@@ -78,7 +78,4 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'can:admin'])->group
     Route::get('/profil-admin', [ProfilAdminController::class, 'profilAdmin'])->name('profil.index'); // lihat profil
 });
 
-// ======================
-// Auth
-// ======================
 require __DIR__ . '/auth.php';
